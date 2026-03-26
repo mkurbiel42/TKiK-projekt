@@ -1,3 +1,3 @@
 # TKiK-projekt
 
-Projekt translatora progrmów w języku Python do języka TypeScript
+Projekt translatora progrmów w języku Python do języka JavaScript
