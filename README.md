@@ -8,4 +8,4 @@
     - kompilator
     - planowany język implementacji: C++ (ew. GUI z wykorzystaniem TypeScript)
     - wejście: poprawny program w języku Python
-    - wyjście: program przekonwrtowany na skrypt w języku JS
+    - wyjście: program przekonwertowany na skrypt w języku JS
