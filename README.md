@@ -9,3 +9,4 @@
     - planowany język implementacji: C++ (ew. GUI z wykorzystaniem TypeScript)
     - wejście: poprawny program w języku Python
     - wyjście: program przekonwertowany na skrypt w języku JS
+    - planowane wykorzystanie generatora ANTLR
