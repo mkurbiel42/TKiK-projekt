@@ -16,10 +16,10 @@ add_subdirectory(antlr4)
 
 # edit in case of file/directory name change!
 add_library(parser STATIC
-  temp_generated/TLexer.cpp
-  temp_generated/TParser.cpp
-  temp_generated/TParserBaseVisitor.cpp
-  temp_generated/TParserBaseListener.cpp
+  generated/TLexer.cpp
+  generated/TParser.cpp
+  generated/TParserBaseVisitor.cpp
+  generated/TParserBaseListener.cpp
 )
 
 target_include_directories(parser

@@ -16,7 +16,7 @@
 #include "TLexer.h"
 #include "TParser.h"
 
-#include <Windows.h>
+// #include <Windows.h>
 
 #pragma execution_character_set("utf-8")
 
@@ -26,6 +26,7 @@ using namespace std;
 
 int main(int argc, const char * argv[]) {
 
+    cout << "Teehee" << endl;
     ANTLRInputStream input("a = b + \"c\";(((x * d))) * e + f; a + (x * (y ? 0 : 1) + z);");
     TLexer lexer(&input);
     CommonTokenStream tokens(&lexer);
