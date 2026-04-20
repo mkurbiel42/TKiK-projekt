@@ -13,7 +13,7 @@ opcjonalnie:
     - comp_notin, comp_in
 */
 
-grammar PythonSimple;
+grammar PythonSimpler;
 
 // starting rule
 file: statements? ENDMARKER;

@@ -2,3 +2,5 @@
 */dist
 grammar/generated
 */.idea
+*/.venv
+*/.antlr
