@@ -19,7 +19,7 @@ co można opcjonalnie dodać:
 grammar Python;
 
 // starting rule
-file:       statements? ENDMARKER;
+file: statements? ENDMARKER;
 
 // temporary:
 ENDLINE: [\r\n] -> skip;
