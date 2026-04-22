@@ -72,7 +72,7 @@ atom: NAME | 'True' | 'False' | 'None' | strings | NUMBER | tuple | list | listc
 
 // function call arguments
 arguments: args ','?;
-args: expression (','(starred_expression | (expression ~'=')))* (',' kwargs)?;
+args: expression (','(starred_expression | (expression ~'=')))*?;
 kwargs: kwarg_or_starred (',' kwarg_or_starred)* ',' kwarg_or_double_starred (',' kwarg_or_double_starred)*
     | kwarg_or_starred (',' kwarg_or_starred)*
     | kwarg_or_double_starred (',' kwarg_or_double_starred)*;
@@ -80,6 +80,9 @@ starred_expression: '*' expression;
 kwarg_or_starred: NAME '=' expression | starred_expression;
 kwarg_or_double_starred: NAME '=' expression | '**' expression;
 
+// assignment target
+as_targets: as_target ~',' | as_target (',' as_target)* ','?;
+as_target: t_primary '.'
 
 // generic targets
 targets: target ~',' | target (',' target)* ','?;

@@ -3,12 +3,13 @@ grammar Python;
 // tokens and helpers
 
 tokens {
-    DEDENT, INDENT, ENDMARKER
+    // DEDENT, INDENT, ENDMARKER
+    ENDMARKER
 }
 
-NAME: [a-zA-Z_][a-zA-Z0-9_]*;
-NUMBER: INTEGER | FLOAT;
-STRING: '"' ~[\\\r\n"]*? '"' | '\'' ~[\\\r\n']*? '\'';
+// temporary for testing
+INDENT: BRACE_LEFT;
+DEDENT: BRACE_RIGHT;
 NEWLINE: '\r\n' | '\n';
 
 EQUALS: '=';
@@ -72,6 +73,11 @@ PERCENTEQUAL: '%=';
 DOUBLESTAREQUAL: '**=';
 DOUBLESLASHEQUAL: '//=';
 
+NAME: [a-zA-Z_][a-zA-Z0-9_]*;
+NUMBER: INTEGER | FLOAT;
+STRING: '"' ~[\\\r\n"]*? '"' | '\'' ~[\\\r\n']*? '\'';
+WHITESPACESKIP: [\t ] -> skip;
+
 fragment INTEGER:   [1-9] [0-9]*;
 fragment FLOAT:     [1-9] [0-9]* '.' [0-9]+;
 
@@ -79,18 +85,15 @@ fragment FLOAT:     [1-9] [0-9]* '.' [0-9]+;
 // starting rule
 file: statements? ENDMARKER;
 
-// whitespace skips
-SPACE: ' ' -> skip;
-
 // general statements
 statements: statement+;
-statement: simple_stmt | compound_stmt;
-simple_stmt: assignment | expressions | return_stmt | raise_stmt | pass_stmt;
+statement: compound_stmt | simple_stmt;
+simple_stmt: (assignment | expressions | return_stmt | raise_stmt | pass_stmt) NEWLINE;
 compound_stmt: function_def | if_stmt | class_def | for_stmt | while_stmt | match_stmt;
 
 // simple statements
-assignment: (targets EQUALS)+ expressions ~EQUALS
-    | target augassign expressions;
+assignment: (as_targets EQUALS)+ expressions
+    | single_target augassign expressions;
 augassign: PLUSEQUAL
     | MINUSEQUAL
     | STAREQUAL
@@ -111,7 +114,7 @@ nonlocal_stmt: NONLOCAL NAME (COMMA NAME)*;
 // compound statements
 
 //function definition
-function_def: DEF NAME PAR_LEFT function_params? PAR_RIGHT block;
+function_def: 'def' NAME PAR_LEFT function_params? PAR_RIGHT COLON block;
 
 // lambda function def
 lambdef: LAMBDA function_params? COLON expression;
@@ -160,7 +163,7 @@ expression: disjunction IF disjunction ELSE expression
     | lambdef;
 assignment_expression: NAME WALRUS expression;
 named_expression:
-    assignment_expression | expression ~WALRUS;
+    assignment_expression | expression {_input.LA(1) != WALRUS}?;
 
 disjunction: conjunction (OR conjunction)*;
 conjunction: inversion (AND inversion)*;
@@ -190,13 +193,13 @@ primary: primary DOT NAME           #field_prim
     | primary BRACKET_LEFT slices BRACKET_RIGHT        #slice_prim
     | atom                          #atom_prim
     ;
-slices: slice ~COMMA | ((slice | expression) (COMMA (slice | expression))*) COMMA?;
+slices: slice {_input.LA(1) != COMMA}? | ((slice | expression) (COMMA (slice | expression))*) COMMA?;
 slice: expression? COLON expression? (COLON expression?)? | named_expression;
 atom: NAME | TRUE | FALSE | NONE | strings | NUMBER | tuple | list | listcomp | dict | dictcomp | set | setcomp;
 
 // function call arguments
 arguments: arg_expression (COMMA arg_expression)* COMMA?;
-arg_expression: (starred_expression | (assignment_expression | expression ~WALRUS) ~EQUALS);
+arg_expression: (starred_expression | (assignment_expression | expression {_input.LA(1) != WALRUS}?) {_input.LA(1) != EQUALS}?);
 
 kwargs: kwarg_or_starred (COMMA kwarg_or_starred)* COMMA kwarg_or_double_starred (COMMA kwarg_or_double_starred)*
     | kwarg_or_starred (COMMA kwarg_or_starred)*
@@ -205,8 +208,33 @@ starred_expression: STAR expression;
 kwarg_or_starred: NAME EQUALS expression | starred_expression;
 kwarg_or_double_starred: NAME EQUALS expression | DOUBLESTAR expression;
 
+// assignment targets
+as_targets: as_target {_input.LA(1) != COMMA}? | as_target (COMMA as_target)* COMMA?;
+as_target_list: as_target (COMMA as_target)* COMMA?;
+as_target_tuple: as_target (COMMA as_target)+ COMMA? | as_target COMMA;
+as_target: t_primary COMMA NAME {_input.LA(1) != PAR_LEFT && _input.LA(1) != BRACKET_LEFT && _input.LA(1) != DOT}?
+    | t_primary BRACE_LEFT slices BRACE_RIGHT {_input.LA(1) != PAR_LEFT && _input.LA(1) != BRACKET_LEFT && _input.LA(1) != DOT}?
+    | as_atom;
+as_atom: NAME 
+    | PAR_LEFT as_target PAR_RIGHT 
+    | PAR_LEFT as_target_tuple? PAR_RIGHT
+    | BRACKET_LEFT as_target_list? BRACE_RIGHT
+    ;
+
+single_target: single_subscript_attribute_target | NAME | PAR_LEFT single_target PAR_RIGHT;
+single_subscript_attribute_target: NAME (DOT NAME)* {_input.LA(1) != PAR_LEFT && _input.LA(1) != BRACKET_LEFT && _input.LA(1) != DOT}?
+    | NAME (DOT NAME)* BRACKET_LEFT slices BRACE_RIGHT {_input.LA(1) != PAR_LEFT && _input.LA(1) != BRACKET_LEFT && _input.LA(1) != DOT}?;
+
+
+t_primary: primary DOT NAME                           #field_tprim
+    | primary PAR_LEFT arguments? PAR_RIGHT         #function_call_tprim
+    | primary BRACKET_LEFT slices BRACKET_RIGHT     #slice_tprim
+    | atom                                          #atom_tprim
+    ;
+t_lookahead: PAR_LEFT | BRACKET_LEFT | DOT;
+
 // generic targets
-targets: target ~COMMA | target (COMMA target)* COMMA?;
+targets: target {_input.LA(1) != COMMA}? | target (COMMA target)* COMMA?;
 target: primary DOT NAME | primary BRACKET_LEFT slices BRACKET_RIGHT | atom;
 
 // del statement targets
