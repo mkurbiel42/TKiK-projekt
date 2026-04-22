@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(Proj LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -12,14 +12,16 @@ endif()
 set(WITH_DEMO OFF CACHE BOOL "" FORCE)
 set(WITH_STATIC_CRT ON CACHE BOOL "" FORCE)
 
-add_subdirectory(antlr4)
+# add_subdirectory(antlr4)
+list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/cmake)
 
-# edit in case of file/directory name change!
+find_package(antlr4-runtime REQUIRED)
+
 add_library(parser STATIC
-  temp_generated/TLexer.cpp
-  temp_generated/TParser.cpp
-  temp_generated/TParserBaseVisitor.cpp
-  temp_generated/TParserBaseListener.cpp
+  generated/TLexer.cpp
+  generated/TParser.cpp
+  generated/TParserBaseVisitor.cpp
+  generated/TParserBaseListener.cpp
 )
 
 target_include_directories(parser

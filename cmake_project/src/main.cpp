@@ -15,6 +15,7 @@
 #include "antlr4-runtime.h"
 #include "TLexer.h"
 #include "TParser.h"
+#include "TVisitor.cpp"
 
 #include <Windows.h>
 
@@ -26,12 +27,15 @@ using namespace std;
 
 int main(int argc, const char * argv[]) {
 
-    ANTLRInputStream input("a = b + \"c\";(((x * d))) * e + f; a + (x * (y ? 0 : 1) + z);");
+    ANTLRInputStream input("a = b + \"c\";(((x * d))) * e + f; a + (x * (y ? 0 : 1) + z); return 6+7;");
     TLexer lexer(&input);
     CommonTokenStream tokens(&lexer);
 
     TParser parser(&tokens);
     tree::ParseTree *tree = parser.main();
+
+    TVisitor *visitor = new TVisitor();
+    visitor->visit(tree);
 
     for (auto c : tree->children) {
       cout << c->getText() << endl;
@@ -39,6 +43,8 @@ int main(int argc, const char * argv[]) {
 
     auto s = tree->toStringTree(&parser);
     cout << "Parse Tree: " << s << std::endl;
+
+    cout << "Teehee" << TVisitor::teehee << endl;
 
     return 0;
 }
