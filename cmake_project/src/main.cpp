@@ -44,7 +44,7 @@ int main(int argc, const char * argv[]) {
     auto s = tree->toStringTree(&parser);
     cout << "Parse Tree: " << s << std::endl;
 
-    cout << "Teehee" << TVisitor::teehee << endl;
+    cout << "Teehee " << TVisitor::teehee << endl;
 
     return 0;
 }

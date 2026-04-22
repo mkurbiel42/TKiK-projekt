@@ -1,6 +1,8 @@
-*/build
 */dist
 grammar/generated
 */.idea
 */.venv
 */.antlr
+.vscode
+build
+*/java-gen
