@@ -1,16 +1,22 @@
 lexer grammar PythonLexer;
 
+options{
+    superClass = PythonLexerBase;
+}
+
 // tokens and temporary helpers
 
 tokens {
-    // DEDENT, INDENT, ENDMARKER, NEWLINE
-    ENDMARKER
+    DEDENT, INDENT, ENDMARKER
+    // ENDMARKER
 }
 
 // temporary for testing
-INDENT: BRACE_LEFT;
-DEDENT: BRACE_RIGHT;
-NEWLINE: '\r\n' | '\n';
+// INDENT: BRACE_LEFT;
+// DEDENT: BRACE_RIGHT;
+// NEWLINE: '\r\n' | '\n';
+
+NEWLINE: ({this->atStartOfInput()}? SPACES | ( '\r'? '\n' | '\r' | '\f') SPACES?) {this->onNewLine();};
 
 EQUALS: '=';
 RETURN: 'return';
@@ -23,12 +29,12 @@ GLOBAL: 'global';
 NONLOCAL: 'nonlocal';
 COMMA: ',';
 DEF: 'def';
-PAR_LEFT: '(';
-PAR_RIGHT: ')';
-BRACKET_LEFT: '[';
-BRACKET_RIGHT: ']';
-BRACE_LEFT: '{';
-BRACE_RIGHT: '}';
+PAR_LEFT: '(' {this->openBrace();};
+PAR_RIGHT: ')' {this->closeBrace();};
+BRACKET_LEFT: '[' {this->openBrace();};
+BRACKET_RIGHT: ']' {this->closeBrace();};
+BRACE_LEFT: '{' {this->openBrace();};
+BRACE_RIGHT: '}' {this->closeBrace();};
 LAMBDA: 'lambda';
 COLON: ':';
 IF: 'if';
@@ -76,7 +82,8 @@ DOUBLESLASHEQUAL: '//=';
 NAME: [a-zA-Z_][a-zA-Z0-9_]*;
 NUMBER: INTEGER | FLOAT;
 STRING: '"' ~[\\\r\n"]*? '"' | '\'' ~[\\\r\n']*? '\'';
-WHITESPACESKIP: [\t ] -> skip;
+// WHITESPACESKIP: [\t ] -> skip;
 
 fragment INTEGER:   [1-9] [0-9]*;
 fragment FLOAT:     [1-9] [0-9]* '.' [0-9]+;
+fragment SPACES: [ \t]+;

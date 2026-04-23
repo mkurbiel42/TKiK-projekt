@@ -6,3 +6,4 @@ grammar/generated
 .vscode
 build
 */java-gen
+*/cpp-gen
