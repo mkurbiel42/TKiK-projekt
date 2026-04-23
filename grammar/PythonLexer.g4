@@ -3,13 +3,14 @@ lexer grammar PythonLexer;
 // tokens and temporary helpers
 
 tokens {
-    DEDENT, INDENT, ENDMARKER, NEWLINE
+    // DEDENT, INDENT, ENDMARKER, NEWLINE
+    ENDMARKER
 }
 
 // temporary for testing
-// INDENT: BRACE_LEFT;
-// DEDENT: BRACE_RIGHT;
-// NEWLINE: '\r\n' | '\n';
+INDENT: BRACE_LEFT;
+DEDENT: BRACE_RIGHT;
+NEWLINE: '\r\n' | '\n';
 
 EQUALS: '=';
 RETURN: 'return';
