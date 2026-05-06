@@ -1,4 +1,0 @@
-E:/_Files/_Programieren/Studies/TKiK/TKiK-projekt/cmake_project/cmake-build-debug/CMakeFiles/parser.dir
-E:/_Files/_Programieren/Studies/TKiK/TKiK-projekt/cmake_project/cmake-build-debug/CMakeFiles/gram.dir
-E:/_Files/_Programieren/Studies/TKiK/TKiK-projekt/cmake_project/cmake-build-debug/CMakeFiles/edit_cache.dir
-E:/_Files/_Programieren/Studies/TKiK/TKiK-projekt/cmake_project/cmake-build-debug/CMakeFiles/rebuild_cache.dir

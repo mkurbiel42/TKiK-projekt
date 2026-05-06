@@ -6,7 +6,7 @@ def get(i):
     add(14,15)
     def inside(j):
         nonlocal g
-    
+        # komentarz here
         return g/2
     return 1
 

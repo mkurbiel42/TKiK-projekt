@@ -8,3 +8,4 @@ grammar/generated
 build
 */java-gen
 */cpp-gen
+*/cmake-build-debug
