@@ -5,3 +5,5 @@ cd generated
 javac Python*.java
 grun Python file [-tree/-gui/-trace] [filename]
 (ommitting filename parses stdin, press CTRL+Z on Windows/CTRL+D on Linux to leave)
+
+// to generate grammar into 

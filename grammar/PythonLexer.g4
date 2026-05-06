@@ -4,11 +4,12 @@ options{
     superClass = PythonLexerBase;
 }
 
+@header{#include "PythonLexerBase.h"}
+
 // tokens and temporary helpers
 
 tokens {
     DEDENT, INDENT, ENDMARKER
-    // ENDMARKER
 }
 
 // temporary for testing
@@ -82,7 +83,7 @@ DOUBLESLASHEQUAL: '//=';
 NAME: [a-zA-Z_][a-zA-Z0-9_]*;
 NUMBER: INTEGER | FLOAT;
 STRING: '"' ~[\\\r\n"]*? '"' | '\'' ~[\\\r\n']*? '\'';
-// WHITESPACESKIP: [\t ] -> skip;
+WHITESPACESKIP: [\t ] -> skip;
 
 fragment INTEGER:   [1-9] [0-9]*;
 fragment FLOAT:     [1-9] [0-9]* '.' [0-9]+;

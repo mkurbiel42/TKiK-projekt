@@ -1,6 +1,6 @@
-#include "..\cpp-gen\PythonLexer.h"
-#include "..\cpp-gen\PythonParser.h"
-
+#include "PythonLexer.h"
+#include "PythonParser.h"
+#include <regex>
 using namespace antlr4;
 
 PythonLexerBase::PythonLexerBase(antlr4::CharStream *input): Lexer(input)
@@ -17,7 +17,7 @@ void PythonLexerBase::emit(std::unique_ptr<antlr4::Token> t){
 std::unique_ptr<antlr4::Token> PythonLexerBase::nextToken(){
     if(_input->LA(1) == EOF && !indents.empty()){
         for(int i=tokens.size()-1;i>=0;i--){
-            if(tokens[i]->getType() == ENDMARKER){
+            if(tokens[i]->getType() == EOF){
                 tokens.erase(tokens.begin()+i);
             }
         }
@@ -26,7 +26,7 @@ std::unique_ptr<antlr4::Token> PythonLexerBase::nextToken(){
             emit(createDedent());
             indents.pop();
         }
-        emit(commonToken(ENDMARKER, "<ENDMARKER>"));
+        emit(commonToken(PythonParser::ENDMARKER, "ENDMARKER"));
     }
     std::unique_ptr<antlr4::Token> next = Lexer::nextToken();
     if (next->getChannel() == antlr4::Token::DEFAULT_CHANNEL) {
@@ -67,11 +67,17 @@ int PythonLexerBase::getIndentationCount(const std::string& spaces){
     return count;
 }
 
-bool PythonLexerBase::atStartOfInput() return getCharPositionInLine() == 0 && getLine() == 1;
+bool PythonLexerBase::atStartOfInput() {
+    return getCharPositionInLine() == 0 && getLine() == 1;
+}
 
-void PythonLexerBase::openBrace() this->opened++;
+void PythonLexerBase::openBrace() {
+    this->opened++;
+}
 
-void PythonLexerBase::closeBrace() this->opened--;
+void PythonLexerBase::closeBrace() {
+    this->opened--;
+}
 
 void PythonLexerBase::onNewLine(){
     std::string newLine = std::regex_replace(getText(), std::regex("[^\r\n\f]+"), "");

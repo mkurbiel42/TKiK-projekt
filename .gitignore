@@ -3,6 +3,7 @@ grammar/generated
 */.idea
 */.venv
 */.antlr
+.antlr
 .vscode
 build
 */java-gen

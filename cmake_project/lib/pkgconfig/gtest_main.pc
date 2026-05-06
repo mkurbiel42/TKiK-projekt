@@ -1,5 +1,5 @@
-libdir=E:/_Files/_Programieren/Studies/TKiK/antlr4 examples/cmake_project/lib
-includedir=E:/_Files/_Programieren/Studies/TKiK/antlr4 examples/cmake_project/include
+libdir=C:/libs/antlr4-debug-mingw/lib
+includedir=C:/libs/antlr4-debug-mingw/include
 
 Name: gtest_main
 Description: GoogleTest (with main() function)

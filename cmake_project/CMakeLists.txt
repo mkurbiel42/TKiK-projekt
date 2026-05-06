@@ -18,33 +18,41 @@ list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/cmake)
 find_package(antlr4-runtime REQUIRED)
 
 add_library(parser STATIC
-  generated/TLexer.cpp
-  generated/TParser.cpp
-  generated/TParserBaseVisitor.cpp
-  generated/TParserBaseListener.cpp
+        generated/PythonLexer.cpp
+        generated/PythonParser.cpp
+        generated/PythonParserListener.cpp
+        generated/PythonParserBaseListener.cpp
+        generated/PythonLexerBase.cpp
 )
 
 target_include_directories(parser
-  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/generated
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/generated
 )
 
 target_link_libraries(parser
-  PUBLIC antlr4_static
+        PUBLIC antlr4_static
 )
 
 target_compile_definitions(parser
-  PUBLIC ANTLR4CPP_STATIC
+        PUBLIC ANTLR4CPP_STATIC
 )
 
 add_executable(gram
-  src/main.cpp
+        src/main.cpp
+)
+
+target_include_directories(gram PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/examples/testfile.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Debug/examples)
+
+target_compile_features(
+        gram PRIVATE cxx_std_17
 )
 
 target_link_libraries(gram
-  PRIVATE
-    parser
+        PRIVATE parser
 )
 
 target_compile_definitions(gram
-  PRIVATE ANTLR4CPP_STATIC
+        PRIVATE ANTLR4CPP_STATIC
 )

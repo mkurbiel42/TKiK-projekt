@@ -83,7 +83,7 @@ expression: disjunction IF disjunction ELSE expression
     | lambdef;
 assignment_expression: NAME WALRUS expression;
 named_expression:
-    assignment_expression | expression {_input.LA(1) != WALRUS}?;
+    assignment_expression | expression {_input->LA(1) != WALRUS}?;
 
 disjunction: conjunction (OR conjunction)*;
 conjunction: inversion (AND inversion)*;
@@ -113,13 +113,13 @@ primary: primary DOT NAME           #field_prim
     | primary BRACKET_LEFT slices BRACKET_RIGHT        #slice_prim
     | atom                          #atom_prim
     ;
-slices: slice {_input.LA(1) != COMMA}? | ((slice | expression) (COMMA (slice | expression))*) COMMA?;
+slices: slice {_input->LA(1) != COMMA}? | ((slice | expression) (COMMA (slice | expression))*) COMMA?;
 slice: expression? COLON expression? (COLON expression?)? | named_expression;
 atom: NAME | TRUE | FALSE | NONE | strings | NUMBER | tuple | list | listcomp | dict | dictcomp | set | setcomp;
 
 // function call arguments
 arguments: arg_expression (COMMA arg_expression)* COMMA?;
-arg_expression: (starred_expression | (assignment_expression | expression {_input.LA(1) != WALRUS}?) {_input.LA(1) != EQUALS}?);
+arg_expression: (starred_expression | (assignment_expression | expression {_input->LA(1) != WALRUS}?) {_input->LA(1) != EQUALS}?);
 
 kwargs: kwarg_or_starred (COMMA kwarg_or_starred)* COMMA kwarg_or_double_starred (COMMA kwarg_or_double_starred)*
     | kwarg_or_starred (COMMA kwarg_or_starred)*
@@ -129,11 +129,11 @@ kwarg_or_starred: NAME EQUALS expression | starred_expression;
 kwarg_or_double_starred: NAME EQUALS expression | DOUBLESTAR expression;
 
 // assignment targets
-as_targets: as_target {_input.LA(1) != COMMA}? | as_target (COMMA as_target)* COMMA?;
+as_targets: as_target {_input->LA(1) != COMMA}? | as_target (COMMA as_target)* COMMA?;
 as_target_list: as_target (COMMA as_target)* COMMA?;
 as_target_tuple: as_target (COMMA as_target)+ COMMA? | as_target COMMA;
-as_target: t_primary COMMA NAME {_input.LA(1) != PAR_LEFT && _input.LA(1) != BRACKET_LEFT && _input.LA(1) != DOT}?
-    | t_primary BRACE_LEFT slices BRACE_RIGHT {_input.LA(1) != PAR_LEFT && _input.LA(1) != BRACKET_LEFT && _input.LA(1) != DOT}?
+as_target: t_primary COMMA NAME {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?
+    | t_primary BRACE_LEFT slices BRACE_RIGHT {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?
     | as_atom;
 as_atom: NAME 
     | PAR_LEFT as_target PAR_RIGHT 
@@ -142,8 +142,8 @@ as_atom: NAME
     ;
 
 single_target: single_subscript_attribute_target | NAME | PAR_LEFT single_target PAR_RIGHT;
-single_subscript_attribute_target: NAME (DOT NAME)* {_input.LA(1) != PAR_LEFT && _input.LA(1) != BRACKET_LEFT && _input.LA(1) != DOT}?
-    | NAME (DOT NAME)* BRACKET_LEFT slices BRACE_RIGHT {_input.LA(1) != PAR_LEFT && _input.LA(1) != BRACKET_LEFT && _input.LA(1) != DOT}?;
+single_subscript_attribute_target: NAME (DOT NAME)* {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?
+    | NAME (DOT NAME)* BRACKET_LEFT slices BRACE_RIGHT {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?;
 
 
 t_primary: primary DOT NAME                           #field_tprim
@@ -154,7 +154,7 @@ t_primary: primary DOT NAME                           #field_tprim
 t_lookahead: PAR_LEFT | BRACKET_LEFT | DOT;
 
 // generic targets
-targets: target {_input.LA(1) != COMMA}? | target (COMMA target)* COMMA?;
+targets: target {_input->LA(1) != COMMA}? | target (COMMA target)* COMMA?;
 target: primary DOT NAME | primary BRACKET_LEFT slices BRACKET_RIGHT | atom;
 
 // del statement targets

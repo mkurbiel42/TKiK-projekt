@@ -1,41 +1,35 @@
-﻿/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
- * Use of this file is governed by the BSD 3-clause license that
- * can be found in the LICENSE.txt file in the project root.
- */
-
-//
-//  main.cpp
-//  antlr4-cpp-demo
-//
-//  Created by Mike Lischke on 13.03.16.
-//
-
-#include <iostream>
+﻿#include <iostream>
 
 #include "antlr4-runtime.h"
-#include "TLexer.h"
-#include "TParser.h"
-#include "TVisitor.cpp"
+#include "PythonLexer.h"
+#include "PythonParser.h"
 
-// #include <Windows.h>
+#include <filesystem>
 
 #pragma execution_character_set("utf-8")
 
-using namespace antlrcpptest;
 using namespace antlr4;
 using namespace std;
 
 int main(int argc, const char * argv[]) {
+	ifstream inputFile("./examples/testfile.py");
 
-    ANTLRInputStream input("a = b + \"c\";(((x * d))) * e + f; a + (x * (y ? 0 : 1) + z); return 6+7;");
-    TLexer lexer(&input);
+	std::cout << std::filesystem::current_path() << std::endl;
+	stringstream inputBuffer;
+
+	if(inputFile.is_open()){
+		inputBuffer << inputFile.rdbuf();
+	}else{
+		cout << "unable to open the file" << endl;
+		return 1;
+	}
+	
+    ANTLRInputStream input(inputBuffer.str());
+	PythonLexer lexer(&input);
     CommonTokenStream tokens(&lexer);
 
-    TParser parser(&tokens);
-    tree::ParseTree *tree = parser.main();
-
-    TVisitor *visitor = new TVisitor();
-    visitor->visit(tree);
+    PythonParser parser(&tokens);
+    tree::ParseTree *tree = parser.file();
 
     for (auto c : tree->children) {
       cout << c->getText() << endl;
@@ -43,8 +37,6 @@ int main(int argc, const char * argv[]) {
 
     auto s = tree->toStringTree(&parser);
     cout << "Parse Tree: " << s << std::endl;
-
-    cout << "Teehee " << TVisitor::teehee << endl;
 
     return 0;
 }
