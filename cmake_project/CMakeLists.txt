@@ -44,6 +44,7 @@ add_executable(gram
 target_include_directories(gram PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/examples/testfile.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Debug/examples)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/examples/testfile.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/examples)
 
 target_compile_features(
         gram PRIVATE cxx_std_17
