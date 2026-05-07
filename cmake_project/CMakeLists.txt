@@ -9,11 +9,17 @@ if (MSVC)
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
 
+if (UNIX)
+    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/antlr4-unix/lib64/cmake)
+else()
+    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/antlr4-win/lib64/cmake)
+endif()
+
 set(WITH_DEMO OFF CACHE BOOL "" FORCE)
 set(WITH_STATIC_CRT ON CACHE BOOL "" FORCE)
 
 # add_subdirectory(antlr4)
-list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/cmake)
+
 
 find_package(antlr4-runtime REQUIRED)
 
