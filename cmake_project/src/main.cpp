@@ -5,6 +5,9 @@
 #include "PythonParser.h"
 
 #include <filesystem>
+#include <PythonParserBaseListener.h>
+
+#include "PythonCustomParserListener.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -31,12 +34,17 @@ int main(int argc, const char * argv[]) {
     PythonParser parser(&tokens);
     tree::ParseTree *tree = parser.file();
 
-    for (auto c : tree->children) {
-      cout << c->getText() << endl;
-    }
+    // for (auto c : tree->children) {
+    //   cout << c->getText() << endl;
+    // }
+    //
+    // auto s = tree->toStringTree(&parser);
+    // cout << "Parse Tree: " << s << std::endl;
 
-    auto s = tree->toStringTree(&parser);
-    cout << "Parse Tree: " << s << std::endl;
+	tree::ParseTreeWalker *walker = new tree::ParseTreeWalker();
+	PythonCustomParserListener *listener = new PythonCustomParserListener();
 
-    return 0;
+	walker->walk(listener, tree);
+	
+	return 0;
 }
