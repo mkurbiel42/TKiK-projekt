@@ -9,3 +9,4 @@ build
 */java-gen
 */cpp-gen
 */cmake-build-debug
+.idea
