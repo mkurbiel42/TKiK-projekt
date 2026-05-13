@@ -28,7 +28,10 @@ std::unique_ptr<antlr4::Token> PythonLexerBase::nextToken(){
             indents.pop();
         }
     }
-    if (_input->LA(1) == EOF) emit(commonToken(PythonParser::ENDMARKER, "ENDMARKER"));
+    if (_input->LA(1) == EOF){
+        if (tokens[tokens.size()-1]->getType() != PythonParser::NEWLINE) emit(commonToken(PythonParser::NEWLINE, "\n"));
+        emit(commonToken(PythonParser::ENDMARKER, "ENDMARKER"));
+    }
     std::unique_ptr<antlr4::Token> next = Lexer::nextToken();
     if (next->getChannel() == antlr4::Token::DEFAULT_CHANNEL) {
         lastToken = cloneToken(next);
@@ -105,6 +108,7 @@ void PythonLexerBase::onNewLine(){
                 indents.pop();
             }
         }
+        if (_input->LA(1) == EOF) emit(commonToken(PythonParser::ENDMARKER, "ENDMARKER"));
     }
 }
 
