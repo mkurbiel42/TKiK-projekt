@@ -455,7 +455,7 @@ public:
   public:
     Elif_stmtContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *ELSE();
+    antlr4::tree::TerminalNode *ELIF();
     Named_expressionContext *named_expression();
     antlr4::tree::TerminalNode *COLON();
     BlockContext *block();
@@ -1337,12 +1337,12 @@ public:
   public:
     As_targetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    T_primaryContext *t_primary();
-    antlr4::tree::TerminalNode *COMMA();
+    PrimaryContext *primary();
+    antlr4::tree::TerminalNode *DOT();
     antlr4::tree::TerminalNode *NAME();
-    antlr4::tree::TerminalNode *BRACE_LEFT();
+    antlr4::tree::TerminalNode *BRACKET_LEFT();
     SlicesContext *slices();
-    antlr4::tree::TerminalNode *BRACE_RIGHT();
+    antlr4::tree::TerminalNode *BRACKET_RIGHT();
     As_atomContext *as_atom();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -1355,19 +1355,56 @@ public:
   class  As_atomContext : public antlr4::ParserRuleContext {
   public:
     As_atomContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+   
+    As_atomContext() = default;
+    void copyFrom(As_atomContext *context);
+    using antlr4::ParserRuleContext::copyFrom;
+
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *NAME();
+
+   
+  };
+
+  class  As_atom_tupleContext : public As_atomContext {
+  public:
+    As_atom_tupleContext(As_atomContext *ctx);
+
     antlr4::tree::TerminalNode *PAR_LEFT();
     As_targetContext *as_target();
     antlr4::tree::TerminalNode *PAR_RIGHT();
-    As_target_tupleContext *as_target_tuple();
-    antlr4::tree::TerminalNode *BRACKET_LEFT();
-    antlr4::tree::TerminalNode *BRACE_RIGHT();
-    As_target_listContext *as_target_list();
-
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+  };
+
+  class  As_atom_nameContext : public As_atomContext {
+  public:
+    As_atom_nameContext(As_atomContext *ctx);
+
+    antlr4::tree::TerminalNode *NAME();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+  };
+
+  class  As_atom_listContext : public As_atomContext {
+  public:
+    As_atom_listContext(As_atomContext *ctx);
+
+    antlr4::tree::TerminalNode *BRACKET_LEFT();
+    antlr4::tree::TerminalNode *BRACKET_RIGHT();
+    As_target_listContext *as_target_list();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+  };
+
+  class  As_atom_tuple_tupleContext : public As_atomContext {
+  public:
+    As_atom_tuple_tupleContext(As_atomContext *ctx);
+
+    antlr4::tree::TerminalNode *PAR_LEFT();
+    antlr4::tree::TerminalNode *PAR_RIGHT();
+    As_target_tupleContext *as_target_tuple();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
   };
 
   As_atomContext* as_atom();
@@ -1399,7 +1436,7 @@ public:
     antlr4::tree::TerminalNode* DOT(size_t i);
     antlr4::tree::TerminalNode *BRACKET_LEFT();
     SlicesContext *slices();
-    antlr4::tree::TerminalNode *BRACE_RIGHT();
+    antlr4::tree::TerminalNode *BRACKET_RIGHT();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;

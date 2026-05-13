@@ -9,8 +9,8 @@
 class PythonCustomParserListener : public PythonParserBaseListener
 {
     public:
-    std::deque<Scope> names = {};
+    std::deque<Scope> scopes = {Scope()};
     std::list<std::string> errors = {};
-
+    std::string translated;
     void enterAssignment(PythonParser::AssignmentContext *ctx) override;
 };

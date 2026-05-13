@@ -132,8 +132,8 @@ kwarg_or_double_starred: NAME EQUALS expression | DOUBLESTAR expression;
 as_targets: as_target {_input->LA(1) != COMMA}? | as_target (COMMA as_target)* COMMA?;
 as_target_list: as_target (COMMA as_target)* COMMA?;
 as_target_tuple: as_target (COMMA as_target)+ COMMA? | as_target COMMA;
-as_target: t_primary COMMA NAME {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?
-    | t_primary BRACKET_LEFT slices BRACKET_RIGHT {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?
+as_target: primary DOT NAME {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?
+    | primary BRACKET_LEFT slices BRACKET_RIGHT {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?
     | as_atom;
 as_atom: NAME                                   # as_atom_name
     | PAR_LEFT as_target PAR_RIGHT              # as_atom_tuple

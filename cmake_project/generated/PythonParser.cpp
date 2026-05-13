@@ -232,7 +232,7 @@ void pythonparserParserInitialize() {
   	0,285,286,5,24,0,0,286,287,3,72,36,0,287,288,5,23,0,0,288,293,3,62,31,
   	0,289,294,3,36,18,0,290,292,3,38,19,0,291,290,1,0,0,0,291,292,1,0,0,0,
   	292,294,1,0,0,0,293,289,1,0,0,0,293,291,1,0,0,0,294,35,1,0,0,0,295,296,
-  	5,26,0,0,296,297,3,72,36,0,297,298,5,23,0,0,298,303,3,62,31,0,299,304,
+  	5,25,0,0,296,297,3,72,36,0,297,298,5,23,0,0,298,303,3,62,31,0,299,304,
   	3,36,18,0,300,302,3,38,19,0,301,300,1,0,0,0,301,302,1,0,0,0,302,304,1,
   	0,0,0,303,299,1,0,0,0,303,301,1,0,0,0,304,37,1,0,0,0,305,306,5,26,0,0,
   	306,307,5,23,0,0,307,308,3,62,31,0,308,39,1,0,0,0,309,310,5,27,0,0,310,
@@ -364,14 +364,14 @@ void pythonparserParserInitialize() {
   	0,0,0,748,749,1,0,0,0,749,751,1,0,0,0,750,752,5,14,0,0,751,750,1,0,0,
   	0,751,752,1,0,0,0,752,757,1,0,0,0,753,754,3,134,67,0,754,755,5,14,0,0,
   	755,757,1,0,0,0,756,743,1,0,0,0,756,753,1,0,0,0,757,133,1,0,0,0,758,759,
-  	3,142,71,0,759,760,5,14,0,0,760,761,5,65,0,0,761,762,4,67,14,0,762,771,
-  	1,0,0,0,763,764,3,142,71,0,764,765,5,20,0,0,765,766,3,110,55,0,766,767,
-  	5,21,0,0,767,768,4,67,15,0,768,771,1,0,0,0,769,771,3,136,68,0,770,758,
+  	3,108,54,0,759,760,5,37,0,0,760,761,5,65,0,0,761,762,4,67,14,0,762,771,
+  	1,0,0,0,763,764,3,108,54,0,764,765,5,18,0,0,765,766,3,110,55,0,766,767,
+  	5,19,0,0,767,768,4,67,15,0,768,771,1,0,0,0,769,771,3,136,68,0,770,758,
   	1,0,0,0,770,763,1,0,0,0,770,769,1,0,0,0,771,135,1,0,0,0,772,788,5,65,
   	0,0,773,774,5,16,0,0,774,775,3,134,67,0,775,776,5,17,0,0,776,788,1,0,
   	0,0,777,779,5,16,0,0,778,780,3,132,66,0,779,778,1,0,0,0,779,780,1,0,0,
   	0,780,781,1,0,0,0,781,788,5,17,0,0,782,784,5,18,0,0,783,785,3,130,65,
-  	0,784,783,1,0,0,0,784,785,1,0,0,0,785,786,1,0,0,0,786,788,5,21,0,0,787,
+  	0,784,783,1,0,0,0,784,785,1,0,0,0,785,786,1,0,0,0,786,788,5,19,0,0,787,
   	772,1,0,0,0,787,773,1,0,0,0,787,777,1,0,0,0,787,782,1,0,0,0,788,137,1,
   	0,0,0,789,796,3,140,70,0,790,796,5,65,0,0,791,792,5,16,0,0,792,793,3,
   	138,69,0,793,794,5,17,0,0,794,796,1,0,0,0,795,789,1,0,0,0,795,790,1,0,
@@ -380,7 +380,7 @@ void pythonparserParserInitialize() {
   	803,1,0,0,0,803,805,1,0,0,0,804,802,1,0,0,0,805,820,4,70,16,0,806,811,
   	5,65,0,0,807,808,5,37,0,0,808,810,5,65,0,0,809,807,1,0,0,0,810,813,1,
   	0,0,0,811,809,1,0,0,0,811,812,1,0,0,0,812,814,1,0,0,0,813,811,1,0,0,0,
-  	814,815,5,18,0,0,815,816,3,110,55,0,816,817,5,21,0,0,817,818,4,70,17,
+  	814,815,5,18,0,0,815,816,3,110,55,0,816,817,5,19,0,0,817,818,4,70,17,
   	0,818,820,1,0,0,0,819,797,1,0,0,0,819,806,1,0,0,0,820,141,1,0,0,0,821,
   	822,3,108,54,0,822,823,5,37,0,0,823,824,5,65,0,0,824,839,1,0,0,0,825,
   	826,3,108,54,0,826,828,5,16,0,0,827,829,3,116,58,0,828,827,1,0,0,0,828,
@@ -1959,27 +1959,56 @@ PythonParser::If_stmtContext* PythonParser::if_stmt() {
     block();
     setState(293);
     _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 14, _ctx)) {
-    case 1: {
-      setState(289);
-      elif_stmt();
-      break;
-    }
-
-    case 2: {
-      setState(291);
-      _errHandler->sync(this);
-
-      _la = _input->LA(1);
-      if (_la == PythonParser::ELSE) {
-        setState(290);
-        else_block();
+    switch (_input->LA(1)) {
+      case PythonParser::ELIF: {
+        setState(289);
+        elif_stmt();
+        break;
       }
-      break;
-    }
+
+      case PythonParser::DEDENT:
+      case PythonParser::ENDMARKER:
+      case PythonParser::RETURN:
+      case PythonParser::RAISE:
+      case PythonParser::PASS:
+      case PythonParser::DEL:
+      case PythonParser::BREAK:
+      case PythonParser::CONTINUE:
+      case PythonParser::GLOBAL:
+      case PythonParser::NONLOCAL:
+      case PythonParser::DEF:
+      case PythonParser::PAR_LEFT:
+      case PythonParser::BRACKET_LEFT:
+      case PythonParser::BRACE_LEFT:
+      case PythonParser::LAMBDA:
+      case PythonParser::IF:
+      case PythonParser::ELSE:
+      case PythonParser::FOR:
+      case PythonParser::WHILE:
+      case PythonParser::CLASS:
+      case PythonParser::MATCH:
+      case PythonParser::NOT:
+      case PythonParser::PLUS:
+      case PythonParser::MINUS:
+      case PythonParser::TRUE:
+      case PythonParser::FALSE:
+      case PythonParser::NONE:
+      case PythonParser::NAME:
+      case PythonParser::NUMBER:
+      case PythonParser::STRING: {
+        setState(291);
+        _errHandler->sync(this);
+
+        _la = _input->LA(1);
+        if (_la == PythonParser::ELSE) {
+          setState(290);
+          else_block();
+        }
+        break;
+      }
 
     default:
-      break;
+      throw NoViableAltException(this);
     }
    
   }
@@ -1998,8 +2027,8 @@ PythonParser::Elif_stmtContext::Elif_stmtContext(ParserRuleContext *parent, size
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* PythonParser::Elif_stmtContext::ELSE() {
-  return getToken(PythonParser::ELSE, 0);
+tree::TerminalNode* PythonParser::Elif_stmtContext::ELIF() {
+  return getToken(PythonParser::ELIF, 0);
 }
 
 PythonParser::Named_expressionContext* PythonParser::Elif_stmtContext::named_expression() {
@@ -2054,7 +2083,7 @@ PythonParser::Elif_stmtContext* PythonParser::elif_stmt() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(295);
-    match(PythonParser::ELSE);
+    match(PythonParser::ELIF);
     setState(296);
     named_expression();
     setState(297);
@@ -2063,27 +2092,56 @@ PythonParser::Elif_stmtContext* PythonParser::elif_stmt() {
     block();
     setState(303);
     _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 16, _ctx)) {
-    case 1: {
-      setState(299);
-      elif_stmt();
-      break;
-    }
-
-    case 2: {
-      setState(301);
-      _errHandler->sync(this);
-
-      _la = _input->LA(1);
-      if (_la == PythonParser::ELSE) {
-        setState(300);
-        else_block();
+    switch (_input->LA(1)) {
+      case PythonParser::ELIF: {
+        setState(299);
+        elif_stmt();
+        break;
       }
-      break;
-    }
+
+      case PythonParser::DEDENT:
+      case PythonParser::ENDMARKER:
+      case PythonParser::RETURN:
+      case PythonParser::RAISE:
+      case PythonParser::PASS:
+      case PythonParser::DEL:
+      case PythonParser::BREAK:
+      case PythonParser::CONTINUE:
+      case PythonParser::GLOBAL:
+      case PythonParser::NONLOCAL:
+      case PythonParser::DEF:
+      case PythonParser::PAR_LEFT:
+      case PythonParser::BRACKET_LEFT:
+      case PythonParser::BRACE_LEFT:
+      case PythonParser::LAMBDA:
+      case PythonParser::IF:
+      case PythonParser::ELSE:
+      case PythonParser::FOR:
+      case PythonParser::WHILE:
+      case PythonParser::CLASS:
+      case PythonParser::MATCH:
+      case PythonParser::NOT:
+      case PythonParser::PLUS:
+      case PythonParser::MINUS:
+      case PythonParser::TRUE:
+      case PythonParser::FALSE:
+      case PythonParser::NONE:
+      case PythonParser::NAME:
+      case PythonParser::NUMBER:
+      case PythonParser::STRING: {
+        setState(301);
+        _errHandler->sync(this);
+
+        _la = _input->LA(1);
+        if (_la == PythonParser::ELSE) {
+          setState(300);
+          else_block();
+        }
+        break;
+      }
 
     default:
-      break;
+      throw NoViableAltException(this);
     }
    
   }
@@ -6768,28 +6826,28 @@ PythonParser::As_targetContext::As_targetContext(ParserRuleContext *parent, size
   : ParserRuleContext(parent, invokingState) {
 }
 
-PythonParser::T_primaryContext* PythonParser::As_targetContext::t_primary() {
-  return getRuleContext<PythonParser::T_primaryContext>(0);
+PythonParser::PrimaryContext* PythonParser::As_targetContext::primary() {
+  return getRuleContext<PythonParser::PrimaryContext>(0);
 }
 
-tree::TerminalNode* PythonParser::As_targetContext::COMMA() {
-  return getToken(PythonParser::COMMA, 0);
+tree::TerminalNode* PythonParser::As_targetContext::DOT() {
+  return getToken(PythonParser::DOT, 0);
 }
 
 tree::TerminalNode* PythonParser::As_targetContext::NAME() {
   return getToken(PythonParser::NAME, 0);
 }
 
-tree::TerminalNode* PythonParser::As_targetContext::BRACE_LEFT() {
-  return getToken(PythonParser::BRACE_LEFT, 0);
+tree::TerminalNode* PythonParser::As_targetContext::BRACKET_LEFT() {
+  return getToken(PythonParser::BRACKET_LEFT, 0);
 }
 
 PythonParser::SlicesContext* PythonParser::As_targetContext::slices() {
   return getRuleContext<PythonParser::SlicesContext>(0);
 }
 
-tree::TerminalNode* PythonParser::As_targetContext::BRACE_RIGHT() {
-  return getToken(PythonParser::BRACE_RIGHT, 0);
+tree::TerminalNode* PythonParser::As_targetContext::BRACKET_RIGHT() {
+  return getToken(PythonParser::BRACKET_RIGHT, 0);
 }
 
 PythonParser::As_atomContext* PythonParser::As_targetContext::as_atom() {
@@ -6831,9 +6889,9 @@ PythonParser::As_targetContext* PythonParser::as_target() {
     case 1: {
       enterOuterAlt(_localctx, 1);
       setState(758);
-      t_primary();
+      primary(0);
       setState(759);
-      match(PythonParser::COMMA);
+      match(PythonParser::DOT);
       setState(760);
       match(PythonParser::NAME);
       setState(761);
@@ -6845,13 +6903,13 @@ PythonParser::As_targetContext* PythonParser::as_target() {
     case 2: {
       enterOuterAlt(_localctx, 2);
       setState(763);
-      t_primary();
+      primary(0);
       setState(764);
-      match(PythonParser::BRACE_LEFT);
+      match(PythonParser::BRACKET_LEFT);
       setState(765);
       slices();
       setState(766);
-      match(PythonParser::BRACE_RIGHT);
+      match(PythonParser::BRACKET_RIGHT);
       setState(767);
 
       if (!(_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT)) throw FailedPredicateException(this, "_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT");
@@ -6885,55 +6943,111 @@ PythonParser::As_atomContext::As_atomContext(ParserRuleContext *parent, size_t i
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* PythonParser::As_atomContext::NAME() {
-  return getToken(PythonParser::NAME, 0);
-}
-
-tree::TerminalNode* PythonParser::As_atomContext::PAR_LEFT() {
-  return getToken(PythonParser::PAR_LEFT, 0);
-}
-
-PythonParser::As_targetContext* PythonParser::As_atomContext::as_target() {
-  return getRuleContext<PythonParser::As_targetContext>(0);
-}
-
-tree::TerminalNode* PythonParser::As_atomContext::PAR_RIGHT() {
-  return getToken(PythonParser::PAR_RIGHT, 0);
-}
-
-PythonParser::As_target_tupleContext* PythonParser::As_atomContext::as_target_tuple() {
-  return getRuleContext<PythonParser::As_target_tupleContext>(0);
-}
-
-tree::TerminalNode* PythonParser::As_atomContext::BRACKET_LEFT() {
-  return getToken(PythonParser::BRACKET_LEFT, 0);
-}
-
-tree::TerminalNode* PythonParser::As_atomContext::BRACE_RIGHT() {
-  return getToken(PythonParser::BRACE_RIGHT, 0);
-}
-
-PythonParser::As_target_listContext* PythonParser::As_atomContext::as_target_list() {
-  return getRuleContext<PythonParser::As_target_listContext>(0);
-}
-
 
 size_t PythonParser::As_atomContext::getRuleIndex() const {
   return PythonParser::RuleAs_atom;
 }
 
-void PythonParser::As_atomContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<PythonParserListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterAs_atom(this);
+void PythonParser::As_atomContext::copyFrom(As_atomContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
 }
 
-void PythonParser::As_atomContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<PythonParserListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitAs_atom(this);
+//----------------- As_atom_tupleContext ------------------------------------------------------------------
+
+tree::TerminalNode* PythonParser::As_atom_tupleContext::PAR_LEFT() {
+  return getToken(PythonParser::PAR_LEFT, 0);
 }
 
+PythonParser::As_targetContext* PythonParser::As_atom_tupleContext::as_target() {
+  return getRuleContext<PythonParser::As_targetContext>(0);
+}
+
+tree::TerminalNode* PythonParser::As_atom_tupleContext::PAR_RIGHT() {
+  return getToken(PythonParser::PAR_RIGHT, 0);
+}
+
+PythonParser::As_atom_tupleContext::As_atom_tupleContext(As_atomContext *ctx) { copyFrom(ctx); }
+
+void PythonParser::As_atom_tupleContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<PythonParserListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterAs_atom_tuple(this);
+}
+void PythonParser::As_atom_tupleContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<PythonParserListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitAs_atom_tuple(this);
+}
+//----------------- As_atom_nameContext ------------------------------------------------------------------
+
+tree::TerminalNode* PythonParser::As_atom_nameContext::NAME() {
+  return getToken(PythonParser::NAME, 0);
+}
+
+PythonParser::As_atom_nameContext::As_atom_nameContext(As_atomContext *ctx) { copyFrom(ctx); }
+
+void PythonParser::As_atom_nameContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<PythonParserListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterAs_atom_name(this);
+}
+void PythonParser::As_atom_nameContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<PythonParserListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitAs_atom_name(this);
+}
+//----------------- As_atom_listContext ------------------------------------------------------------------
+
+tree::TerminalNode* PythonParser::As_atom_listContext::BRACKET_LEFT() {
+  return getToken(PythonParser::BRACKET_LEFT, 0);
+}
+
+tree::TerminalNode* PythonParser::As_atom_listContext::BRACKET_RIGHT() {
+  return getToken(PythonParser::BRACKET_RIGHT, 0);
+}
+
+PythonParser::As_target_listContext* PythonParser::As_atom_listContext::as_target_list() {
+  return getRuleContext<PythonParser::As_target_listContext>(0);
+}
+
+PythonParser::As_atom_listContext::As_atom_listContext(As_atomContext *ctx) { copyFrom(ctx); }
+
+void PythonParser::As_atom_listContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<PythonParserListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterAs_atom_list(this);
+}
+void PythonParser::As_atom_listContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<PythonParserListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitAs_atom_list(this);
+}
+//----------------- As_atom_tuple_tupleContext ------------------------------------------------------------------
+
+tree::TerminalNode* PythonParser::As_atom_tuple_tupleContext::PAR_LEFT() {
+  return getToken(PythonParser::PAR_LEFT, 0);
+}
+
+tree::TerminalNode* PythonParser::As_atom_tuple_tupleContext::PAR_RIGHT() {
+  return getToken(PythonParser::PAR_RIGHT, 0);
+}
+
+PythonParser::As_target_tupleContext* PythonParser::As_atom_tuple_tupleContext::as_target_tuple() {
+  return getRuleContext<PythonParser::As_target_tupleContext>(0);
+}
+
+PythonParser::As_atom_tuple_tupleContext::As_atom_tuple_tupleContext(As_atomContext *ctx) { copyFrom(ctx); }
+
+void PythonParser::As_atom_tuple_tupleContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<PythonParserListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterAs_atom_tuple_tuple(this);
+}
+void PythonParser::As_atom_tuple_tupleContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<PythonParserListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitAs_atom_tuple_tuple(this);
+}
 PythonParser::As_atomContext* PythonParser::as_atom() {
   As_atomContext *_localctx = _tracker.createInstance<As_atomContext>(_ctx, getState());
   enterRule(_localctx, 136, PythonParser::RuleAs_atom);
@@ -6951,6 +7065,7 @@ PythonParser::As_atomContext* PythonParser::as_atom() {
     _errHandler->sync(this);
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 84, _ctx)) {
     case 1: {
+      _localctx = _tracker.createInstance<PythonParser::As_atom_nameContext>(_localctx);
       enterOuterAlt(_localctx, 1);
       setState(772);
       match(PythonParser::NAME);
@@ -6958,6 +7073,7 @@ PythonParser::As_atomContext* PythonParser::as_atom() {
     }
 
     case 2: {
+      _localctx = _tracker.createInstance<PythonParser::As_atom_tupleContext>(_localctx);
       enterOuterAlt(_localctx, 2);
       setState(773);
       match(PythonParser::PAR_LEFT);
@@ -6969,6 +7085,7 @@ PythonParser::As_atomContext* PythonParser::as_atom() {
     }
 
     case 3: {
+      _localctx = _tracker.createInstance<PythonParser::As_atom_tuple_tupleContext>(_localctx);
       enterOuterAlt(_localctx, 3);
       setState(777);
       match(PythonParser::PAR_LEFT);
@@ -6987,6 +7104,7 @@ PythonParser::As_atomContext* PythonParser::as_atom() {
     }
 
     case 4: {
+      _localctx = _tracker.createInstance<PythonParser::As_atom_listContext>(_localctx);
       enterOuterAlt(_localctx, 4);
       setState(782);
       match(PythonParser::BRACKET_LEFT);
@@ -7000,7 +7118,7 @@ PythonParser::As_atomContext* PythonParser::as_atom() {
         as_target_list();
       }
       setState(786);
-      match(PythonParser::BRACE_RIGHT);
+      match(PythonParser::BRACKET_RIGHT);
       break;
     }
 
@@ -7145,8 +7263,8 @@ PythonParser::SlicesContext* PythonParser::Single_subscript_attribute_targetCont
   return getRuleContext<PythonParser::SlicesContext>(0);
 }
 
-tree::TerminalNode* PythonParser::Single_subscript_attribute_targetContext::BRACE_RIGHT() {
-  return getToken(PythonParser::BRACE_RIGHT, 0);
+tree::TerminalNode* PythonParser::Single_subscript_attribute_targetContext::BRACKET_RIGHT() {
+  return getToken(PythonParser::BRACKET_RIGHT, 0);
 }
 
 
@@ -7228,7 +7346,7 @@ PythonParser::Single_subscript_attribute_targetContext* PythonParser::single_sub
       setState(815);
       slices();
       setState(816);
-      match(PythonParser::BRACE_RIGHT);
+      match(PythonParser::BRACKET_RIGHT);
       setState(817);
 
       if (!(_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT)) throw FailedPredicateException(this, "_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT");

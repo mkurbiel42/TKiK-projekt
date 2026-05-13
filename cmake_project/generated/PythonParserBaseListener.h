@@ -235,8 +235,17 @@ public:
   virtual void enterAs_target(PythonParser::As_targetContext * /*ctx*/) override { }
   virtual void exitAs_target(PythonParser::As_targetContext * /*ctx*/) override { }
 
-  virtual void enterAs_atom(PythonParser::As_atomContext * /*ctx*/) override { }
-  virtual void exitAs_atom(PythonParser::As_atomContext * /*ctx*/) override { }
+  virtual void enterAs_atom_name(PythonParser::As_atom_nameContext * /*ctx*/) override { }
+  virtual void exitAs_atom_name(PythonParser::As_atom_nameContext * /*ctx*/) override { }
+
+  virtual void enterAs_atom_tuple(PythonParser::As_atom_tupleContext * /*ctx*/) override { }
+  virtual void exitAs_atom_tuple(PythonParser::As_atom_tupleContext * /*ctx*/) override { }
+
+  virtual void enterAs_atom_tuple_tuple(PythonParser::As_atom_tuple_tupleContext * /*ctx*/) override { }
+  virtual void exitAs_atom_tuple_tuple(PythonParser::As_atom_tuple_tupleContext * /*ctx*/) override { }
+
+  virtual void enterAs_atom_list(PythonParser::As_atom_listContext * /*ctx*/) override { }
+  virtual void exitAs_atom_list(PythonParser::As_atom_listContext * /*ctx*/) override { }
 
   virtual void enterSingle_target(PythonParser::Single_targetContext * /*ctx*/) override { }
   virtual void exitSingle_target(PythonParser::Single_targetContext * /*ctx*/) override { }
