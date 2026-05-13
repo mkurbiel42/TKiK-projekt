@@ -41,7 +41,7 @@ lambdef: LAMBDA function_params? COLON expression;
 
 // if stmt
 if_stmt: IF named_expression COLON block (elif_stmt | else_block?);
-elif_stmt: ELSE named_expression COLON block (elif_stmt | else_block?);
+elif_stmt: ELIF named_expression COLON block (elif_stmt | else_block?);
 else_block: ELSE COLON block;
 
 // for stmt
