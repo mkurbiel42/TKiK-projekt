@@ -1,9 +1,16 @@
+#include <list>
 #include <PythonParserBaseListener.h>
 #include <PythonParserListener.h>
+
+#include "Scope.h"
 //
 // Created by root on 5/7/26.
 //
-class PythonCustomParserListener : public PythonParserBaseListener{
-    void enterStatement(PythonParser::StatementContext* ctx) override;
-    void exitStatement(PythonParser::StatementContext* ctx) override;
+class PythonCustomParserListener : public PythonParserBaseListener
+{
+    public:
+    std::deque<Scope> names = {};
+    std::list<std::string> errors = {};
+
+    void enterAssignment(PythonParser::AssignmentContext *ctx) override;
 };

@@ -42,7 +42,7 @@ std::unique_ptr<antlr4::Token> PythonLexerBase::nextToken(){
 }
 
 std::unique_ptr<antlr4::Token> PythonLexerBase::createDedent(){
-    std::unique_ptr<antlr4::CommonToken> dedent = commonToken(PythonParser::DEDENT, "");
+    std::unique_ptr<antlr4::CommonToken> dedent = commonToken(PythonParser::DEDENT, "DEDENT");
     return dedent;
 }
 

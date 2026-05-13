@@ -31,6 +31,8 @@ add_library(parser STATIC
         generated/PythonLexerBase.cpp
         generated/PythonCustomParserListener.cpp
         generated/PythonCustomParserListener.h
+        generated/Scope.cpp
+        generated/Scope.h
 )
 
 target_include_directories(parser

@@ -34,7 +34,7 @@ nonlocal_stmt: NONLOCAL NAME (COMMA NAME)*;
 // compound statements
 
 //function definition
-function_def: 'def' NAME PAR_LEFT function_params? PAR_RIGHT COLON block;
+function_def: DEF NAME PAR_LEFT function_params? PAR_RIGHT COLON block;
 
 // lambda function def
 lambdef: LAMBDA function_params? COLON expression;
@@ -133,17 +133,17 @@ as_targets: as_target {_input->LA(1) != COMMA}? | as_target (COMMA as_target)* C
 as_target_list: as_target (COMMA as_target)* COMMA?;
 as_target_tuple: as_target (COMMA as_target)+ COMMA? | as_target COMMA;
 as_target: t_primary COMMA NAME {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?
-    | t_primary BRACE_LEFT slices BRACE_RIGHT {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?
+    | t_primary BRACKET_LEFT slices BRACKET_RIGHT {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?
     | as_atom;
-as_atom: NAME 
-    | PAR_LEFT as_target PAR_RIGHT 
-    | PAR_LEFT as_target_tuple? PAR_RIGHT
-    | BRACKET_LEFT as_target_list? BRACE_RIGHT
+as_atom: NAME                                   # as_atom_name
+    | PAR_LEFT as_target PAR_RIGHT              # as_atom_tuple
+    | PAR_LEFT as_target_tuple? PAR_RIGHT       # as_atom_tuple_tuple
+    | BRACKET_LEFT as_target_list? BRACKET_RIGHT# as_atom_list
     ;
 
 single_target: single_subscript_attribute_target | NAME | PAR_LEFT single_target PAR_RIGHT;
 single_subscript_attribute_target: NAME (DOT NAME)* {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?
-    | NAME (DOT NAME)* BRACKET_LEFT slices BRACE_RIGHT {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?;
+    | NAME (DOT NAME)* BRACKET_LEFT slices BRACKET_RIGHT {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?;
 
 
 t_primary: primary DOT NAME                           #field_tprim

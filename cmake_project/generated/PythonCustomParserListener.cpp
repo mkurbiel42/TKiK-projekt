@@ -4,12 +4,13 @@
 
 #include "PythonCustomParserListener.h"
 
-void PythonCustomParserListener::enterStatement(PythonParser::StatementContext* ctx)
-{
-    std::cout << "entered statement: " << ctx->getText() << std::endl;
-}
+void PythonCustomParserListener::enterAssignment(PythonParser::AssignmentContext *ctx) {
+    std::string alreadyDeclared;
+    std::string notDeclared;
 
-void PythonCustomParserListener::exitStatement(PythonParser::StatementContext* ctx)
-{
-    std::cout << "exited statemenet: " << ctx->getText() << std::endl;
+    for (auto d : ctx->as_targets()) {
+        for (auto t : d->as_target()) {
+            if (t->as_atom())
+        }
+    }
 }
