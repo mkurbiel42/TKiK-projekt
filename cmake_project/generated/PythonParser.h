@@ -42,16 +42,16 @@ public:
     RuleComp_eq = 42, RuleComp_noteq = 43, RuleComp_lte = 44, RuleComp_lt = 45, 
     RuleComp_gte = 46, RuleComp_gt = 47, RuleComp_notin = 48, RuleComp_in = 49, 
     RuleSum = 50, RuleTerm = 51, RuleFactor = 52, RulePower = 53, RulePrimary = 54, 
-    RuleSlices = 55, RuleSlice = 56, RuleAtom = 57, RuleArguments = 58, 
-    RuleArg_expression = 59, RuleKwargs = 60, RuleStarred_expression = 61, 
-    RuleKwarg_or_starred = 62, RuleKwarg_or_double_starred = 63, RuleAs_targets = 64, 
-    RuleAs_target_list = 65, RuleAs_target_tuple = 66, RuleAs_target = 67, 
-    RuleAs_atom = 68, RuleSingle_target = 69, RuleSingle_subscript_attribute_target = 70, 
-    RuleT_primary = 71, RuleT_lookahead = 72, RuleTargets = 73, RuleTarget = 74, 
-    RuleDel_targets = 75, RuleDel_target = 76, RuleStrings = 77, RuleList = 78, 
-    RuleTuple = 79, RuleSet = 80, RuleDict = 81, RuleDouble_starred_kvpairs = 82, 
-    RuleDouble_starred_kvpair = 83, RuleKvpair = 84, RuleFor_if_clauses = 85, 
-    RuleFor_if_clause = 86, RuleListcomp = 87, RuleSetcomp = 88, RuleDictcomp = 89
+    RuleSlices = 55, RuleSlice = 56, RuleAtom = 57, RuleGroup = 58, RuleArguments = 59, 
+    RuleArg_expression = 60, RuleKwargs = 61, RuleStarred_expression = 62, 
+    RuleKwarg_or_starred = 63, RuleKwarg_or_double_starred = 64, RuleAs_targets = 65, 
+    RuleAs_target_list = 66, RuleAs_target_tuple = 67, RuleAs_target = 68, 
+    RuleAs_atom = 69, RuleSingle_target = 70, RuleSingle_subscript_attribute_target = 71, 
+    RuleT_primary = 72, RuleT_lookahead = 73, RuleTargets = 74, RuleTarget = 75, 
+    RuleDel_targets = 76, RuleDel_target = 77, RuleStrings = 78, RuleList = 79, 
+    RuleTuple = 80, RuleSet = 81, RuleDict = 82, RuleDouble_starred_kvpairs = 83, 
+    RuleDouble_starred_kvpair = 84, RuleKvpair = 85, RuleFor_if_clauses = 86, 
+    RuleFor_if_clause = 87, RuleListcomp = 88, RuleSetcomp = 89, RuleDictcomp = 90
   };
 
   explicit PythonParser(antlr4::TokenStream *input);
@@ -129,6 +129,7 @@ public:
   class SlicesContext;
   class SliceContext;
   class AtomContext;
+  class GroupContext;
   class ArgumentsContext;
   class Arg_expressionContext;
   class KwargsContext;
@@ -248,18 +249,38 @@ public:
   class  AssignmentContext : public antlr4::ParserRuleContext {
   public:
     AssignmentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+   
+    AssignmentContext() = default;
+    void copyFrom(AssignmentContext *context);
+    using antlr4::ParserRuleContext::copyFrom;
+
     virtual size_t getRuleIndex() const override;
+
+   
+  };
+
+  class  Simple_assignmentContext : public AssignmentContext {
+  public:
+    Simple_assignmentContext(AssignmentContext *ctx);
+
     ExpressionsContext *expressions();
     std::vector<As_targetsContext *> as_targets();
     As_targetsContext* as_targets(size_t i);
     std::vector<antlr4::tree::TerminalNode *> EQUALS();
     antlr4::tree::TerminalNode* EQUALS(size_t i);
-    Single_targetContext *single_target();
-    AugassignContext *augassign();
-
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+  };
+
+  class  Aug_assignmentContext : public AssignmentContext {
+  public:
+    Aug_assignmentContext(AssignmentContext *ctx);
+
+    Single_targetContext *single_target();
+    AugassignContext *augassign();
+    ExpressionsContext *expressions();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
   };
 
   AssignmentContext* assignment();
@@ -1176,6 +1197,7 @@ public:
     StringsContext *strings();
     antlr4::tree::TerminalNode *NUMBER();
     TupleContext *tuple();
+    GroupContext *group();
     ListContext *list();
     ListcompContext *listcomp();
     DictContext *dict();
@@ -1189,6 +1211,21 @@ public:
   };
 
   AtomContext* atom();
+
+  class  GroupContext : public antlr4::ParserRuleContext {
+  public:
+    GroupContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *PAR_LEFT();
+    ExpressionContext *expression();
+    antlr4::tree::TerminalNode *PAR_RIGHT();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  GroupContext* group();
 
   class  ArgumentsContext : public antlr4::ParserRuleContext {
   public:

@@ -31,8 +31,11 @@ public:
   virtual void enterCompound_stmt(PythonParser::Compound_stmtContext * /*ctx*/) override { }
   virtual void exitCompound_stmt(PythonParser::Compound_stmtContext * /*ctx*/) override { }
 
-  virtual void enterAssignment(PythonParser::AssignmentContext * /*ctx*/) override { }
-  virtual void exitAssignment(PythonParser::AssignmentContext * /*ctx*/) override { }
+  virtual void enterSimple_assignment(PythonParser::Simple_assignmentContext * /*ctx*/) override { }
+  virtual void exitSimple_assignment(PythonParser::Simple_assignmentContext * /*ctx*/) override { }
+
+  virtual void enterAug_assignment(PythonParser::Aug_assignmentContext * /*ctx*/) override { }
+  virtual void exitAug_assignment(PythonParser::Aug_assignmentContext * /*ctx*/) override { }
 
   virtual void enterAugassign(PythonParser::AugassignContext * /*ctx*/) override { }
   virtual void exitAugassign(PythonParser::AugassignContext * /*ctx*/) override { }
@@ -204,6 +207,9 @@ public:
 
   virtual void enterAtom(PythonParser::AtomContext * /*ctx*/) override { }
   virtual void exitAtom(PythonParser::AtomContext * /*ctx*/) override { }
+
+  virtual void enterGroup(PythonParser::GroupContext * /*ctx*/) override { }
+  virtual void exitGroup(PythonParser::GroupContext * /*ctx*/) override { }
 
   virtual void enterArguments(PythonParser::ArgumentsContext * /*ctx*/) override { }
   virtual void exitArguments(PythonParser::ArgumentsContext * /*ctx*/) override { }

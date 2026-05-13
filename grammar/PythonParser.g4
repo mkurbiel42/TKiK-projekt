@@ -12,8 +12,9 @@ simple_stmt: (assignment | expressions | return_stmt | raise_stmt | pass_stmt | 
 compound_stmt: function_def | if_stmt | class_def | for_stmt | while_stmt | match_stmt;
 
 // simple statements
-assignment: (as_targets EQUALS)+ expressions
-    | single_target augassign expressions;
+assignment: (as_targets EQUALS)+ expressions    # simple_assignment
+    | single_target augassign expressions       # aug_assignment
+    ;
 augassign: PLUSEQUAL
     | MINUSEQUAL
     | STAREQUAL
@@ -115,7 +116,9 @@ primary: primary DOT NAME           #field_prim
     ;
 slices: slice {_input->LA(1) != COMMA}? | ((slice | expression) (COMMA (slice | expression))*) COMMA?;
 slice: expression? COLON expression? (COLON expression?)? | named_expression;
-atom: NAME | TRUE | FALSE | NONE | strings | NUMBER | tuple | list | listcomp | dict | dictcomp | set | setcomp;
+atom: NAME | TRUE | FALSE | NONE | strings | NUMBER | tuple | group | list | listcomp | dict | dictcomp | set | setcomp;
+
+group: PAR_LEFT expression PAR_RIGHT;
 
 // function call arguments
 arguments: arg_expression (COMMA arg_expression)* COMMA?;

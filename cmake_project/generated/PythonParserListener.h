@@ -29,8 +29,11 @@ public:
   virtual void enterCompound_stmt(PythonParser::Compound_stmtContext *ctx) = 0;
   virtual void exitCompound_stmt(PythonParser::Compound_stmtContext *ctx) = 0;
 
-  virtual void enterAssignment(PythonParser::AssignmentContext *ctx) = 0;
-  virtual void exitAssignment(PythonParser::AssignmentContext *ctx) = 0;
+  virtual void enterSimple_assignment(PythonParser::Simple_assignmentContext *ctx) = 0;
+  virtual void exitSimple_assignment(PythonParser::Simple_assignmentContext *ctx) = 0;
+
+  virtual void enterAug_assignment(PythonParser::Aug_assignmentContext *ctx) = 0;
+  virtual void exitAug_assignment(PythonParser::Aug_assignmentContext *ctx) = 0;
 
   virtual void enterAugassign(PythonParser::AugassignContext *ctx) = 0;
   virtual void exitAugassign(PythonParser::AugassignContext *ctx) = 0;
@@ -202,6 +205,9 @@ public:
 
   virtual void enterAtom(PythonParser::AtomContext *ctx) = 0;
   virtual void exitAtom(PythonParser::AtomContext *ctx) = 0;
+
+  virtual void enterGroup(PythonParser::GroupContext *ctx) = 0;
+  virtual void exitGroup(PythonParser::GroupContext *ctx) = 0;
 
   virtual void enterArguments(PythonParser::ArgumentsContext *ctx) = 0;
   virtual void exitArguments(PythonParser::ArgumentsContext *ctx) = 0;
