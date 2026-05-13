@@ -26,8 +26,10 @@ int main(int argc, const char * argv[]) {
 		cout << "unable to open the file" << endl;
 		return 1;
 	}
-	
-    ANTLRInputStream input(inputBuffer.str());
+
+	auto bufferStr = inputBuffer.str();
+	if (bufferStr.back() != '\n') bufferStr += '\n';
+    ANTLRInputStream input(bufferStr);
 	PythonLexer lexer(&input);
     CommonTokenStream tokens(&lexer);
 
