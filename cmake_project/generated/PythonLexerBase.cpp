@@ -29,7 +29,8 @@ std::unique_ptr<antlr4::Token> PythonLexerBase::nextToken(){
         }
     }
     if (_input->LA(1) == EOF){
-        if (tokens[tokens.size()-1]->getType() != PythonParser::NEWLINE) emit(commonToken(PythonParser::NEWLINE, "\n"));
+        auto t = tokens[tokens.size()-1]->getType();
+        if (t != PythonParser::DEDENT) emit(commonToken(PythonParser::NEWLINE, "\n"));
         emit(commonToken(PythonParser::ENDMARKER, "ENDMARKER"));
     }
     std::unique_ptr<antlr4::Token> next = Lexer::nextToken();
@@ -88,7 +89,8 @@ void PythonLexerBase::onNewLine(){
     std::string spaces = std::regex_replace(getText(), std::regex("[\r\n\f]+"), "");
     int next = _input->LA(1);
     int nextnext = _input->LA(2);
-    if (opened > 0 || (nextnext != -1 && (next == '\r' || next == '\n' || next == '\f' || next == '#'))) {
+    // if (opened > 0 || (nextnext != -1 && (next == '\r' || next == '\n' || next == '\f' || next == '#'))) {
+    if (opened > 0 || next == '\r' || next == '\n' || next == '\f' || next == '#'){
         skip();
     }
     else {
@@ -108,8 +110,8 @@ void PythonLexerBase::onNewLine(){
                 indents.pop();
             }
         }
-        if (_input->LA(1) == EOF) emit(commonToken(PythonParser::ENDMARKER, "ENDMARKER"));
     }
+    if (_input->LA(1) == EOF) emit(commonToken(PythonParser::ENDMARKER, "ENDMARKER"));
 }
 
 void PythonLexerBase::reset(){
