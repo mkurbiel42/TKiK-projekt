@@ -34,12 +34,12 @@ int main(int argc, const char * argv[]) {
     PythonParser parser(&tokens);
     tree::ParseTree *tree = parser.file();
 
-    // for (auto c : tree->children) {
-    //   cout << c->getText() << endl;
-    // }
-    //
-    // auto s = tree->toStringTree(&parser);
-    // cout << "Parse Tree: " << s << std::endl;
+    for (auto c : tree->children) {
+      cout << c->getText() << endl;
+    }
+
+    auto s = tree->toStringTree(&parser);
+    cout << "Parse Tree: " << s << std::endl;
 
 	tree::ParseTreeWalker *walker = new tree::ParseTreeWalker();
 	PythonCustomParserListener *listener = new PythonCustomParserListener();

@@ -10,7 +10,7 @@ void PythonCustomParserListener::enterAssignment(PythonParser::AssignmentContext
 
     for (auto d : ctx->as_targets()) {
         for (auto t : d->as_target()) {
-            if (t->as_atom())
+            // if (t->as_atom()->)
         }
     }
 }
