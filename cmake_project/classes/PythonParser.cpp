@@ -1,8 +1,9 @@
 
-// Generated from PythonParser.g4 by ANTLR 4.13.2
+// Generated from ./PythonParser.g4 by ANTLR 4.13.2
 
 
 #include "PythonParserListener.h"
+#include "PythonParserVisitor.h"
 
 #include "PythonParser.h"
 
@@ -512,6 +513,14 @@ void PythonParser::FileContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitFile(this);
 }
 
+
+std::any PythonParser::FileContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitFile(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::FileContext* PythonParser::file() {
   FileContext *_localctx = _tracker.createInstance<FileContext>(_ctx, getState());
   enterRule(_localctx, 0, PythonParser::RuleFile);
@@ -579,6 +588,14 @@ void PythonParser::StatementsContext::exitRule(tree::ParseTreeListener *listener
     parserListener->exitStatements(this);
 }
 
+
+std::any PythonParser::StatementsContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitStatements(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::StatementsContext* PythonParser::statements() {
   StatementsContext *_localctx = _tracker.createInstance<StatementsContext>(_ctx, getState());
   enterRule(_localctx, 2, PythonParser::RuleStatements);
@@ -644,6 +661,14 @@ void PythonParser::StatementContext::exitRule(tree::ParseTreeListener *listener)
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitStatement(this);
+}
+
+
+std::any PythonParser::StatementContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitStatement(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::StatementContext* PythonParser::statement() {
@@ -779,6 +804,14 @@ void PythonParser::Simple_stmtContext::exitRule(tree::ParseTreeListener *listene
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitSimple_stmt(this);
+}
+
+
+std::any PythonParser::Simple_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitSimple_stmt(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Simple_stmtContext* PythonParser::simple_stmt() {
@@ -920,6 +953,14 @@ void PythonParser::Compound_stmtContext::exitRule(tree::ParseTreeListener *liste
     parserListener->exitCompound_stmt(this);
 }
 
+
+std::any PythonParser::Compound_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitCompound_stmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Compound_stmtContext* PythonParser::compound_stmt() {
   Compound_stmtContext *_localctx = _tracker.createInstance<Compound_stmtContext>(_ctx, getState());
   enterRule(_localctx, 8, PythonParser::RuleCompound_stmt);
@@ -1040,6 +1081,13 @@ void PythonParser::Simple_assignmentContext::exitRule(tree::ParseTreeListener *l
   if (parserListener != nullptr)
     parserListener->exitSimple_assignment(this);
 }
+
+std::any PythonParser::Simple_assignmentContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitSimple_assignment(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- Aug_assignmentContext ------------------------------------------------------------------
 
 PythonParser::Single_targetContext* PythonParser::Aug_assignmentContext::single_target() {
@@ -1065,6 +1113,13 @@ void PythonParser::Aug_assignmentContext::exitRule(tree::ParseTreeListener *list
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitAug_assignment(this);
+}
+
+std::any PythonParser::Aug_assignmentContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAug_assignment(this);
+  else
+    return visitor->visitChildren(this);
 }
 PythonParser::AssignmentContext* PythonParser::assignment() {
   AssignmentContext *_localctx = _tracker.createInstance<AssignmentContext>(_ctx, getState());
@@ -1187,6 +1242,14 @@ void PythonParser::AugassignContext::exitRule(tree::ParseTreeListener *listener)
     parserListener->exitAugassign(this);
 }
 
+
+std::any PythonParser::AugassignContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAugassign(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::AugassignContext* PythonParser::augassign() {
   AugassignContext *_localctx = _tracker.createInstance<AugassignContext>(_ctx, getState());
   enterRule(_localctx, 12, PythonParser::RuleAugassign);
@@ -1251,6 +1314,14 @@ void PythonParser::Return_stmtContext::exitRule(tree::ParseTreeListener *listene
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitReturn_stmt(this);
+}
+
+
+std::any PythonParser::Return_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitReturn_stmt(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Return_stmtContext* PythonParser::return_stmt() {
@@ -1320,6 +1391,14 @@ void PythonParser::Raise_stmtContext::exitRule(tree::ParseTreeListener *listener
     parserListener->exitRaise_stmt(this);
 }
 
+
+std::any PythonParser::Raise_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitRaise_stmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Raise_stmtContext* PythonParser::raise_stmt() {
   Raise_stmtContext *_localctx = _tracker.createInstance<Raise_stmtContext>(_ctx, getState());
   enterRule(_localctx, 16, PythonParser::RuleRaise_stmt);
@@ -1383,6 +1462,14 @@ void PythonParser::Pass_stmtContext::exitRule(tree::ParseTreeListener *listener)
     parserListener->exitPass_stmt(this);
 }
 
+
+std::any PythonParser::Pass_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitPass_stmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Pass_stmtContext* PythonParser::pass_stmt() {
   Pass_stmtContext *_localctx = _tracker.createInstance<Pass_stmtContext>(_ctx, getState());
   enterRule(_localctx, 18, PythonParser::RulePass_stmt);
@@ -1440,6 +1527,14 @@ void PythonParser::Del_stmtContext::exitRule(tree::ParseTreeListener *listener) 
     parserListener->exitDel_stmt(this);
 }
 
+
+std::any PythonParser::Del_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitDel_stmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Del_stmtContext* PythonParser::del_stmt() {
   Del_stmtContext *_localctx = _tracker.createInstance<Del_stmtContext>(_ctx, getState());
   enterRule(_localctx, 20, PythonParser::RuleDel_stmt);
@@ -1495,6 +1590,14 @@ void PythonParser::Break_stmtContext::exitRule(tree::ParseTreeListener *listener
     parserListener->exitBreak_stmt(this);
 }
 
+
+std::any PythonParser::Break_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitBreak_stmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Break_stmtContext* PythonParser::break_stmt() {
   Break_stmtContext *_localctx = _tracker.createInstance<Break_stmtContext>(_ctx, getState());
   enterRule(_localctx, 22, PythonParser::RuleBreak_stmt);
@@ -1546,6 +1649,14 @@ void PythonParser::Continue_stmtContext::exitRule(tree::ParseTreeListener *liste
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitContinue_stmt(this);
+}
+
+
+std::any PythonParser::Continue_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitContinue_stmt(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Continue_stmtContext* PythonParser::continue_stmt() {
@@ -1615,6 +1726,14 @@ void PythonParser::Global_stmtContext::exitRule(tree::ParseTreeListener *listene
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitGlobal_stmt(this);
+}
+
+
+std::any PythonParser::Global_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitGlobal_stmt(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Global_stmtContext* PythonParser::global_stmt() {
@@ -1699,6 +1818,14 @@ void PythonParser::Nonlocal_stmtContext::exitRule(tree::ParseTreeListener *liste
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitNonlocal_stmt(this);
+}
+
+
+std::any PythonParser::Nonlocal_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitNonlocal_stmt(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Nonlocal_stmtContext* PythonParser::nonlocal_stmt() {
@@ -1793,6 +1920,14 @@ void PythonParser::Function_defContext::exitRule(tree::ParseTreeListener *listen
     parserListener->exitFunction_def(this);
 }
 
+
+std::any PythonParser::Function_defContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitFunction_def(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Function_defContext* PythonParser::function_def() {
   Function_defContext *_localctx = _tracker.createInstance<Function_defContext>(_ctx, getState());
   enterRule(_localctx, 30, PythonParser::RuleFunction_def);
@@ -1875,6 +2010,14 @@ void PythonParser::LambdefContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitLambdef(this);
+}
+
+
+std::any PythonParser::LambdefContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitLambdef(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::LambdefContext* PythonParser::lambdef() {
@@ -1961,6 +2104,14 @@ void PythonParser::If_stmtContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitIf_stmt(this);
+}
+
+
+std::any PythonParser::If_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitIf_stmt(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::If_stmtContext* PythonParser::if_stmt() {
@@ -2096,6 +2247,14 @@ void PythonParser::Elif_stmtContext::exitRule(tree::ParseTreeListener *listener)
     parserListener->exitElif_stmt(this);
 }
 
+
+std::any PythonParser::Elif_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitElif_stmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Elif_stmtContext* PythonParser::elif_stmt() {
   Elif_stmtContext *_localctx = _tracker.createInstance<Elif_stmtContext>(_ctx, getState());
   enterRule(_localctx, 36, PythonParser::RuleElif_stmt);
@@ -2217,6 +2376,14 @@ void PythonParser::Else_blockContext::exitRule(tree::ParseTreeListener *listener
     parserListener->exitElse_block(this);
 }
 
+
+std::any PythonParser::Else_blockContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitElse_block(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Else_blockContext* PythonParser::else_block() {
   Else_blockContext *_localctx = _tracker.createInstance<Else_blockContext>(_ctx, getState());
   enterRule(_localctx, 38, PythonParser::RuleElse_block);
@@ -2296,6 +2463,14 @@ void PythonParser::For_stmtContext::exitRule(tree::ParseTreeListener *listener) 
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitFor_stmt(this);
+}
+
+
+std::any PythonParser::For_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitFor_stmt(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::For_stmtContext* PythonParser::for_stmt() {
@@ -2382,6 +2557,14 @@ void PythonParser::While_stmtContext::exitRule(tree::ParseTreeListener *listener
     parserListener->exitWhile_stmt(this);
 }
 
+
+std::any PythonParser::While_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitWhile_stmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::While_stmtContext* PythonParser::while_stmt() {
   While_stmtContext *_localctx = _tracker.createInstance<While_stmtContext>(_ctx, getState());
   enterRule(_localctx, 42, PythonParser::RuleWhile_stmt);
@@ -2463,6 +2646,14 @@ void PythonParser::Class_defContext::exitRule(tree::ParseTreeListener *listener)
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitClass_def(this);
+}
+
+
+std::any PythonParser::Class_defContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitClass_def(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Class_defContext* PythonParser::class_def() {
@@ -2574,6 +2765,13 @@ void PythonParser::Try_except_else_finally_blockContext::exitRule(tree::ParseTre
   if (parserListener != nullptr)
     parserListener->exitTry_except_else_finally_block(this);
 }
+
+std::any PythonParser::Try_except_else_finally_blockContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitTry_except_else_finally_block(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- Try_finally_blockContext ------------------------------------------------------------------
 
 tree::TerminalNode* PythonParser::Try_finally_blockContext::TRY() {
@@ -2603,6 +2801,13 @@ void PythonParser::Try_finally_blockContext::exitRule(tree::ParseTreeListener *l
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitTry_finally_block(this);
+}
+
+std::any PythonParser::Try_finally_blockContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitTry_finally_block(this);
+  else
+    return visitor->visitChildren(this);
 }
 PythonParser::Try_stmtContext* PythonParser::try_stmt() {
   Try_stmtContext *_localctx = _tracker.createInstance<Try_stmtContext>(_ctx, getState());
@@ -2729,6 +2934,14 @@ void PythonParser::Except_blockContext::exitRule(tree::ParseTreeListener *listen
     parserListener->exitExcept_block(this);
 }
 
+
+std::any PythonParser::Except_blockContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitExcept_block(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Except_blockContext* PythonParser::except_block() {
   Except_blockContext *_localctx = _tracker.createInstance<Except_blockContext>(_ctx, getState());
   enterRule(_localctx, 48, PythonParser::RuleExcept_block);
@@ -2811,6 +3024,14 @@ void PythonParser::Finally_blockContext::exitRule(tree::ParseTreeListener *liste
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitFinally_block(this);
+}
+
+
+std::any PythonParser::Finally_blockContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitFinally_block(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Finally_blockContext* PythonParser::finally_block() {
@@ -2898,6 +3119,14 @@ void PythonParser::Match_stmtContext::exitRule(tree::ParseTreeListener *listener
     parserListener->exitMatch_stmt(this);
 }
 
+
+std::any PythonParser::Match_stmtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitMatch_stmt(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Match_stmtContext* PythonParser::match_stmt() {
   Match_stmtContext *_localctx = _tracker.createInstance<Match_stmtContext>(_ctx, getState());
   enterRule(_localctx, 52, PythonParser::RuleMatch_stmt);
@@ -2978,6 +3207,14 @@ void PythonParser::Subject_exprContext::exitRule(tree::ParseTreeListener *listen
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitSubject_expr(this);
+}
+
+
+std::any PythonParser::Subject_exprContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitSubject_expr(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Subject_exprContext* PythonParser::subject_expr() {
@@ -3080,6 +3317,13 @@ void PythonParser::Match_case_defaultContext::exitRule(tree::ParseTreeListener *
   if (parserListener != nullptr)
     parserListener->exitMatch_case_default(this);
 }
+
+std::any PythonParser::Match_case_defaultContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitMatch_case_default(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- Match_caseContext ------------------------------------------------------------------
 
 tree::TerminalNode* PythonParser::Match_caseContext::CASE() {
@@ -3109,6 +3353,13 @@ void PythonParser::Match_caseContext::exitRule(tree::ParseTreeListener *listener
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitMatch_case(this);
+}
+
+std::any PythonParser::Match_caseContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitMatch_case(this);
+  else
+    return visitor->visitChildren(this);
 }
 PythonParser::Case_blockContext* PythonParser::case_block() {
   Case_blockContext *_localctx = _tracker.createInstance<Case_blockContext>(_ctx, getState());
@@ -3198,6 +3449,14 @@ void PythonParser::PatternContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitPattern(this);
 }
 
+
+std::any PythonParser::PatternContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitPattern(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::PatternContext* PythonParser::pattern() {
   PatternContext *_localctx = _tracker.createInstance<PatternContext>(_ctx, getState());
   enterRule(_localctx, 58, PythonParser::RulePattern);
@@ -3278,6 +3537,14 @@ void PythonParser::Attr_patternContext::exitRule(tree::ParseTreeListener *listen
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitAttr_pattern(this);
+}
+
+
+std::any PythonParser::Attr_patternContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAttr_pattern(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Attr_patternContext* PythonParser::attr_pattern() {
@@ -3366,6 +3633,14 @@ void PythonParser::BlockContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitBlock(this);
 }
 
+
+std::any PythonParser::BlockContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitBlock(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::BlockContext* PythonParser::block() {
   BlockContext *_localctx = _tracker.createInstance<BlockContext>(_ctx, getState());
   enterRule(_localctx, 62, PythonParser::RuleBlock);
@@ -3435,6 +3710,14 @@ void PythonParser::Function_paramsContext::exitRule(tree::ParseTreeListener *lis
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitFunction_params(this);
+}
+
+
+std::any PythonParser::Function_paramsContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitFunction_params(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Function_paramsContext* PythonParser::function_params() {
@@ -3513,6 +3796,14 @@ void PythonParser::ExpressionsContext::exitRule(tree::ParseTreeListener *listene
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitExpressions(this);
+}
+
+
+std::any PythonParser::ExpressionsContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitExpressions(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::ExpressionsContext* PythonParser::expressions() {
@@ -3612,6 +3903,14 @@ void PythonParser::ExpressionContext::exitRule(tree::ParseTreeListener *listener
     parserListener->exitExpression(this);
 }
 
+
+std::any PythonParser::ExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitExpression(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::ExpressionContext* PythonParser::expression() {
   ExpressionContext *_localctx = _tracker.createInstance<ExpressionContext>(_ctx, getState());
   enterRule(_localctx, 68, PythonParser::RuleExpression);
@@ -3705,6 +4004,14 @@ void PythonParser::Assignment_expressionContext::exitRule(tree::ParseTreeListene
     parserListener->exitAssignment_expression(this);
 }
 
+
+std::any PythonParser::Assignment_expressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAssignment_expression(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Assignment_expressionContext* PythonParser::assignment_expression() {
   Assignment_expressionContext *_localctx = _tracker.createInstance<Assignment_expressionContext>(_ctx, getState());
   enterRule(_localctx, 70, PythonParser::RuleAssignment_expression);
@@ -3764,6 +4071,14 @@ void PythonParser::Named_expressionContext::exitRule(tree::ParseTreeListener *li
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitNamed_expression(this);
+}
+
+
+std::any PythonParser::Named_expressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitNamed_expression(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Named_expressionContext* PythonParser::named_expression() {
@@ -3851,6 +4166,14 @@ void PythonParser::DisjunctionContext::exitRule(tree::ParseTreeListener *listene
     parserListener->exitDisjunction(this);
 }
 
+
+std::any PythonParser::DisjunctionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitDisjunction(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::DisjunctionContext* PythonParser::disjunction() {
   DisjunctionContext *_localctx = _tracker.createInstance<DisjunctionContext>(_ctx, getState());
   enterRule(_localctx, 74, PythonParser::RuleDisjunction);
@@ -3931,6 +4254,14 @@ void PythonParser::ConjunctionContext::exitRule(tree::ParseTreeListener *listene
     parserListener->exitConjunction(this);
 }
 
+
+std::any PythonParser::ConjunctionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitConjunction(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::ConjunctionContext* PythonParser::conjunction() {
   ConjunctionContext *_localctx = _tracker.createInstance<ConjunctionContext>(_ctx, getState());
   enterRule(_localctx, 76, PythonParser::RuleConjunction);
@@ -4005,6 +4336,14 @@ void PythonParser::InversionContext::exitRule(tree::ParseTreeListener *listener)
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitInversion(this);
+}
+
+
+std::any PythonParser::InversionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitInversion(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::InversionContext* PythonParser::inversion() {
@@ -4095,6 +4434,14 @@ void PythonParser::ComparisonContext::exitRule(tree::ParseTreeListener *listener
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitComparison(this);
+}
+
+
+std::any PythonParser::ComparisonContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitComparison(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::ComparisonContext* PythonParser::comparison() {
@@ -4214,6 +4561,14 @@ void PythonParser::Comp_opContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitComp_op(this);
 }
 
+
+std::any PythonParser::Comp_opContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitComp_op(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Comp_opContext* PythonParser::comp_op() {
   Comp_opContext *_localctx = _tracker.createInstance<Comp_opContext>(_ctx, getState());
   enterRule(_localctx, 82, PythonParser::RuleComp_op);
@@ -4330,6 +4685,14 @@ void PythonParser::Comp_eqContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitComp_eq(this);
 }
 
+
+std::any PythonParser::Comp_eqContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitComp_eq(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Comp_eqContext* PythonParser::comp_eq() {
   Comp_eqContext *_localctx = _tracker.createInstance<Comp_eqContext>(_ctx, getState());
   enterRule(_localctx, 84, PythonParser::RuleComp_eq);
@@ -4387,6 +4750,14 @@ void PythonParser::Comp_noteqContext::exitRule(tree::ParseTreeListener *listener
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitComp_noteq(this);
+}
+
+
+std::any PythonParser::Comp_noteqContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitComp_noteq(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Comp_noteqContext* PythonParser::comp_noteq() {
@@ -4448,6 +4819,14 @@ void PythonParser::Comp_lteContext::exitRule(tree::ParseTreeListener *listener) 
     parserListener->exitComp_lte(this);
 }
 
+
+std::any PythonParser::Comp_lteContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitComp_lte(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Comp_lteContext* PythonParser::comp_lte() {
   Comp_lteContext *_localctx = _tracker.createInstance<Comp_lteContext>(_ctx, getState());
   enterRule(_localctx, 88, PythonParser::RuleComp_lte);
@@ -4505,6 +4884,14 @@ void PythonParser::Comp_ltContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitComp_lt(this);
+}
+
+
+std::any PythonParser::Comp_ltContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitComp_lt(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Comp_ltContext* PythonParser::comp_lt() {
@@ -4566,6 +4953,14 @@ void PythonParser::Comp_gteContext::exitRule(tree::ParseTreeListener *listener) 
     parserListener->exitComp_gte(this);
 }
 
+
+std::any PythonParser::Comp_gteContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitComp_gte(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Comp_gteContext* PythonParser::comp_gte() {
   Comp_gteContext *_localctx = _tracker.createInstance<Comp_gteContext>(_ctx, getState());
   enterRule(_localctx, 92, PythonParser::RuleComp_gte);
@@ -4623,6 +5018,14 @@ void PythonParser::Comp_gtContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitComp_gt(this);
+}
+
+
+std::any PythonParser::Comp_gtContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitComp_gt(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Comp_gtContext* PythonParser::comp_gt() {
@@ -4688,6 +5091,14 @@ void PythonParser::Comp_notinContext::exitRule(tree::ParseTreeListener *listener
     parserListener->exitComp_notin(this);
 }
 
+
+std::any PythonParser::Comp_notinContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitComp_notin(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Comp_notinContext* PythonParser::comp_notin() {
   Comp_notinContext *_localctx = _tracker.createInstance<Comp_notinContext>(_ctx, getState());
   enterRule(_localctx, 96, PythonParser::RuleComp_notin);
@@ -4747,6 +5158,14 @@ void PythonParser::Comp_inContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitComp_in(this);
+}
+
+
+std::any PythonParser::Comp_inContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitComp_in(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Comp_inContext* PythonParser::comp_in() {
@@ -4814,6 +5233,14 @@ void PythonParser::SumContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitSum(this);
+}
+
+
+std::any PythonParser::SumContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitSum(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 
@@ -4944,6 +5371,14 @@ void PythonParser::TermContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitTerm(this);
+}
+
+
+std::any PythonParser::TermContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitTerm(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 
@@ -5094,6 +5529,14 @@ void PythonParser::FactorContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitFactor(this);
 }
 
+
+std::any PythonParser::FactorContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitFactor(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::FactorContext* PythonParser::factor() {
   FactorContext *_localctx = _tracker.createInstance<FactorContext>(_ctx, getState());
   enterRule(_localctx, 104, PythonParser::RuleFactor);
@@ -5191,6 +5634,14 @@ void PythonParser::PowerContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitPower(this);
 }
 
+
+std::any PythonParser::PowerContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitPower(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::PowerContext* PythonParser::power() {
   PowerContext *_localctx = _tracker.createInstance<PowerContext>(_ctx, getState());
   enterRule(_localctx, 106, PythonParser::RulePower);
@@ -5283,6 +5734,13 @@ void PythonParser::Function_call_primContext::exitRule(tree::ParseTreeListener *
   if (parserListener != nullptr)
     parserListener->exitFunction_call_prim(this);
 }
+
+std::any PythonParser::Function_call_primContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitFunction_call_prim(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- Slice_primContext ------------------------------------------------------------------
 
 PythonParser::PrimaryContext* PythonParser::Slice_primContext::primary() {
@@ -5313,6 +5771,13 @@ void PythonParser::Slice_primContext::exitRule(tree::ParseTreeListener *listener
   if (parserListener != nullptr)
     parserListener->exitSlice_prim(this);
 }
+
+std::any PythonParser::Slice_primContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitSlice_prim(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- Field_primContext ------------------------------------------------------------------
 
 PythonParser::PrimaryContext* PythonParser::Field_primContext::primary() {
@@ -5339,6 +5804,13 @@ void PythonParser::Field_primContext::exitRule(tree::ParseTreeListener *listener
   if (parserListener != nullptr)
     parserListener->exitField_prim(this);
 }
+
+std::any PythonParser::Field_primContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitField_prim(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- Atom_primContext ------------------------------------------------------------------
 
 PythonParser::AtomContext* PythonParser::Atom_primContext::atom() {
@@ -5356,6 +5828,13 @@ void PythonParser::Atom_primContext::exitRule(tree::ParseTreeListener *listener)
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitAtom_prim(this);
+}
+
+std::any PythonParser::Atom_primContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAtom_prim(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::PrimaryContext* PythonParser::primary() {
@@ -5518,6 +5997,14 @@ void PythonParser::SlicesContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitSlices(this);
 }
 
+
+std::any PythonParser::SlicesContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitSlices(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::SlicesContext* PythonParser::slices() {
   SlicesContext *_localctx = _tracker.createInstance<SlicesContext>(_ctx, getState());
   enterRule(_localctx, 110, PythonParser::RuleSlices);
@@ -5661,6 +6148,14 @@ void PythonParser::SliceContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitSlice(this);
+}
+
+
+std::any PythonParser::SliceContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitSlice(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::SliceContext* PythonParser::slice() {
@@ -5834,6 +6329,14 @@ void PythonParser::AtomContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitAtom(this);
 }
 
+
+std::any PythonParser::AtomContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAtom(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::AtomContext* PythonParser::atom() {
   AtomContext *_localctx = _tracker.createInstance<AtomContext>(_ctx, getState());
   enterRule(_localctx, 114, PythonParser::RuleAtom);
@@ -5996,6 +6499,14 @@ void PythonParser::GroupContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitGroup(this);
 }
 
+
+std::any PythonParser::GroupContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitGroup(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::GroupContext* PythonParser::group() {
   GroupContext *_localctx = _tracker.createInstance<GroupContext>(_ctx, getState());
   enterRule(_localctx, 116, PythonParser::RuleGroup);
@@ -6063,6 +6574,14 @@ void PythonParser::ArgumentsContext::exitRule(tree::ParseTreeListener *listener)
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitArguments(this);
+}
+
+
+std::any PythonParser::ArgumentsContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitArguments(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::ArgumentsContext* PythonParser::arguments() {
@@ -6148,6 +6667,14 @@ void PythonParser::Arg_expressionContext::exitRule(tree::ParseTreeListener *list
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitArg_expression(this);
+}
+
+
+std::any PythonParser::Arg_expressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitArg_expression(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Arg_expressionContext* PythonParser::arg_expression() {
@@ -6271,6 +6798,14 @@ void PythonParser::KwargsContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitKwargs(this);
+}
+
+
+std::any PythonParser::KwargsContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitKwargs(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::KwargsContext* PythonParser::kwargs() {
@@ -6410,6 +6945,14 @@ void PythonParser::Starred_expressionContext::exitRule(tree::ParseTreeListener *
     parserListener->exitStarred_expression(this);
 }
 
+
+std::any PythonParser::Starred_expressionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitStarred_expression(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Starred_expressionContext* PythonParser::starred_expression() {
   Starred_expressionContext *_localctx = _tracker.createInstance<Starred_expressionContext>(_ctx, getState());
   enterRule(_localctx, 124, PythonParser::RuleStarred_expression);
@@ -6475,6 +7018,14 @@ void PythonParser::Kwarg_or_starredContext::exitRule(tree::ParseTreeListener *li
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitKwarg_or_starred(this);
+}
+
+
+std::any PythonParser::Kwarg_or_starredContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitKwarg_or_starred(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Kwarg_or_starredContext* PythonParser::kwarg_or_starred() {
@@ -6563,6 +7114,14 @@ void PythonParser::Kwarg_or_double_starredContext::exitRule(tree::ParseTreeListe
     parserListener->exitKwarg_or_double_starred(this);
 }
 
+
+std::any PythonParser::Kwarg_or_double_starredContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitKwarg_or_double_starred(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Kwarg_or_double_starredContext* PythonParser::kwarg_or_double_starred() {
   Kwarg_or_double_starredContext *_localctx = _tracker.createInstance<Kwarg_or_double_starredContext>(_ctx, getState());
   enterRule(_localctx, 128, PythonParser::RuleKwarg_or_double_starred);
@@ -6649,6 +7208,14 @@ void PythonParser::As_targetsContext::exitRule(tree::ParseTreeListener *listener
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitAs_targets(this);
+}
+
+
+std::any PythonParser::As_targetsContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAs_targets(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::As_targetsContext* PythonParser::as_targets() {
@@ -6760,6 +7327,14 @@ void PythonParser::As_target_listContext::exitRule(tree::ParseTreeListener *list
     parserListener->exitAs_target_list(this);
 }
 
+
+std::any PythonParser::As_target_listContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAs_target_list(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::As_target_listContext* PythonParser::as_target_list() {
   As_target_listContext *_localctx = _tracker.createInstance<As_target_listContext>(_ctx, getState());
   enterRule(_localctx, 132, PythonParser::RuleAs_target_list);
@@ -6847,6 +7422,14 @@ void PythonParser::As_target_tupleContext::exitRule(tree::ParseTreeListener *lis
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitAs_target_tuple(this);
+}
+
+
+std::any PythonParser::As_target_tupleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAs_target_tuple(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::As_target_tupleContext* PythonParser::as_target_tuple() {
@@ -6975,6 +7558,14 @@ void PythonParser::As_targetContext::exitRule(tree::ParseTreeListener *listener)
     parserListener->exitAs_target(this);
 }
 
+
+std::any PythonParser::As_targetContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAs_target(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::As_targetContext* PythonParser::as_target() {
   As_targetContext *_localctx = _tracker.createInstance<As_targetContext>(_ctx, getState());
   enterRule(_localctx, 136, PythonParser::RuleAs_target);
@@ -7082,6 +7673,13 @@ void PythonParser::As_atom_tupleContext::exitRule(tree::ParseTreeListener *liste
   if (parserListener != nullptr)
     parserListener->exitAs_atom_tuple(this);
 }
+
+std::any PythonParser::As_atom_tupleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAs_atom_tuple(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- As_atom_nameContext ------------------------------------------------------------------
 
 tree::TerminalNode* PythonParser::As_atom_nameContext::NAME() {
@@ -7099,6 +7697,13 @@ void PythonParser::As_atom_nameContext::exitRule(tree::ParseTreeListener *listen
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitAs_atom_name(this);
+}
+
+std::any PythonParser::As_atom_nameContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAs_atom_name(this);
+  else
+    return visitor->visitChildren(this);
 }
 //----------------- As_atom_listContext ------------------------------------------------------------------
 
@@ -7126,6 +7731,13 @@ void PythonParser::As_atom_listContext::exitRule(tree::ParseTreeListener *listen
   if (parserListener != nullptr)
     parserListener->exitAs_atom_list(this);
 }
+
+std::any PythonParser::As_atom_listContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAs_atom_list(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- As_atom_tuple_tupleContext ------------------------------------------------------------------
 
 tree::TerminalNode* PythonParser::As_atom_tuple_tupleContext::PAR_LEFT() {
@@ -7151,6 +7763,13 @@ void PythonParser::As_atom_tuple_tupleContext::exitRule(tree::ParseTreeListener 
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitAs_atom_tuple_tuple(this);
+}
+
+std::any PythonParser::As_atom_tuple_tupleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAs_atom_tuple_tuple(this);
+  else
+    return visitor->visitChildren(this);
 }
 PythonParser::As_atomContext* PythonParser::as_atom() {
   As_atomContext *_localctx = _tracker.createInstance<As_atomContext>(_ctx, getState());
@@ -7283,6 +7902,14 @@ void PythonParser::Single_targetContext::exitRule(tree::ParseTreeListener *liste
     parserListener->exitSingle_target(this);
 }
 
+
+std::any PythonParser::Single_targetContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitSingle_target(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Single_targetContext* PythonParser::single_target() {
   Single_targetContext *_localctx = _tracker.createInstance<Single_targetContext>(_ctx, getState());
   enterRule(_localctx, 140, PythonParser::RuleSingle_target);
@@ -7386,6 +8013,14 @@ void PythonParser::Single_subscript_attribute_targetContext::exitRule(tree::Pars
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitSingle_subscript_attribute_target(this);
+}
+
+
+std::any PythonParser::Single_subscript_attribute_targetContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitSingle_subscript_attribute_target(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Single_subscript_attribute_targetContext* PythonParser::single_subscript_attribute_target() {
@@ -7516,6 +8151,13 @@ void PythonParser::Function_call_tprimContext::exitRule(tree::ParseTreeListener 
   if (parserListener != nullptr)
     parserListener->exitFunction_call_tprim(this);
 }
+
+std::any PythonParser::Function_call_tprimContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitFunction_call_tprim(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- Field_tprimContext ------------------------------------------------------------------
 
 PythonParser::PrimaryContext* PythonParser::Field_tprimContext::primary() {
@@ -7541,6 +8183,13 @@ void PythonParser::Field_tprimContext::exitRule(tree::ParseTreeListener *listene
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitField_tprim(this);
+}
+
+std::any PythonParser::Field_tprimContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitField_tprim(this);
+  else
+    return visitor->visitChildren(this);
 }
 //----------------- Slice_tprimContext ------------------------------------------------------------------
 
@@ -7572,6 +8221,13 @@ void PythonParser::Slice_tprimContext::exitRule(tree::ParseTreeListener *listene
   if (parserListener != nullptr)
     parserListener->exitSlice_tprim(this);
 }
+
+std::any PythonParser::Slice_tprimContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitSlice_tprim(this);
+  else
+    return visitor->visitChildren(this);
+}
 //----------------- Atom_tprimContext ------------------------------------------------------------------
 
 PythonParser::AtomContext* PythonParser::Atom_tprimContext::atom() {
@@ -7589,6 +8245,13 @@ void PythonParser::Atom_tprimContext::exitRule(tree::ParseTreeListener *listener
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitAtom_tprim(this);
+}
+
+std::any PythonParser::Atom_tprimContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitAtom_tprim(this);
+  else
+    return visitor->visitChildren(this);
 }
 PythonParser::T_primaryContext* PythonParser::t_primary() {
   T_primaryContext *_localctx = _tracker.createInstance<T_primaryContext>(_ctx, getState());
@@ -7710,6 +8373,14 @@ void PythonParser::T_lookaheadContext::exitRule(tree::ParseTreeListener *listene
     parserListener->exitT_lookahead(this);
 }
 
+
+std::any PythonParser::T_lookaheadContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitT_lookahead(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::T_lookaheadContext* PythonParser::t_lookahead() {
   T_lookaheadContext *_localctx = _tracker.createInstance<T_lookaheadContext>(_ctx, getState());
   enterRule(_localctx, 146, PythonParser::RuleT_lookahead);
@@ -7782,6 +8453,14 @@ void PythonParser::TargetsContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitTargets(this);
+}
+
+
+std::any PythonParser::TargetsContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitTargets(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::TargetsContext* PythonParser::targets() {
@@ -7905,6 +8584,14 @@ void PythonParser::TargetContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitTarget(this);
 }
 
+
+std::any PythonParser::TargetContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitTarget(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::TargetContext* PythonParser::target() {
   TargetContext *_localctx = _tracker.createInstance<TargetContext>(_ctx, getState());
   enterRule(_localctx, 150, PythonParser::RuleTarget);
@@ -8004,6 +8691,14 @@ void PythonParser::Del_targetsContext::exitRule(tree::ParseTreeListener *listene
     parserListener->exitDel_targets(this);
 }
 
+
+std::any PythonParser::Del_targetsContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitDel_targets(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Del_targetsContext* PythonParser::del_targets() {
   Del_targetsContext *_localctx = _tracker.createInstance<Del_targetsContext>(_ctx, getState());
   enterRule(_localctx, 152, PythonParser::RuleDel_targets);
@@ -8101,6 +8796,14 @@ void PythonParser::Del_targetContext::exitRule(tree::ParseTreeListener *listener
     parserListener->exitDel_target(this);
 }
 
+
+std::any PythonParser::Del_targetContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitDel_target(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::Del_targetContext* PythonParser::del_target() {
   Del_targetContext *_localctx = _tracker.createInstance<Del_targetContext>(_ctx, getState());
   enterRule(_localctx, 154, PythonParser::RuleDel_target);
@@ -8192,6 +8895,14 @@ void PythonParser::StringsContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitStrings(this);
 }
 
+
+std::any PythonParser::StringsContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitStrings(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::StringsContext* PythonParser::strings() {
   StringsContext *_localctx = _tracker.createInstance<StringsContext>(_ctx, getState());
   enterRule(_localctx, 156, PythonParser::RuleStrings);
@@ -8268,6 +8979,14 @@ void PythonParser::ListContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitList(this);
+}
+
+
+std::any PythonParser::ListContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitList(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::ListContext* PythonParser::list() {
@@ -8349,6 +9068,14 @@ void PythonParser::TupleContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitTuple(this);
+}
+
+
+std::any PythonParser::TupleContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitTuple(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::TupleContext* PythonParser::tuple() {
@@ -8435,6 +9162,14 @@ void PythonParser::SetContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitSet(this);
 }
 
+
+std::any PythonParser::SetContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitSet(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::SetContext* PythonParser::set() {
   SetContext *_localctx = _tracker.createInstance<SetContext>(_ctx, getState());
   enterRule(_localctx, 162, PythonParser::RuleSet);
@@ -8498,6 +9233,14 @@ void PythonParser::DictContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitDict(this);
+}
+
+
+std::any PythonParser::DictContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitDict(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::DictContext* PythonParser::dict() {
@@ -8575,6 +9318,14 @@ void PythonParser::Double_starred_kvpairsContext::exitRule(tree::ParseTreeListen
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitDouble_starred_kvpairs(this);
+}
+
+
+std::any PythonParser::Double_starred_kvpairsContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitDouble_starred_kvpairs(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Double_starred_kvpairsContext* PythonParser::double_starred_kvpairs() {
@@ -8660,6 +9411,14 @@ void PythonParser::Double_starred_kvpairContext::exitRule(tree::ParseTreeListene
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitDouble_starred_kvpair(this);
+}
+
+
+std::any PythonParser::Double_starred_kvpairContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitDouble_starred_kvpair(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::Double_starred_kvpairContext* PythonParser::double_starred_kvpair() {
@@ -8754,6 +9513,14 @@ void PythonParser::KvpairContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitKvpair(this);
 }
 
+
+std::any PythonParser::KvpairContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitKvpair(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::KvpairContext* PythonParser::kvpair() {
   KvpairContext *_localctx = _tracker.createInstance<KvpairContext>(_ctx, getState());
   enterRule(_localctx, 170, PythonParser::RuleKvpair);
@@ -8813,6 +9580,14 @@ void PythonParser::For_if_clausesContext::exitRule(tree::ParseTreeListener *list
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitFor_if_clauses(this);
+}
+
+
+std::any PythonParser::For_if_clausesContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitFor_if_clauses(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::For_if_clausesContext* PythonParser::for_if_clauses() {
@@ -8901,6 +9676,14 @@ void PythonParser::For_if_clauseContext::exitRule(tree::ParseTreeListener *liste
     parserListener->exitFor_if_clause(this);
 }
 
+
+std::any PythonParser::For_if_clauseContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitFor_if_clause(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::For_if_clauseContext* PythonParser::for_if_clause() {
   For_if_clauseContext *_localctx = _tracker.createInstance<For_if_clauseContext>(_ctx, getState());
   enterRule(_localctx, 174, PythonParser::RuleFor_if_clause);
@@ -8985,6 +9768,14 @@ void PythonParser::ListcompContext::exitRule(tree::ParseTreeListener *listener) 
     parserListener->exitListcomp(this);
 }
 
+
+std::any PythonParser::ListcompContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitListcomp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::ListcompContext* PythonParser::listcomp() {
   ListcompContext *_localctx = _tracker.createInstance<ListcompContext>(_ctx, getState());
   enterRule(_localctx, 176, PythonParser::RuleListcomp);
@@ -9056,6 +9847,14 @@ void PythonParser::SetcompContext::exitRule(tree::ParseTreeListener *listener) {
     parserListener->exitSetcomp(this);
 }
 
+
+std::any PythonParser::SetcompContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitSetcomp(this);
+  else
+    return visitor->visitChildren(this);
+}
+
 PythonParser::SetcompContext* PythonParser::setcomp() {
   SetcompContext *_localctx = _tracker.createInstance<SetcompContext>(_ctx, getState());
   enterRule(_localctx, 178, PythonParser::RuleSetcomp);
@@ -9125,6 +9924,14 @@ void PythonParser::DictcompContext::exitRule(tree::ParseTreeListener *listener) 
   auto parserListener = dynamic_cast<PythonParserListener *>(listener);
   if (parserListener != nullptr)
     parserListener->exitDictcomp(this);
+}
+
+
+std::any PythonParser::DictcompContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<PythonParserVisitor*>(visitor))
+    return parserVisitor->visitDictcomp(this);
+  else
+    return visitor->visitChildren(this);
 }
 
 PythonParser::DictcompContext* PythonParser::dictcomp() {

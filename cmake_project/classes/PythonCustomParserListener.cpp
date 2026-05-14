@@ -89,16 +89,29 @@ std::string PythonCustomParserListener::processInversion(PythonParser::Inversion
 
 std::string PythonCustomParserListener::processComparison(PythonParser::ComparisonContext *ctx) {
     string result;
+    string sumResult = processSum(ctx->sum());
+    string compOpsResult;
+
     for (auto &c : ctx->comp_op()) {
-        if (!result.empty())
+        if (c == ctx->comp_op().front() && !c->comp_in() && ! c->comp_notin()) {
+            result = sumResult;
+        }
+
+        if (!result.empty() && result != sumResult)
             result += " ";
-        result += processCompOp(c);
+
+        string compOpResult = processCompOp(c);
+
+        if (c->comp_in() || c->comp_notin())
+            result += compOpResult + sumResult + ")";
+        else
+            result += compOpResult;
     }
 
-    if (!result.empty())
-        result += " ";
+    if (result.empty())
+        result = sumResult;
 
-    return result + processSum(ctx->sum());
+    return result;
 }
 
 std::string PythonCustomParserListener::processCompOp(PythonParser::Comp_opContext *ctx) {
@@ -133,10 +146,40 @@ std::string PythonCustomParserListener::processCompOp(PythonParser::Comp_opConte
         result += processSum(ctx->comp_lte()->sum());
     }
 
+    if (ctx->comp_in()) {
+        result += processSum(ctx->comp_in()->sum());
+        result += ".includes(";
+    }
+
+    if (ctx->comp_notin()) {
+        result += "!";
+        result += processSum(ctx->comp_notin()->sum());
+        result += ".includes(";
+    }
+
     return result;
 }
 
 std::string PythonCustomParserListener::processSum(PythonParser::SumContext *ctx) {
+    string sumResult;
+    string termResult;
+
+    termResult = processTerm(ctx->term());
+
+    if (!ctx->sum())
+        return termResult;
+
+    sumResult = processSum(ctx->sum());
+
+    if (ctx->PLUS()) {
+        return sumResult + " + " + termResult;
+    }else {
+        return sumResult + " - " + termResult;
+    }
+
+}
+
+std::string PythonCustomParserListener::processTerm(PythonParser::TermContext *ctx) {
     return ctx->getText();
 }
 
@@ -230,6 +273,14 @@ void PythonCustomParserListener::enterAug_assignment(PythonParser::Aug_assignmen
         translated.append("\n");
 
     translated.append(result).append("\n");
+}
+
+void PythonCustomParserListener::enterSimple_stmt(PythonParser::Simple_stmtContext *ctx) {
+    if (ctx->expressions()) {
+        if (!translated.empty())
+            translated.append("\n");
+        translated.append(processExpressions(ctx->expressions()));
+    }
 }
 
 

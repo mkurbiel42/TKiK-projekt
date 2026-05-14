@@ -1,6 +1,6 @@
 #include "PythonLexerBase.h"
 
-// Generated from PythonLexer.g4 by ANTLR 4.13.2
+// Generated from ./PythonLexer.g4 by ANTLR 4.13.2
 
 #pragma once
 

@@ -23,8 +23,14 @@ class PythonCustomParserListener : public PythonParserBaseListener
     std::string processComparison(PythonParser::ComparisonContext *ctx);
     std::string processCompOp(PythonParser::Comp_opContext *ctx);
     std::string processSum(PythonParser::SumContext *ctx);
+    std::string processTerm(PythonParser::TermContext *ctx);
+    std::string processFactor(PythonParser::FactorContext *ctx);
+    std::string processPower(PythonParser::PowerContext *ctx);
+    std::string processPrimary(PythonParser::PrimaryContext *ctx);
+    std::string processAtom(PythonParser::AtomContext *ctx);
 
     // statements processing
+    void enterSimple_stmt(PythonParser::Simple_stmtContext *ctx) override;
     void enterSimple_assignment(PythonParser::Simple_assignmentContext *ctx) override;
     void enterAug_assignment(PythonParser::Aug_assignmentContext *ctx) override;
 

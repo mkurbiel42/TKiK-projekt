@@ -33,6 +33,8 @@ add_library(parser STATIC
         classes/PythonCustomParserListener.h
         classes/Scope.cpp
         classes/Scope.h
+        classes/PythonCustomParserVisitor.cpp
+        classes/PythonCustomParserVisitor.h
 )
 
 target_include_directories(parser

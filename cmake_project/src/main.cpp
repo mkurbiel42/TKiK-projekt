@@ -7,6 +7,7 @@
 #include <filesystem>
 
 #include "PythonCustomParserListener.h"
+#include "PythonCustomParserVisitor.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -46,6 +47,12 @@ int main(int argc, const char * argv[]) {
 	PythonCustomParserListener *listener = new PythonCustomParserListener();
 
 	walker->walk(listener, tree);
-	
+
+	// auto *visitor = new PythonCustomParserVisitor();
+	// visitor->visit(tree);
+	//
+	// cout << "================" << endl;
+	// cout << "Przetlumaczone:" << endl << visitor->translated << endl;
+	// cout << "================" << endl;
 	return 0;
 }
