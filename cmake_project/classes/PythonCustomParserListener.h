@@ -12,6 +12,7 @@ class PythonCustomParserListener : public PythonParserBaseListener
     std::deque<Scope> scopes = {Scope()};
     std::list<std::string> errors = {};
     std::string translated;
+    bool logging = true;
 
     // expression processing
     std::string processExpressions(PythonParser::ExpressionsContext *ctx);

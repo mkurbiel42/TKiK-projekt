@@ -10,7 +10,7 @@ string PythonCustomParserListener::processExpressions(PythonParser::ExpressionsC
     string result;
 
     for (const auto &e : ctx->expression()) {
-        if (result.empty())
+        if (!result.empty())
             result.append(", ");
 
         result.append(processExpression(e));
@@ -145,7 +145,6 @@ std::string PythonCustomParserListener::processSum(PythonParser::SumContext *ctx
 
 void PythonCustomParserListener::enterSimple_assignment(PythonParser::Simple_assignmentContext *ctx)
 {
-    bool logging = true;
     string alreadyDeclared;
     string notDeclared = "let ";
 
@@ -212,16 +211,33 @@ void PythonCustomParserListener::enterAug_assignment(PythonParser::Aug_assignmen
         return;
     }
 
-    result.append(target->getText()).append(" ").
-        append(ctx->augassign()->getText())
+    if (ctx->augassign()->DOUBLESLASHEQUAL()) {
+        result.append(target->getText())
+            .append(" = ~~(")
+            .append(target->getText())
+            .append("/")
+            .append(processExpressions(ctx->expressions()))
+            .append(")");
+    }else {
+        result.append(target->getText())
         .append(" ")
-        .append(ctx->expressions()->getText());
+        .append(ctx->augassign()->getText())
+        .append(" ")
+        .append(processExpressions(ctx->expressions()));
+    }
+
     if (!translated.empty())
         translated.append("\n");
+
     translated.append(result).append("\n");
 }
 
 
 void PythonCustomParserListener::exitFile(PythonParser::FileContext *ctx) {
-    cout << "Przetlumaczone:" << endl << translated << endl;
+    if (logging) {
+        cout << "================" << endl;
+        cout << "Przetlumaczone:" << endl << translated << endl;
+        cout << "================" << endl;
+    }
+
 }

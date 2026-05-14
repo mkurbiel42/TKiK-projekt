@@ -7,17 +7,34 @@
 #include <set>
 #include <string>
 
+enum ScopeName {
+    FILESCOPE,
+    FUNCSCOPE,
+    FORLOOPSCOPE,
+    WHILELOOPSCOPE,
+    CLASSSCOPE,
+    BLOCKSCOPE
+};
 
 class Scope {
 public:
     std::set<std::string> names;
     std::set<std::string> globals;
     std::set<std::string> nonLocals;
+    ScopeName name;
 
     Scope() {
         names = {};
         globals = {};
         nonLocals = {};
+        name = FILESCOPE;
+    };
+
+    explicit Scope(const ScopeName _name) {
+        names = {};
+        globals = {};
+        nonLocals = {};
+        name = _name;
     };
 };
 

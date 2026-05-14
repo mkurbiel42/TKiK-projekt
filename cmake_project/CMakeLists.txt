@@ -24,19 +24,19 @@ set(WITH_STATIC_CRT ON CACHE BOOL "" FORCE)
 find_package(antlr4-runtime REQUIRED)
 
 add_library(parser STATIC
-        generated/PythonLexer.cpp
-        generated/PythonParser.cpp
-        generated/PythonParserListener.cpp
-        generated/PythonParserBaseListener.cpp
-        generated/PythonLexerBase.cpp
-        generated/PythonCustomParserListener.cpp
-        generated/PythonCustomParserListener.h
-        generated/Scope.cpp
-        generated/Scope.h
+        classes/PythonLexer.cpp
+        classes/PythonParser.cpp
+        classes/PythonParserListener.cpp
+        classes/PythonParserBaseListener.cpp
+        classes/PythonLexerBase.cpp
+        classes/PythonCustomParserListener.cpp
+        classes/PythonCustomParserListener.h
+        classes/Scope.cpp
+        classes/Scope.h
 )
 
 target_include_directories(parser
-        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/generated
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/classes
 )
 
 target_link_libraries(parser
