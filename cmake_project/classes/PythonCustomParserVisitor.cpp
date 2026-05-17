@@ -6,8 +6,16 @@
 
 using namespace std;
 
+std::any PythonCustomParserVisitor::visitStatement(PythonParser::StatementContext *ctx) {
+    auto res = any_cast<string>(visit(ctx->children[0]));
+    translated += res += "\n";
+    return res;
+}
+
 std::any PythonCustomParserVisitor::visitSimple_stmt(PythonParser::Simple_stmtContext *ctx) {
-    // if (ctx->ass)
+    any anyRes = visit(ctx->children[0]);
+    auto res = any_cast<string>(anyRes);
+    return res;
 }
 
 std::any PythonCustomParserVisitor::visitSimple_assignment(PythonParser::Simple_assignmentContext *ctx) {
@@ -41,9 +49,9 @@ std::any PythonCustomParserVisitor::visitSimple_assignment(PythonParser::Simple_
         }
     }
 
-    if (!translated.empty()) {
-        translated.append("\n");
-    }
+    // if (!translated.empty()) {
+    //     translated.append("\n");
+    // }
 
     auto exprResult = any_cast<string>(visitExpression(ctx->expressions()->expression()[0]));
 
@@ -51,12 +59,12 @@ std::any PythonCustomParserVisitor::visitSimple_assignment(PythonParser::Simple_
 
     if (!alreadyDeclared.empty()) {
         alreadyDeclared.append(" = ").append(exprResult);
-        result += alreadyDeclared;
-
+        result += alreadyDeclared += "\n";
     }
 
     if (notDeclared != "let ") {
         notDeclared.append(" = ").append(exprResult);
+        result += notDeclared += "\n";
     }
 
     if (logging) {
@@ -64,7 +72,7 @@ std::any PythonCustomParserVisitor::visitSimple_assignment(PythonParser::Simple_
         cout << "Deklarowane teraz: " << notDeclared << endl;
     }
 
-
+    // translated.append(result);
     return result;
 }
 
@@ -99,10 +107,10 @@ std::any PythonCustomParserVisitor::visitAug_assignment(PythonParser::Aug_assign
         .append(any_cast<string>(visitExpressions(ctx->expressions())));
     }
 
-    if (!translated.empty())
-        translated.append("\n");
-
-    translated.append(result).append("\n");
+    // if (!translated.empty())
+    //     translated.append("\n");
+    //
+    // translated.append(result).append("\n");
 
     return result;
 }
@@ -137,16 +145,14 @@ any PythonCustomParserVisitor::visitExpression(PythonParser::ExpressionContext *
     if (ctx->IF()) {
         auto disj1 = ctx->disjunction()[0];
         auto disj2 = ctx->disjunction()[1];
-        auto disj1Processed = any_cast<string>(visitDisjunction(disj1));
-        auto disj2Processed = any_cast<string>(visitDisjunction(disj2));
-        auto exprProcessed = any_cast<string>(visitExpression(ctx->expression()));
+        string disj1Processed = any_cast<string>(visitDisjunction(disj1));
+        string disj2Processed = any_cast<string>(visitDisjunction(disj2));
+        string exprProcessed = any_cast<string>(visitExpression(ctx->expression()));
 
-        string result = disj2Processed.append(" ? ").append(disj1Processed).append(" : ").append(exprProcessed);
+        return disj2Processed.append(" ? ").append(disj1Processed).append(" : ").append(exprProcessed);
     }
 
-    string result = any_cast<string>(visitDisjunction(ctx->disjunction()[0]));
-
-    return result;
+    return any_cast<string>(visitDisjunction(ctx->disjunction()[0]));
 }
 
 std::any PythonCustomParserVisitor::visitDisjunction(PythonParser::DisjunctionContext *ctx) {
@@ -198,11 +204,15 @@ std::any PythonCustomParserVisitor::visitInversion(PythonParser::InversionContex
 
 std::any PythonCustomParserVisitor::visitComparison(PythonParser::ComparisonContext *ctx) {
     string result;
-
     string sumResult = any_cast<string>(visitSum(ctx->sum()));
+    string compOpsResult;
 
     for (auto &c : ctx->comp_op()) {
-        if (!result.empty())
+        if (c == ctx->comp_op().front() && !c->comp_in() && ! c->comp_notin()) {
+            result = sumResult;
+        }
+
+        if (!result.empty() && result != sumResult)
             result += " ";
 
         string compOpResult = any_cast<string>(visitComp_op(c));
@@ -210,13 +220,13 @@ std::any PythonCustomParserVisitor::visitComparison(PythonParser::ComparisonCont
         if (c->comp_in() || c->comp_notin())
             result += compOpResult + sumResult + ")";
         else
-            result += sumResult + compOpResult;
+            result += compOpResult;
     }
 
-    if (!result.empty())
-        result += " ";
+    if (result.empty())
+        result = sumResult;
 
-    return sumResult + result;
+    return result;
 }
 
 std::any PythonCustomParserVisitor::visitComp_op(PythonParser::Comp_opContext *ctx) {
@@ -258,28 +268,125 @@ std::any PythonCustomParserVisitor::visitComp_op(PythonParser::Comp_opContext *c
 
     if (ctx->comp_notin()) {
         result += "!";
-        result += any_cast<string>(visitSum(ctx->comp_in()->sum()));
-        result += " .includes(";
+        result += any_cast<string>(visitSum(ctx->comp_notin()->sum()));
+        result += ".includes(";
     }
-
-
 
     return result;
 }
 
 std::any PythonCustomParserVisitor::visitSum(PythonParser::SumContext *ctx) {
-    string result = ctx->getText();
+    string sumResult;
+    string termResult;
+
+    termResult = any_cast<string>(visitTerm(ctx->term()));
+
+    if (!ctx->sum())
+        return termResult;
+
+    sumResult = any_cast<string>(visitSum(ctx->sum()));
+
+
+    return sumResult + " " + ctx->children[1]->getText() + " " + termResult;
+}
+
+std::any PythonCustomParserVisitor::visitTerm(PythonParser::TermContext *ctx) {
+    string factorResult;
+    string termResult;
+
+    factorResult = any_cast<string>(visitFactor(ctx->factor()));
+
+    if (!ctx->term())
+        return factorResult;
+
+    termResult = any_cast<string>(visitTerm(ctx->term()));
+
+    if (ctx->DOUBLESLASH()) {
+        return "~~(" + termResult + " / " + factorResult + ")";
+    }else {
+        return termResult + " " + ctx->children[1]->getText() + " " + factorResult;
+    }
+}
+
+std::any PythonCustomParserVisitor::visitFactor(PythonParser::FactorContext *ctx) {
+    if (ctx->power())
+        return any_cast<string>(visitPower(ctx->power()));
+    else
+        return ctx->children[0]->getText() + any_cast<string>(visitFactor(ctx->factor()));
+}
+
+std::any PythonCustomParserVisitor::visitPower(PythonParser::PowerContext *ctx) {
+    string primaryResult;
+
+    // primaryResult = any_cast<string>(visitChildren(ctx->primary()));
+
+    primaryResult = any_cast<string>(visitChildren(ctx->primary()));
+    if (!ctx->factor())
+        return primaryResult;
+
+    string factorResult = any_cast<string>(visitFactor(ctx->factor()));
+    return primaryResult + " ** " + factorResult;
+}
+
+std::any PythonCustomParserVisitor::visitField_prim(PythonParser::Field_primContext *ctx) {
+    return ctx->getText();
+}
+
+std::any PythonCustomParserVisitor::visitFunction_call_prim(PythonParser::Function_call_primContext *ctx) {
+    return ctx->getText();
+}
+
+std::any PythonCustomParserVisitor::visitSlice_prim(PythonParser::Slice_primContext *ctx) {
+    return ctx->getText();
+}
+
+std::any PythonCustomParserVisitor::visitAtom_prim(PythonParser::Atom_primContext *ctx) {
+    return any_cast<string>(visitAtom(ctx->atom()));
+}
+
+std::any PythonCustomParserVisitor::visitAtom(PythonParser::AtomContext *ctx) {
+    if (ctx->NONE())
+        return "undefined";
+
+    if (ctx->strings())
+        return visitStrings(ctx->strings());
+
+    if (ctx->tuple())
+        return visitTuple(ctx->tuple());
+
+    if (ctx->set())
+        return visitSet(ctx->set());
+
+
+    return ctx->getText();
+}
+
+std::any PythonCustomParserVisitor::visitStrings(PythonParser::StringsContext *ctx) {
+    string res = "\"";
+    for (auto &s : ctx->STRING()) {
+        string temp = s->getText();
+        temp = temp.substr(1, temp.size() - 2);
+        res += temp;
+    }
+    res += "\"";
+    return res;
+}
+
+std::any PythonCustomParserVisitor::visitTuple(PythonParser::TupleContext *ctx) {
+    string result = "[";
+    result += any_cast<string>(visitExpression(ctx->expression()));
+
+    if (ctx->expressions())
+        result += any_cast<string>(visitExpressions(ctx->expressions()));
+
+    result += "]";
     return result;
 }
 
-// std::any PythonCustomParserVisitor::visitFile(PythonParser::FileContext *ctx) {
-//     visitChildren(ctx);
-//
-//     if (logging) {
-//         cout << "================" << endl;
-//         cout << "Przetlumaczone:" << endl << translated << endl;
-//         cout << "================" << endl;
-//     }
-//
-//     return translated;
-// }
+std::any PythonCustomParserVisitor::visitGroup(PythonParser::GroupContext *ctx) {
+    return "(" + any_cast<string>(visitExpression(ctx->expression())) + ")";
+}
+
+std::any PythonCustomParserVisitor::visitSet(PythonParser::SetContext *ctx) {
+    return "new Set([" + any_cast<string>(visitExpressions(ctx->expressions())) + "])";
+}

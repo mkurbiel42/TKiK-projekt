@@ -43,16 +43,16 @@ int main(int argc, const char * argv[]) {
     auto s = tree->toStringTree(&parser);
     cout << "Parse Tree: " << s << std::endl;
 
-	tree::ParseTreeWalker *walker = new tree::ParseTreeWalker();
-	PythonCustomParserListener *listener = new PythonCustomParserListener();
-
-	walker->walk(listener, tree);
-
-	// auto *visitor = new PythonCustomParserVisitor();
-	// visitor->visit(tree);
+	// tree::ParseTreeWalker *walker = new tree::ParseTreeWalker();
+	// PythonCustomParserListener *listener = new PythonCustomParserListener();
 	//
-	// cout << "================" << endl;
-	// cout << "Przetlumaczone:" << endl << visitor->translated << endl;
-	// cout << "================" << endl;
+	// walker->walk(listener, tree);
+
+	auto *visitor = new PythonCustomParserVisitor();
+	visitor->visit(tree);
+
+	cout << "================" << endl;
+	cout << "Przetlumaczone:" << endl << visitor->translated << endl;
+	cout << "================" << endl;
 	return 0;
 }
