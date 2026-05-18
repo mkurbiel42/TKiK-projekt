@@ -168,6 +168,8 @@ public:
     FileContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *ENDMARKER();
+    std::vector<antlr4::tree::TerminalNode *> NEWLINE();
+    antlr4::tree::TerminalNode* NEWLINE(size_t i);
     StatementsContext *statements();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;

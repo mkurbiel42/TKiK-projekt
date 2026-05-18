@@ -1,9 +1,9 @@
-parser grammar PythonParser;
+parser grammar PythonParserSimplified;
 
 options { tokenVocab=PythonLexer; }
 
 // starting rule
-file: NEWLINE* statements? ENDMARKER;
+file: statements? ENDMARKER;
 
 // general statements
 statements: statement+;
@@ -82,9 +82,8 @@ expressions: expression (COMMA expression)* COMMA?;
 expression: disjunction IF disjunction ELSE expression
     | disjunction
     | lambdef;
-assignment_expression: NAME WALRUS expression;
 named_expression:
-    assignment_expression | expression {_input->LA(1) != WALRUS}?;
+    expression {_input->LA(1) != WALRUS}?;
 
 disjunction: conjunction (OR conjunction)*;
 conjunction: inversion (AND inversion)*;
@@ -122,7 +121,7 @@ group: PAR_LEFT expression PAR_RIGHT;
 
 // function call arguments
 arguments: arg_expression (COMMA arg_expression)* COMMA?;
-arg_expression: (starred_expression | (assignment_expression | expression {_input->LA(1) != WALRUS}?) {_input->LA(1) != EQUALS}?);
+arg_expression: (starred_expression | (expression {_input->LA(1) != WALRUS}?) {_input->LA(1) != EQUALS}?);
 
 kwargs: kwarg_or_starred (COMMA kwarg_or_starred)* COMMA kwarg_or_double_starred (COMMA kwarg_or_double_starred)*
     | kwarg_or_starred (COMMA kwarg_or_starred)*
