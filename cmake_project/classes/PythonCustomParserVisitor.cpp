@@ -320,7 +320,7 @@ std::any PythonCustomParserVisitor::visitPower(PythonParser::PowerContext *ctx) 
 
     // primaryResult = any_cast<string>(visitChildren(ctx->primary()));
 
-    primaryResult = any_cast<string>(visitChildren(ctx->primary()));
+    primaryResult = any_cast<string>(visit(ctx->primary()));
     if (!ctx->factor())
         return primaryResult;
 
@@ -346,7 +346,7 @@ std::any PythonCustomParserVisitor::visitAtom_prim(PythonParser::Atom_primContex
 
 std::any PythonCustomParserVisitor::visitAtom(PythonParser::AtomContext *ctx) {
     if (ctx->NONE())
-        return "undefined";
+        return noneReplacement;
 
     if (ctx->strings())
         return visitStrings(ctx->strings());
@@ -357,6 +357,11 @@ std::any PythonCustomParserVisitor::visitAtom(PythonParser::AtomContext *ctx) {
     if (ctx->set())
         return visitSet(ctx->set());
 
+    if (ctx->listcomp())
+        return visitListcomp(ctx->listcomp());
+
+    if (ctx->setcomp())
+        return visitSetcomp(ctx->setcomp());
 
     return ctx->getText();
 }
@@ -390,3 +395,102 @@ std::any PythonCustomParserVisitor::visitGroup(PythonParser::GroupContext *ctx) 
 std::any PythonCustomParserVisitor::visitSet(PythonParser::SetContext *ctx) {
     return "new Set([" + any_cast<string>(visitExpressions(ctx->expressions())) + "])";
 }
+
+std::any PythonCustomParserVisitor::visitFor_if_clause(PythonParser::For_if_clauseContext *ctx) {
+    if (ctx->targets()->target().size() != 1) {
+        cout << "Multiple targets for if clauses are not supported";
+        return "";
+    }
+
+    auto target = ctx->targets()[0].target()[0];
+    string targetResult;
+
+    if (target->atom())
+        targetResult = target->atom()->getText();
+    else {
+        auto primary = target->primary();
+        while (true) {
+            if (auto atom_c = dynamic_cast<PythonParser::Atom_primContext*>(primary)) {
+                targetResult = atom_c->getText();
+                break;
+            }
+
+            if (auto c = dynamic_cast<PythonParser::Field_primContext*>(primary))
+                primary = c->primary();
+            else if (auto c2 = dynamic_cast<PythonParser::Function_call_primContext*>(primary))
+                primary = c2->primary();
+            else if (auto c3 = dynamic_cast<PythonParser::Slice_primContext*>(primary))
+                primary = c3->primary();
+        }
+    }
+
+    string disjunctionResult = any_cast<string>(visitDisjunction(ctx->disjunction()[0]));
+    string filters;
+
+    for (int i=0; i<ctx->IF().size(); i++) {
+        filters += ".filter(" + targetResult + " => " + any_cast<string>(visitDisjunction(ctx->disjunction()[i+1])) + ")";
+    }
+
+    return disjunctionResult + filters;
+}
+
+std::any PythonCustomParserVisitor::visitFor_if_clauses(PythonParser::For_if_clausesContext *ctx) {
+    if (ctx->for_if_clause().size() > 1) {
+        cout << "Multiple for if clauses in array comprehension statements are not supported";
+        return "";
+    }
+
+    return visitFor_if_clause(ctx->for_if_clause()[0]);
+}
+
+
+std::any PythonCustomParserVisitor::visitListcomp(PythonParser::ListcompContext *ctx) {
+    string forIfClauseResult = any_cast<string>(visitFor_if_clauses(ctx->for_if_clauses()));
+
+    auto target = ctx->for_if_clauses()[0].for_if_clause()[0]->targets()[0].target()[0];
+    string targetResult;
+
+    if (target->atom())
+        targetResult = target->atom()->getText();
+    else {
+        auto primary = target->primary();
+        while (true) {
+            if (auto atom_c = dynamic_cast<PythonParser::Atom_primContext*>(primary)) {
+                targetResult = atom_c->getText();
+                break;
+            }
+
+            if (auto c = dynamic_cast<PythonParser::Field_primContext*>(primary))
+                primary = c->primary();
+            else if (auto c2 = dynamic_cast<PythonParser::Function_call_primContext*>(primary))
+                primary = c2->primary();
+            else if (auto c3 = dynamic_cast<PythonParser::Slice_primContext*>(primary))
+                primary = c3->primary();
+        }
+    }
+
+    return forIfClauseResult + ".map(" + targetResult + " => " + any_cast<string>(visitNamed_expression(ctx->named_expression())) + ")";
+}
+
+std::any PythonCustomParserVisitor::visitSetcomp(PythonParser::SetcompContext *ctx) {
+    string listComp = "new Set(";
+    listComp += any_cast<string>(visitListcomp(reinterpret_cast<PythonParser::ListcompContext*>(ctx)));
+    listComp += ")";
+
+    return listComp;
+}
+
+std::any PythonCustomParserVisitor::visitDictcomp(PythonParser::DictcompContext *ctx) {
+   return "";
+}
+
+
+std::any PythonCustomParserVisitor::visitNamed_expression(PythonParser::Named_expressionContext *ctx) {
+    return ctx->getText();
+}
+
+
+std::any PythonCustomParserVisitor::visitSlices(PythonParser::SlicesContext *ctx) {
+    return ctx->getText();
+}
+
