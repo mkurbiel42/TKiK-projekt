@@ -339,11 +339,11 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitField_tprim(PythonParser::Field_tprimContext *ctx) override {
+  virtual std::any visitFunction_call_tprim(PythonParser::Function_call_tprimContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual std::any visitFunction_call_tprim(PythonParser::Function_call_tprimContext *ctx) override {
+  virtual std::any visitField_tprim(PythonParser::Field_tprimContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -352,10 +352,6 @@ public:
   }
 
   virtual std::any visitAtom_tprim(PythonParser::Atom_tprimContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual std::any visitT_lookahead(PythonParser::T_lookaheadContext *ctx) override {
     return visitChildren(ctx);
   }
 

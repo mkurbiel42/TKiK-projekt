@@ -145,16 +145,15 @@ as_atom: NAME                                   # as_atom_name
     ;
 
 single_target: single_subscript_attribute_target | NAME | PAR_LEFT single_target PAR_RIGHT;
-single_subscript_attribute_target: NAME (DOT NAME)* {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?
-    | NAME (DOT NAME)* BRACKET_LEFT slices BRACKET_RIGHT {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?;
+single_subscript_attribute_target: t_primary DOT NAME {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?
+    | t_primary BRACKET_LEFT slices BRACKET_RIGHT {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?;
 
 
-t_primary: primary DOT NAME                           #field_tprim
-    | primary PAR_LEFT arguments? PAR_RIGHT         #function_call_tprim
-    | primary BRACKET_LEFT slices BRACKET_RIGHT     #slice_tprim
-    | atom                                          #atom_tprim
+t_primary: t_primary DOT NAME {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?                          #field_tprim
+    | t_primary PAR_LEFT arguments? PAR_RIGHT {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?        #function_call_tprim
+    | t_primary BRACKET_LEFT slices BRACKET_RIGHT {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?    #slice_tprim
+    | atom  {_input->LA(1) != PAR_LEFT && _input->LA(1) != BRACKET_LEFT && _input->LA(1) != DOT}?                                        #atom_tprim
     ;
-t_lookahead: PAR_LEFT | BRACKET_LEFT | DOT;
 
 // generic targets
 targets: target {_input->LA(1) != COMMA}? | target (COMMA target)* COMMA?;

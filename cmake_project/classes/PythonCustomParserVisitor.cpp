@@ -36,14 +36,14 @@ std::any PythonCustomParserVisitor::visitSimple_assignment(PythonParser::Simple_
                 }
             }
 
-            if (t->BRACKET_LEFT() || t->NAME() || alreadyPresentInScope) {
+            if (!t->as_atom() || alreadyPresentInScope) {
                 if (!alreadyDeclared.empty())
                     alreadyDeclared.append(", ");
-                alreadyDeclared.append(t->getText());
+                alreadyDeclared.append(any_cast<string>(visit(t)));
             }else {
                 if (notDeclared != "let ")
                     notDeclared.append(", ");
-                notDeclared.append(t->getText());
+                notDeclared.append(any_cast<string>(visit(t)));
                 scopes.back().names.insert(t->getText());
             }
         }
@@ -128,16 +128,8 @@ any PythonCustomParserVisitor::visitExpressions(PythonParser::ExpressionsContext
 }
 
 any PythonCustomParserVisitor::visitExpression(PythonParser::ExpressionContext *ctx) {
-    if (ctx->lambdef()) {
-        auto lambdef = ctx->lambdef();
-        string result = "(";
-        if (lambdef->function_params())
-            result.append(lambdef->function_params()->getText());
-        result.append(") => ");
-        result.append(any_cast<string>(visitExpression(lambdef->expression())));
-
-        return result;
-    }
+    if (ctx->lambdef())
+        return visitLambdef(ctx->lambdef());
 
     if (ctx->IF()) {
         auto disj1 = ctx->disjunction()[0];
@@ -151,6 +143,17 @@ any PythonCustomParserVisitor::visitExpression(PythonParser::ExpressionContext *
 
     return any_cast<string>(visitDisjunction(ctx->disjunction()[0]));
 }
+
+std::any PythonCustomParserVisitor::visitLambdef(PythonParser::LambdefContext *ctx) {
+    string result = "(";
+    if (ctx->function_params())
+        result.append(any_cast<string>(visit(ctx->function_params())));
+    result.append(") => ");
+    result.append(any_cast<string>(visitExpression(ctx->expression())));
+
+    return result;
+}
+
 
 std::any PythonCustomParserVisitor::visitDisjunction(PythonParser::DisjunctionContext *ctx) {
     string result;
@@ -347,25 +350,16 @@ std::any PythonCustomParserVisitor::visitAtom(PythonParser::AtomContext *ctx) {
     if (ctx->NONE())
         return noneReplacement;
 
-    if (ctx->strings())
-        return visitStrings(ctx->strings());
+    if (ctx->NAME() || ctx->NUMBER())
+        return ctx->getText();
 
-    if (ctx->tuple())
-        return visitTuple(ctx->tuple());
+    if (ctx->TRUE() || ctx->FALSE()) {
+        string text = ctx->getText();
+        ranges::transform(text, text.begin(), [](unsigned char c){ return std::tolower(c); });
+        return text;
+    }
 
-    if (ctx->set())
-        return visitSet(ctx->set());
-
-    if (ctx->listcomp())
-        return visitListcomp(ctx->listcomp());
-
-    if (ctx->setcomp())
-        return visitSetcomp(ctx->setcomp());
-
-    if (ctx->dictcomp())
-        return visitDictcomp(ctx->dictcomp());
-
-    return ctx->getText();
+    return visit(ctx->children[0]);
 }
 
 std::any PythonCustomParserVisitor::visitStrings(PythonParser::StringsContext *ctx) {
@@ -405,7 +399,7 @@ std::any PythonCustomParserVisitor::visitFor_if_clause(PythonParser::For_if_clau
     }
 
     auto target = ctx->targets()[0].target()[0];
-    string targetResult = target->getText();
+    string targetResult = any_cast<string>(visit(target));
 
     string filters;
     string firstDisjunctionResult = any_cast<string>(visitDisjunction(ctx->disjunction()[0]));
@@ -438,6 +432,43 @@ std::any PythonCustomParserVisitor::visitFor_if_clauses(PythonParser::For_if_cla
     return forIfClausesResult;
 }
 
+std::any PythonCustomParserVisitor::visitList(PythonParser::ListContext *ctx) {
+    return "[" + any_cast<string>(visitExpressions(ctx->expressions())) + "]";
+}
+
+std::any PythonCustomParserVisitor::visitDict(PythonParser::DictContext *ctx) {
+    string doubleStarredKVPairsResult = any_cast<string>(visit(ctx->double_starred_kvpairs()));
+
+    return "{" + doubleStarredKVPairsResult + "}";
+}
+
+std::any PythonCustomParserVisitor::visitDouble_starred_kvpairs(PythonParser::Double_starred_kvpairsContext *ctx) {
+    string result;
+    for (auto &p : ctx->double_starred_kvpair()) {
+        if (!result.empty())
+            result += ", ";
+
+        result += any_cast<string>(visit(p));
+    }
+
+    return "{" + result + "}";
+}
+
+std::any PythonCustomParserVisitor::visitDouble_starred_kvpair(PythonParser::Double_starred_kvpairContext *ctx) {
+    if (ctx->kvpair())
+        return visit(ctx->kvpair());
+
+    string expressionResult = any_cast<string>(visit(ctx->expression()));
+
+    return "..." + expressionResult;
+}
+
+std::any PythonCustomParserVisitor::visitKvpair(PythonParser::KvpairContext *ctx) {
+    string keyResult = any_cast<string>(ctx->expression()[0]);
+    string valResult = any_cast<string>(ctx->expression()[1]);
+
+    return keyResult + ": " + valResult;
+}
 
 std::any PythonCustomParserVisitor::visitListcomp(PythonParser::ListcompContext *ctx) {
     string forIfClauseResult = any_cast<string>(visitFor_if_clauses(ctx->for_if_clauses()));
@@ -530,6 +561,237 @@ std::any PythonCustomParserVisitor::visitSlice(PythonParser::SliceContext *ctx) 
 
     if (!thirdArg.empty()) {
         result += ".filter((_, idx) => idx % " + thirdArg + " == 0)";
+    }
+
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitAtom_tprim(PythonParser::Atom_tprimContext *ctx) {
+    if (ctx->atom()->TRUE() || ctx->atom()->FALSE() || ctx->atom()->NONE() || ctx->atom()->strings()) {
+        cout << "Can't augassign to '" << ctx->atom()->getText() << "'" << endl;
+        return "";
+    }
+
+    if (!ctx->atom()->NAME())
+        return visitAtom(ctx->atom());
+
+    string atomName = ctx->atom()->NAME()->getText();
+
+    for (auto &s : scopes) {
+        if (s.names.contains(atomName) || s.globals.contains(atomName) || s.nonLocals.contains(atomName))
+            return visitAtom(ctx->atom());
+    }
+
+    cout << "Can't augassign to an undeclared variable" << endl;
+    return "";
+}
+
+std::any PythonCustomParserVisitor::visitField_tprim(PythonParser::Field_tprimContext *ctx) {
+    string tPrimResult = any_cast<string>(visit(ctx->t_primary()));
+
+    return tPrimResult + "." + ctx->NAME()->getText();
+}
+
+std::any PythonCustomParserVisitor::visitSlice_tprim(PythonParser::Slice_tprimContext *ctx) {
+    string tPrimResult = any_cast<string>(visit(ctx->t_primary()));
+    string slicesResult = any_cast<string>(visitSlices(ctx->slices()));
+
+    return tPrimResult + slicesResult;
+}
+
+std::any PythonCustomParserVisitor::visitFunction_call_tprim(PythonParser::Function_call_tprimContext *ctx) {
+    string tPrimResult = any_cast<string>(visit(ctx->t_primary()));
+    if (!ctx->arguments())
+        return tPrimResult + "()";
+
+    string argsResult = any_cast<string>(visit(ctx->arguments()));
+    return tPrimResult + "(" + argsResult + ")";
+}
+
+std::any PythonCustomParserVisitor::visitArguments(PythonParser::ArgumentsContext *ctx) {
+    string result;
+
+    for (auto &a : ctx->arg_expression()) {
+        if (!result.empty())
+            result += ", ";
+
+        result += any_cast<string>(visit(a));
+    }
+
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitFunction_params(PythonParser::Function_paramsContext *ctx) {
+    string result;
+    for (auto &p : ctx->NAME()) {
+        if (p->getText() == "self")
+            continue;
+        if (!result.empty())
+            result += ", ";
+        result += p->getText();
+    }
+
+    return result;
+}
+
+
+std::any PythonCustomParserVisitor::visitArg_expression(PythonParser::Arg_expressionContext *ctx) {
+    return visit(ctx->children[0]);
+}
+
+std::any PythonCustomParserVisitor::visitStarred_expression(PythonParser::Starred_expressionContext *ctx) {
+    string expressionResult = any_cast<string>(visitExpression(ctx->expression()));
+
+    return "..." + expressionResult;
+}
+
+std::any PythonCustomParserVisitor::visitSingle_subscript_attribute_target(PythonParser::Single_subscript_attribute_targetContext *ctx) {
+    string tPrimResult = any_cast<string>(visit(ctx->t_primary()));
+
+    if (!ctx->slices())
+        return tPrimResult + "." + ctx->NAME()->getText();
+
+    string slicesResult = any_cast<string>(visitSlices(ctx->slices()));
+    return tPrimResult + slicesResult;
+}
+
+std::any PythonCustomParserVisitor::visitSingle_target(PythonParser::Single_targetContext *ctx) {
+    if (ctx->NAME())
+        return ctx->NAME()->getText();
+
+    if (ctx->single_target())
+        return "(" + any_cast<string>(visitSingle_target(ctx->single_target())) + ")";
+
+    return visitSingle_subscript_attribute_target(ctx->single_subscript_attribute_target());
+}
+
+std::any PythonCustomParserVisitor::visitAs_target(PythonParser::As_targetContext *ctx) {
+    if (ctx->as_atom())
+        return visit(ctx->as_atom());
+
+    string primaryResult = any_cast<string>(visit(ctx->primary()));
+
+    if (!ctx->slices())
+        return primaryResult + "." + ctx->NAME()->getText();
+
+    string slicesResult = any_cast<string>(visit(ctx->slices()));
+    return primaryResult + slicesResult;
+}
+
+
+std::any PythonCustomParserVisitor::visitAs_atom_name(PythonParser::As_atom_nameContext *ctx) {
+    return ctx->NAME()->getText();
+}
+
+std::any PythonCustomParserVisitor::visitAs_atom_tuple(PythonParser::As_atom_tupleContext *ctx) {
+    string asTargetResult = any_cast<string>(visit(ctx->as_target()));
+
+    return "[" + asTargetResult + "]";
+}
+
+std::any PythonCustomParserVisitor::visitAs_atom_tuple_tuple(PythonParser::As_atom_tuple_tupleContext *ctx) {
+    string asTargetTupleResult;
+
+    if (ctx->as_target_tuple())
+        asTargetTupleResult = any_cast<string>(visit(ctx->as_target_tuple()));
+
+    return "[" + asTargetTupleResult + "]";
+}
+
+std::any PythonCustomParserVisitor::visitAs_target_list(PythonParser::As_target_listContext *ctx) {
+    string result;
+    for (auto &t : ctx->as_target()) {
+        if (!result.empty())
+            result += ", ";
+
+        result += any_cast<string>(visit(t));
+    }
+
+    return "[" + result + "]";
+}
+
+std::any PythonCustomParserVisitor::visitAs_target_tuple(PythonParser::As_target_tupleContext *ctx) {
+    string result;
+    for (auto &t : ctx->as_target()) {
+        if (!result.empty())
+            result += ", ";
+
+        result += any_cast<string>(visit(t));
+    }
+
+    return "[" + result + "]";
+}
+
+std::any PythonCustomParserVisitor::visitAs_atom_list(PythonParser::As_atom_listContext *ctx) {
+    string asTargetListResult;
+    if (ctx->as_target_list())
+        asTargetListResult = any_cast<string>(visit(ctx->as_target_list()));
+
+    return "[" + asTargetListResult + "]";
+}
+
+std::any PythonCustomParserVisitor::visitAs_targets(PythonParser::As_targetsContext *ctx) {
+    string result;
+
+    for (auto &t : ctx->as_target()) {
+        if (!result.empty())
+            result += ", ";
+
+        result += any_cast<string>(visit(t));
+    }
+
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitTarget(PythonParser::TargetContext *ctx) {
+    if (ctx->atom())
+        return visit(ctx->atom());
+
+    string primaryResult = any_cast<string>(visit(ctx->primary()));
+
+    if (!ctx->slices())
+        return primaryResult + "." + ctx->NAME()->getText();
+
+    string slicesResult = any_cast<string>(visit(ctx->slices()));
+
+    return primaryResult + slicesResult;
+}
+
+std::any PythonCustomParserVisitor::visitTargets(PythonParser::TargetsContext *ctx) {
+    string result;
+
+    for (auto &t : ctx->target()) {
+        if (!result.empty())
+            result += ", ";
+
+        result += any_cast<string>(visit(t));
+    }
+
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitDel_target(PythonParser::Del_targetContext *ctx) {
+    if (ctx->NAME())
+        return ctx->NAME()->getText();
+
+    string primaryResult = any_cast<string>(visit(ctx->primary()));
+
+    if (!ctx->slices())
+        return primaryResult + "." + ctx->NAME()->getText();
+
+    string slicesResult = any_cast<string>(visit(ctx->slices()));
+
+    return primaryResult + slicesResult;
+}
+
+std::any PythonCustomParserVisitor::visitDel_targets(PythonParser::Del_targetsContext *ctx) {
+    string result;
+
+    for (auto &t : ctx->del_target()) {
+        if (!result.empty())
+            result += ", ";
+
+        result += any_cast<string>(visit(t));
     }
 
     return result;

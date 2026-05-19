@@ -47,11 +47,11 @@ public:
     RuleKwarg_or_starred = 63, RuleKwarg_or_double_starred = 64, RuleAs_targets = 65, 
     RuleAs_target_list = 66, RuleAs_target_tuple = 67, RuleAs_target = 68, 
     RuleAs_atom = 69, RuleSingle_target = 70, RuleSingle_subscript_attribute_target = 71, 
-    RuleT_primary = 72, RuleT_lookahead = 73, RuleTargets = 74, RuleTarget = 75, 
-    RuleDel_targets = 76, RuleDel_target = 77, RuleStrings = 78, RuleList = 79, 
-    RuleTuple = 80, RuleSet = 81, RuleDict = 82, RuleDouble_starred_kvpairs = 83, 
-    RuleDouble_starred_kvpair = 84, RuleKvpair = 85, RuleFor_if_clauses = 86, 
-    RuleFor_if_clause = 87, RuleListcomp = 88, RuleSetcomp = 89, RuleDictcomp = 90
+    RuleT_primary = 72, RuleTargets = 73, RuleTarget = 74, RuleDel_targets = 75, 
+    RuleDel_target = 76, RuleStrings = 77, RuleList = 78, RuleTuple = 79, 
+    RuleSet = 80, RuleDict = 81, RuleDouble_starred_kvpairs = 82, RuleDouble_starred_kvpair = 83, 
+    RuleKvpair = 84, RuleFor_if_clauses = 85, RuleFor_if_clause = 86, RuleListcomp = 87, 
+    RuleSetcomp = 88, RuleDictcomp = 89
   };
 
   explicit PythonParser(antlr4::TokenStream *input);
@@ -144,7 +144,6 @@ public:
   class Single_targetContext;
   class Single_subscript_attribute_targetContext;
   class T_primaryContext;
-  class T_lookaheadContext;
   class TargetsContext;
   class TargetContext;
   class Del_targetsContext;
@@ -1629,10 +1628,9 @@ public:
   public:
     Single_subscript_attribute_targetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<antlr4::tree::TerminalNode *> NAME();
-    antlr4::tree::TerminalNode* NAME(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> DOT();
-    antlr4::tree::TerminalNode* DOT(size_t i);
+    T_primaryContext *t_primary();
+    antlr4::tree::TerminalNode *DOT();
+    antlr4::tree::TerminalNode *NAME();
     antlr4::tree::TerminalNode *BRACKET_LEFT();
     SlicesContext *slices();
     antlr4::tree::TerminalNode *BRACKET_RIGHT();
@@ -1663,7 +1661,7 @@ public:
   public:
     Function_call_tprimContext(T_primaryContext *ctx);
 
-    PrimaryContext *primary();
+    T_primaryContext *t_primary();
     antlr4::tree::TerminalNode *PAR_LEFT();
     antlr4::tree::TerminalNode *PAR_RIGHT();
     ArgumentsContext *arguments();
@@ -1677,7 +1675,7 @@ public:
   public:
     Field_tprimContext(T_primaryContext *ctx);
 
-    PrimaryContext *primary();
+    T_primaryContext *t_primary();
     antlr4::tree::TerminalNode *DOT();
     antlr4::tree::TerminalNode *NAME();
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -1690,7 +1688,7 @@ public:
   public:
     Slice_tprimContext(T_primaryContext *ctx);
 
-    PrimaryContext *primary();
+    T_primaryContext *t_primary();
     antlr4::tree::TerminalNode *BRACKET_LEFT();
     SlicesContext *slices();
     antlr4::tree::TerminalNode *BRACKET_RIGHT();
@@ -1712,24 +1710,7 @@ public:
   };
 
   T_primaryContext* t_primary();
-
-  class  T_lookaheadContext : public antlr4::ParserRuleContext {
-  public:
-    T_lookaheadContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *PAR_LEFT();
-    antlr4::tree::TerminalNode *BRACKET_LEFT();
-    antlr4::tree::TerminalNode *DOT();
-
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-
-    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-   
-  };
-
-  T_lookaheadContext* t_lookahead();
-
+  T_primaryContext* t_primary(int precedence);
   class  TargetsContext : public antlr4::ParserRuleContext {
   public:
     TargetsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -2048,6 +2029,7 @@ public:
   bool as_targetsSempred(As_targetsContext *_localctx, size_t predicateIndex);
   bool as_targetSempred(As_targetContext *_localctx, size_t predicateIndex);
   bool single_subscript_attribute_targetSempred(Single_subscript_attribute_targetContext *_localctx, size_t predicateIndex);
+  bool t_primarySempred(T_primaryContext *_localctx, size_t predicateIndex);
   bool targetsSempred(TargetsContext *_localctx, size_t predicateIndex);
 
   // By default the static state used to implement the parser is lazily initialized during the first

@@ -257,20 +257,17 @@ public:
   virtual void enterSingle_subscript_attribute_target(PythonParser::Single_subscript_attribute_targetContext *ctx) = 0;
   virtual void exitSingle_subscript_attribute_target(PythonParser::Single_subscript_attribute_targetContext *ctx) = 0;
 
-  virtual void enterField_tprim(PythonParser::Field_tprimContext *ctx) = 0;
-  virtual void exitField_tprim(PythonParser::Field_tprimContext *ctx) = 0;
-
   virtual void enterFunction_call_tprim(PythonParser::Function_call_tprimContext *ctx) = 0;
   virtual void exitFunction_call_tprim(PythonParser::Function_call_tprimContext *ctx) = 0;
+
+  virtual void enterField_tprim(PythonParser::Field_tprimContext *ctx) = 0;
+  virtual void exitField_tprim(PythonParser::Field_tprimContext *ctx) = 0;
 
   virtual void enterSlice_tprim(PythonParser::Slice_tprimContext *ctx) = 0;
   virtual void exitSlice_tprim(PythonParser::Slice_tprimContext *ctx) = 0;
 
   virtual void enterAtom_tprim(PythonParser::Atom_tprimContext *ctx) = 0;
   virtual void exitAtom_tprim(PythonParser::Atom_tprimContext *ctx) = 0;
-
-  virtual void enterT_lookahead(PythonParser::T_lookaheadContext *ctx) = 0;
-  virtual void exitT_lookahead(PythonParser::T_lookaheadContext *ctx) = 0;
 
   virtual void enterTargets(PythonParser::TargetsContext *ctx) = 0;
   virtual void exitTargets(PythonParser::TargetsContext *ctx) = 0;

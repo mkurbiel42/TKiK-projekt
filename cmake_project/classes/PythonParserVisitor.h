@@ -181,15 +181,13 @@ public:
 
     virtual std::any visitSingle_subscript_attribute_target(PythonParser::Single_subscript_attribute_targetContext *context) = 0;
 
-    virtual std::any visitField_tprim(PythonParser::Field_tprimContext *context) = 0;
-
     virtual std::any visitFunction_call_tprim(PythonParser::Function_call_tprimContext *context) = 0;
+
+    virtual std::any visitField_tprim(PythonParser::Field_tprimContext *context) = 0;
 
     virtual std::any visitSlice_tprim(PythonParser::Slice_tprimContext *context) = 0;
 
     virtual std::any visitAtom_tprim(PythonParser::Atom_tprimContext *context) = 0;
-
-    virtual std::any visitT_lookahead(PythonParser::T_lookaheadContext *context) = 0;
 
     virtual std::any visitTargets(PythonParser::TargetsContext *context) = 0;
 

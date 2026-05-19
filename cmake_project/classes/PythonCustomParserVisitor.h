@@ -23,6 +23,7 @@ public:
 
     std::any visitExpressions(PythonParser::ExpressionsContext *ctx) override;
     std::any visitExpression(PythonParser::ExpressionContext *ctx) override;
+    std::any visitLambdef(PythonParser::LambdefContext *ctx) override;
 
     std::any visitDisjunction(PythonParser::DisjunctionContext *ctx) override;
     std::any visitConjunction(PythonParser::ConjunctionContext *ctx) override;
@@ -46,12 +47,44 @@ public:
     std::any visitTuple(PythonParser::TupleContext *ctx) override;
     std::any visitGroup(PythonParser::GroupContext *ctx) override;
     std::any visitSet(PythonParser::SetContext *ctx) override;
+    std::any visitList(PythonParser::ListContext *ctx) override;
+    std::any visitDict(PythonParser::DictContext *ctx) override;
+
+    std::any visitDouble_starred_kvpairs(PythonParser::Double_starred_kvpairsContext *ctx) override;
+    std::any visitDouble_starred_kvpair(PythonParser::Double_starred_kvpairContext *ctx) override;
+    std::any visitKvpair(PythonParser::KvpairContext *ctx) override;
 
     std::any visitNamed_expression(PythonParser::Named_expressionContext *ctx) override;
     std::any visitAssignment_expression(PythonParser::Assignment_expressionContext *ctx) override;
 
     std::any visitSlices(PythonParser::SlicesContext *ctx) override;
     std::any visitSlice(PythonParser::SliceContext *ctx) override;
+
+    std::any visitAs_targets(PythonParser::As_targetsContext *ctx) override;
+    std::any visitAs_target(PythonParser::As_targetContext *ctx) override;
+    std::any visitAs_target_list(PythonParser::As_target_listContext *ctx) override;
+    std::any visitAs_target_tuple(PythonParser::As_target_tupleContext *ctx) override;
+    std::any visitAs_atom_name(PythonParser::As_atom_nameContext *ctx) override;
+    std::any visitAs_atom_tuple(PythonParser::As_atom_tupleContext *ctx) override;
+    std::any visitAs_atom_tuple_tuple(PythonParser::As_atom_tuple_tupleContext *ctx) override;
+    std::any visitAs_atom_list(PythonParser::As_atom_listContext *ctx) override;
+
+    std::any visitSingle_target(PythonParser::Single_targetContext *ctx) override;
+    std::any visitSingle_subscript_attribute_target(PythonParser::Single_subscript_attribute_targetContext *ctx) override;
+    std::any visitField_tprim(PythonParser::Field_tprimContext *ctx) override;
+    std::any visitFunction_call_tprim(PythonParser::Function_call_tprimContext *ctx) override;
+    std::any visitSlice_tprim(PythonParser::Slice_tprimContext *ctx) override;
+    std::any visitAtom_tprim(PythonParser::Atom_tprimContext *ctx) override;
+
+    std::any visitTargets(PythonParser::TargetsContext *ctx) override;
+    std::any visitTarget(PythonParser::TargetContext *ctx) override;
+    std::any visitDel_targets(PythonParser::Del_targetsContext *ctx) override;
+    std::any visitDel_target(PythonParser::Del_targetContext *ctx) override;
+
+    std::any visitFunction_params(PythonParser::Function_paramsContext *ctx) override;
+    std::any visitArguments(PythonParser::ArgumentsContext *ctx) override;
+    std::any visitArg_expression(PythonParser::Arg_expressionContext *ctx) override;
+    std::any visitStarred_expression(PythonParser::Starred_expressionContext *ctx) override;
 
     std::any visitSimple_assignment(PythonParser::Simple_assignmentContext *ctx) override;
     std::any visitAug_assignment(PythonParser::Aug_assignmentContext *ctx) override;
