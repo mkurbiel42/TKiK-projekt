@@ -488,21 +488,16 @@ std::any PythonCustomParserVisitor::visitAssignment_expression(PythonParser::Ass
 }
 
 std::any PythonCustomParserVisitor::visitSlices(PythonParser::SlicesContext *ctx) {
-    if (ctx->slice().size() == 1 && ctx->expression().empty())
-        return visitSlice(ctx->slice()[0]);
+    // if (ctx->slice().size() == 1 && ctx->expression().empty())
+    //     return visitSlice(ctx->slice()[0]);
 
     string result;
 
-    for (auto &s : ctx->slice()) {
-        if (!result.empty())
-            result += "][";
-        result += any_cast<string>(visitSlice(s));
-    }
-
-    for (auto &e : ctx->expression()) {
-        if (!result.empty())
-            result += "][";
-        result += any_cast<string>(visitExpression(e));
+    for (auto &c : ctx->children) {
+        if (dynamic_cast<PythonParser::SliceContext*>(c))
+            result += any_cast<string>(visit(c));
+        else if (dynamic_cast<PythonParser::ExpressionContext*>(c))
+            result += "[" + any_cast<string>(visit(c)) + "]";
     }
 
     return result;
