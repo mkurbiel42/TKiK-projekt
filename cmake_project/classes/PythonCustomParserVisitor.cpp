@@ -6,11 +6,49 @@
 
 using namespace std;
 
+std::any PythonCustomParserVisitor::visitFile(PythonParser::FileContext *ctx) {
+    if (!ctx->statements())
+        return "";
+
+    for (auto &s : ctx->statements()->statement()) {
+        string sRes = any_cast<string>(visit(s));
+        translated += sRes;
+        cout << sRes;
+    }
+
+    return translated;
+}
+
+
+std::any PythonCustomParserVisitor::visitStatements(PythonParser::StatementsContext *ctx) {
+    string result;
+
+    for (auto &s : ctx->statement()) {
+        result += any_cast<string>(visit(s));
+    }
+
+    return result;
+}
+
+
 std::any PythonCustomParserVisitor::visitStatement(PythonParser::StatementContext *ctx) {
     auto res = any_cast<string>(visit(ctx->children[0]));
-    translated += res += "\n";
-    return res;
+    string tabs;
+
+    for (int i=0; i<indentCount * indentDepth; i++)
+        tabs += " ";
+
+    return tabs + res + "\n";
 }
+
+std::any PythonCustomParserVisitor::visitBlock(PythonParser::BlockContext *ctx) {
+    indentDepth += 1;
+    string statementsResult = any_cast<string>(visit(ctx->statements()));
+    indentDepth -= 1;
+
+    return "{\n" + statementsResult + "}";
+}
+
 
 std::any PythonCustomParserVisitor::visitSimple_stmt(PythonParser::Simple_stmtContext *ctx) {
     any anyRes = visit(ctx->children[0]);
@@ -350,6 +388,9 @@ std::any PythonCustomParserVisitor::visitAtom(PythonParser::AtomContext *ctx) {
     if (ctx->NONE())
         return noneReplacement;
 
+    if (ctx->NAME() && (ctx->NAME()->getText().contains("Error") || ctx->NAME()->getText().contains("Exception")))
+        return "new Error";
+
     if (ctx->NAME() || ctx->NUMBER())
         return ctx->getText();
 
@@ -567,7 +608,7 @@ std::any PythonCustomParserVisitor::visitSlice(PythonParser::SliceContext *ctx) 
 }
 
 std::any PythonCustomParserVisitor::visitAtom_tprim(PythonParser::Atom_tprimContext *ctx) {
-    if (ctx->atom()->TRUE() || ctx->atom()->FALSE() || ctx->atom()->NONE() || ctx->atom()->strings()) {
+    if (ctx->atom()->TRUE() || ctx->atom()->FALSE() || ctx->atom()->NONE() || ctx->atom()->strings() || ctx->atom()->NUMBER()) {
         cout << "Can't augassign to '" << ctx->atom()->getText() << "'" << endl;
         return "";
     }
@@ -796,3 +837,72 @@ std::any PythonCustomParserVisitor::visitDel_targets(PythonParser::Del_targetsCo
 
     return result;
 }
+
+std::any PythonCustomParserVisitor::visitRaise_stmt(PythonParser::Raise_stmtContext *ctx) {
+    if (!ctx->expression())
+        return "throw " + noneReplacement;
+
+    string expressionResult = any_cast<string>(visit(ctx->expression()));
+    if (!expressionResult.starts_with("Error")) {
+        cout << "Cannot raise " << ctx->expression()-> getText() << "as an exception" << endl;
+        return "";
+    }
+
+    return "throw " + expressionResult;
+}
+
+std::any PythonCustomParserVisitor::visitExcept_block_normal(PythonParser::Except_block_normalContext *ctx) {
+    if (ctx->expressions() && ctx->expressions()->expression().empty()) {
+        cout << "Multiple exceptions in one except block are not supported" << endl;
+        return "";
+    }
+
+    string blockResult = any_cast<string>(visitBlock(ctx->block()));
+
+    // if (!ctx->expression() && !ctx->expressions())
+    //     return "catch";
+
+    return "catch" + blockResult;
+}
+
+std::any PythonCustomParserVisitor::visitExcept_as_block(PythonParser::Except_as_blockContext *ctx) {
+    string blockResult = any_cast<string>(visitBlock(ctx->block()));
+    return "catch(" + ctx->NAME()->getText() + ")" + blockResult;
+}
+
+std::any PythonCustomParserVisitor::visitFinally_block(PythonParser::Finally_blockContext *ctx) {
+    string blockResult = any_cast<string>(visitBlock(ctx->block()));
+    return "finally" + blockResult;
+}
+
+std::any PythonCustomParserVisitor::visitTry_finally_block(PythonParser::Try_finally_blockContext *ctx) {
+    string blockResult = any_cast<string>(visitBlock(ctx->block()));
+    string finallyBlockResult = any_cast<string>(visitFinally_block(ctx->finally_block()));
+
+    return "try" + blockResult + finallyBlockResult;
+}
+
+std::any PythonCustomParserVisitor::visitTry_except_else_finally_block(PythonParser::Try_except_else_finally_blockContext *ctx) {
+    if (ctx->except_block().size() > 1) {
+        cout << "Multiple except blocks are not supported by JavaScript";
+        return "";
+    }
+
+    if (ctx->else_block()) {
+        cout << "Else block in try...catch statement is not supported by JavaScript";
+        return "";
+    }
+
+    string blockResult = any_cast<string>(visitBlock(ctx->block()));
+    string exceptBlockResult = any_cast<string>(visit(ctx->except_block()[0]));
+
+    string result = "try" + blockResult + exceptBlockResult;
+
+    if (ctx->finally_block()) {
+        string finallyBlockResult = any_cast<string>(visitFinally_block(ctx->finally_block()));
+        result += finallyBlockResult;
+    }
+
+    return result;
+}
+

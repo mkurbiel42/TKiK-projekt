@@ -71,7 +71,9 @@ public:
 
     virtual std::any visitTry_except_else_finally_block(PythonParser::Try_except_else_finally_blockContext *context) = 0;
 
-    virtual std::any visitExcept_block(PythonParser::Except_blockContext *context) = 0;
+    virtual std::any visitExcept_block_normal(PythonParser::Except_block_normalContext *context) = 0;
+
+    virtual std::any visitExcept_as_block(PythonParser::Except_as_blockContext *context) = 0;
 
     virtual std::any visitFinally_block(PythonParser::Finally_blockContext *context) = 0;
 
@@ -84,8 +86,6 @@ public:
     virtual std::any visitMatch_case_default(PythonParser::Match_case_defaultContext *context) = 0;
 
     virtual std::any visitPattern(PythonParser::PatternContext *context) = 0;
-
-    virtual std::any visitAttr_pattern(PythonParser::Attr_patternContext *context) = 0;
 
     virtual std::any visitBlock(PythonParser::BlockContext *context) = 0;
 

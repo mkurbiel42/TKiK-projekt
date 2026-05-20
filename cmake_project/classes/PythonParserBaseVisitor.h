@@ -119,7 +119,11 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitExcept_block(PythonParser::Except_blockContext *ctx) override {
+  virtual std::any visitExcept_block_normal(PythonParser::Except_block_normalContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitExcept_as_block(PythonParser::Except_as_blockContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -144,10 +148,6 @@ public:
   }
 
   virtual std::any visitPattern(PythonParser::PatternContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual std::any visitAttr_pattern(PythonParser::Attr_patternContext *ctx) override {
     return visitChildren(ctx);
   }
 

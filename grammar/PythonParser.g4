@@ -9,7 +9,7 @@ file: NEWLINE* statements? ENDMARKER;
 statements: statement+;
 statement: compound_stmt | simple_stmt;
 simple_stmt: (assignment | expressions | return_stmt | raise_stmt | pass_stmt | del_stmt | break_stmt | continue_stmt | global_stmt | nonlocal_stmt) NEWLINE;
-compound_stmt: function_def | if_stmt | class_def | for_stmt | while_stmt | match_stmt;
+compound_stmt: function_def | if_stmt | class_def | for_stmt | try_stmt | while_stmt | match_stmt;
 
 // simple statements
 assignment: (as_targets EQUALS)+ expressions    # simple_assignment
@@ -59,7 +59,9 @@ try_stmt: TRY COLON block finally_block                         #try_finally_blo
     | TRY COLON block except_block+ else_block? finally_block?  #try_except_else_finally_block
     ;
 
-except_block: EXCEPT (expression | expressions)? COLON block;
+except_block: EXCEPT (expression | expressions)? COLON block #except_block_normal
+| EXCEPT expression AS NAME COLON block   #except_as_block
+;
 finally_block: FINALLY COLON block;
 
 // match case stmt
@@ -68,8 +70,7 @@ subject_expr: named_expression COMMA named_expression? | named_expression;
 case_block: CASE pattern COLON block    #match_case
     | CASE UNDERSCORE COLON block              #match_case_default
     ;
-pattern: NAME | attr_pattern;
-attr_pattern: (NAME DOT)+ NAME;
+pattern: primary;
 
 // compound statements common elements
 block: NEWLINE INDENT statements DEDENT;

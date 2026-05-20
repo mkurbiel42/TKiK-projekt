@@ -50,6 +50,7 @@ EXCEPT: 'except';
 FINALLY: 'finally';
 MATCH: 'match';
 CASE: 'case';
+AS: 'as';
 UNDERSCORE: '_';
 DOT: '.';
 WALRUS: ':=';

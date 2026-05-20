@@ -26,11 +26,7 @@ find_package(antlr4-runtime REQUIRED)
 add_library(parser STATIC
         classes/PythonLexer.cpp
         classes/PythonParser.cpp
-        classes/PythonParserListener.cpp
-        classes/PythonParserBaseListener.cpp
         classes/PythonLexerBase.cpp
-        classes/PythonCustomParserListener.cpp
-        classes/PythonCustomParserListener.h
         classes/Scope.cpp
         classes/Scope.h
         classes/PythonCustomParserVisitor.cpp
@@ -55,7 +51,6 @@ add_executable(gram
 
 target_include_directories(gram PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/examples/testfile.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Debug/examples)
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/examples/testfile.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/examples)
 
 target_compile_features(

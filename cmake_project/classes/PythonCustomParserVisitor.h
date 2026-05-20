@@ -16,10 +16,13 @@ public:
     std::deque<Scope> scopes = {Scope()};
     std::list<std::string> errors = {};
     std::string translated;
-    bool logging = true;
+    bool logging = false;
     std::string noneReplacement = "undefined";
     int indentCount = 4;
     int indentDepth = 0;
+
+    std::any visitFile(PythonParser::FileContext *ctx) override;
+    std::any visitStatements(PythonParser::StatementsContext *context) override;
 
     std::any visitExpressions(PythonParser::ExpressionsContext *ctx) override;
     std::any visitExpression(PythonParser::ExpressionContext *ctx) override;
@@ -97,7 +100,14 @@ public:
     std::any visitDictcomp(PythonParser::DictcompContext *ctx) override;
     std::any visitSetcomp(PythonParser::SetcompContext *ctx) override;
 
-    // std::any visitFile(PythonParser::FileContext *ctx) override;
+    std::any visitRaise_stmt(PythonParser::Raise_stmtContext *ctx) override;
+    std::any visitTry_finally_block(PythonParser::Try_finally_blockContext *ctx) override;
+    std::any visitTry_except_else_finally_block(PythonParser::Try_except_else_finally_blockContext *ctx) override;
+    std::any visitExcept_block_normal(PythonParser::Except_block_normalContext *ctx) override;
+    std::any visitExcept_as_block(PythonParser::Except_as_blockContext *ctx) override;
+    std::any visitFinally_block(PythonParser::Finally_blockContext *ctx) override;
+
+    std::any visitBlock(PythonParser::BlockContext *ctx) override;
 };
 
 
