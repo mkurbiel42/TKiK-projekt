@@ -269,34 +269,12 @@ std::any PythonCustomParserVisitor::visitComparison(PythonParser::ComparisonCont
 
 std::any PythonCustomParserVisitor::visitComp_op(PythonParser::Comp_opContext *ctx) {
     string result;
-    if (ctx->comp_eq()) {
-        result += " == ";
-        result += any_cast<string>(visitSum(ctx->comp_eq()->sum()));
-    }
 
-    if (ctx->comp_noteq()) {
-        result += " != ";
-        result += any_cast<string>(visitSum(ctx->comp_noteq()->sum()));
-    }
-
-    if (ctx->comp_gt()) {
-        result += " > ";
-        result += any_cast<string>(visitSum(ctx->comp_gt()->sum()));
-    }
-
-    if (ctx->comp_gte()) {
-        result += " >= ";
-        result += any_cast<string>(visitSum(ctx->comp_gte()->sum()));
-    }
-
-    if (ctx->comp_lt()) {
-        result += " < ";
-        result += any_cast<string>(visitSum(ctx->comp_lt()->sum()));
-    }
-
-    if (ctx->comp_lte()) {
-        result += " <= ";
-        result += any_cast<string>(visitSum(ctx->comp_lte()->sum()));
+    if (!ctx->comp_in() && !ctx->comp_notin()) {
+        result += " ";
+        result += ctx->children[0]->children[0]->getText();
+        result += " ";
+        result += any_cast<string>(visit(ctx->children[0]->children[1]));
     }
 
     if (ctx->comp_in()) {
