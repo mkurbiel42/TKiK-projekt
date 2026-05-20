@@ -8,7 +8,7 @@ using namespace std;
 
 std::any PythonCustomParserVisitor::visitFile(PythonParser::FileContext *ctx) {
     if (!ctx->statements())
-        return "";
+        return string("");
 
     for (auto &s : ctx->statements()->statement()) {
         string sRes = any_cast<string>(visit(s));
@@ -62,7 +62,7 @@ std::any PythonCustomParserVisitor::visitSimple_assignment(PythonParser::Simple_
 
     if (ctx->expressions()->expression().size() != 1) {
         cout << "Multiple values assignment is not supported by JavaScript" << endl;
-        return "";
+        return string("");
     }
 
     for (auto d : ctx->as_targets()) {
@@ -124,7 +124,7 @@ std::any PythonCustomParserVisitor::visitAug_assignment(PythonParser::Aug_assign
     }
     if (!alreadyPresentInScope) {
         cout << "Can't augassign to an uninitialized variable" << endl;
-        return "";
+        return string("");
     }
 
     if (ctx->augassign()->DOUBLESLASHEQUAL()) {
@@ -436,7 +436,7 @@ std::any PythonCustomParserVisitor::visitSet(PythonParser::SetContext *ctx) {
 std::any PythonCustomParserVisitor::visitFor_if_clause(PythonParser::For_if_clauseContext *ctx) {
     if (ctx->targets()->target().size() != 1) {
         cout << "Multiple targets for if clauses are not supported";
-        return "";
+        return string("");
     }
 
     auto target = ctx->targets()[0].target()[0];
@@ -556,7 +556,7 @@ std::any PythonCustomParserVisitor::visitNamed_expression(PythonParser::Named_ex
 
 std::any PythonCustomParserVisitor::visitAssignment_expression(PythonParser::Assignment_expressionContext *ctx) {
     cout << "Assignment expressions are not supported by JavaScript (especially in strict mode)";
-    return "";
+    return string("");
 }
 
 std::any PythonCustomParserVisitor::visitSlices(PythonParser::SlicesContext *ctx) {
@@ -610,7 +610,7 @@ std::any PythonCustomParserVisitor::visitSlice(PythonParser::SliceContext *ctx) 
 std::any PythonCustomParserVisitor::visitAtom_tprim(PythonParser::Atom_tprimContext *ctx) {
     if (ctx->atom()->TRUE() || ctx->atom()->FALSE() || ctx->atom()->NONE() || ctx->atom()->strings() || ctx->atom()->NUMBER()) {
         cout << "Can't augassign to '" << ctx->atom()->getText() << "'" << endl;
-        return "";
+        return string("");
     }
 
     if (!ctx->atom()->NAME())
@@ -624,7 +624,7 @@ std::any PythonCustomParserVisitor::visitAtom_tprim(PythonParser::Atom_tprimCont
     }
 
     cout << "Can't augassign to an undeclared variable" << endl;
-    return "";
+    return string("");
 }
 
 std::any PythonCustomParserVisitor::visitField_tprim(PythonParser::Field_tprimContext *ctx) {
@@ -845,7 +845,7 @@ std::any PythonCustomParserVisitor::visitRaise_stmt(PythonParser::Raise_stmtCont
     string expressionResult = any_cast<string>(visit(ctx->expression()));
     if (!expressionResult.starts_with("Error")) {
         cout << "Cannot raise " << ctx->expression()-> getText() << "as an exception" << endl;
-        return "";
+        return string("");
     }
 
     return "throw " + expressionResult;
@@ -854,7 +854,7 @@ std::any PythonCustomParserVisitor::visitRaise_stmt(PythonParser::Raise_stmtCont
 std::any PythonCustomParserVisitor::visitExcept_block_normal(PythonParser::Except_block_normalContext *ctx) {
     if (ctx->expressions() && ctx->expressions()->expression().empty()) {
         cout << "Multiple exceptions in one except block are not supported" << endl;
-        return "";
+        return string("");
     }
 
     string blockResult = any_cast<string>(visitBlock(ctx->block()));
@@ -885,12 +885,12 @@ std::any PythonCustomParserVisitor::visitTry_finally_block(PythonParser::Try_fin
 std::any PythonCustomParserVisitor::visitTry_except_else_finally_block(PythonParser::Try_except_else_finally_blockContext *ctx) {
     if (ctx->except_block().size() > 1) {
         cout << "Multiple except blocks are not supported by JavaScript";
-        return "";
+        return string("");
     }
 
     if (ctx->else_block()) {
         cout << "Else block in try...catch statement is not supported by JavaScript";
-        return "";
+        return string("");
     }
 
     string blockResult = any_cast<string>(visitBlock(ctx->block()));
@@ -906,3 +906,137 @@ std::any PythonCustomParserVisitor::visitTry_except_else_finally_block(PythonPar
     return result;
 }
 
+std::any PythonCustomParserVisitor::visitFunction_def(PythonParser::Function_defContext* ctx){
+    string result = "function " + ctx->NAME()->getText() + "(";
+    if (ctx->function_params())
+        result += any_cast<string>(visitFunction_params(ctx->function_params()));
+    result += ")" + any_cast<string>(visitBlock(ctx->block()));
+
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitReturn_stmt(PythonParser::Return_stmtContext* ctx){
+    string result = "return";
+    if (ctx->expression())
+        result += " " + any_cast<string>(visitExpression(ctx->expression()));
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitPass_stmt(PythonParser::Pass_stmtContext* ctx){
+    return string("");
+}
+
+std::any PythonCustomParserVisitor::visitDel_stmt(PythonParser::Del_stmtContext* ctx){
+    string result = "delete " + any_cast<string>(visitDel_targets(ctx->del_targets()));
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitBreak_stmt(PythonParser::Break_stmtContext* ctx){
+    return string("break");
+}
+
+std::any PythonCustomParserVisitor::visitContinue_stmt(PythonParser::Continue_stmtContext* ctx){
+    return string("continue");
+}
+
+std::any PythonCustomParserVisitor::visitGlobal_stmt(PythonParser::Global_stmtContext* ctx){
+    for (auto var: ctx->NAME())
+        scopes.back().globals.insert(var->getText());
+    return string("");
+}
+
+std::any PythonCustomParserVisitor::visitNonlocal_stmt(PythonParser::Nonlocal_stmtContext *ctx){
+    for (auto var: ctx->NAME())
+        scopes.back().nonLocals.insert(var->getText());
+    return string("");
+}
+
+std::any PythonCustomParserVisitor::visitIf_stmt(PythonParser::If_stmtContext* ctx){
+    string result = "if(" + any_cast<string>(visitNamed_expression(ctx->named_expression())) + ")" + any_cast<string>(visitBlock(ctx->block()));
+    if (ctx->elif_stmt())
+        result += any_cast<string>(visitElif_stmt(ctx->elif_stmt()));
+    if (ctx->else_block())
+        result += any_cast<string>(visitElse_block(ctx->else_block()));
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitElif_stmt(PythonParser::Elif_stmtContext* ctx){
+    string result = "else if(" + any_cast<string>(visitNamed_expression(ctx->named_expression())) + ")" + any_cast<string>(visitBlock(ctx->block()));
+    if (ctx->elif_stmt())
+        result += any_cast<string>(visitElif_stmt(ctx->elif_stmt()));
+    if (ctx->else_block())
+        result += any_cast<string>(visitElse_block(ctx->else_block()));
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitElse_block(PythonParser::Else_blockContext* ctx){
+    return "else" + any_cast<string>(visitBlock(ctx->block()));
+}
+
+std::any PythonCustomParserVisitor::visitFor_stmt(PythonParser::For_stmtContext* ctx){
+    string result = "for(" + any_cast<string>(visitTargets(ctx->targets()));
+    result += " of " + any_cast<string>(visitExpressions(ctx->expressions()));
+    result += ")" + any_cast<string>(visitBlock(ctx->block()));
+
+    if (ctx->else_block()){
+        cout << "For...else statements are not supported by JavaScript";
+        return string("");
+    }
+
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitWhile_stmt(PythonParser::While_stmtContext* ctx){
+    return "while(" + any_cast<string>(visitNamed_expression(ctx->named_expression())) + ")" + any_cast<string>(visitBlock(ctx->block()));
+}
+
+std::any PythonCustomParserVisitor::visitClass_def(PythonParser::Class_defContext* ctx){
+    string result = "class " + ctx->NAME()->getText();
+    if (ctx->arguments()){
+        if (ctx->arguments()->arg_expression().size() > 1){
+            cout << "Extending multiple classes is not supported by JavaScript";
+            return string("");
+        }
+        result += " extends " + any_cast<string>(visitArguments(ctx->arguments()));
+    }
+    result += any_cast<string>(visitBlock(ctx->block()));
+
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitMatch_stmt(PythonParser::Match_stmtContext* ctx){
+    string result = "switch " + any_cast<string>(visitSubject_expr(ctx->subject_expr())) + "{\n";
+    indentDepth++;
+    for (auto c : ctx->case_block()){
+        result += any_cast<string>(visit(c));
+    }
+    indentDepth--;
+    result += "}";
+
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitSubject_expr(PythonParser::Subject_exprContext* ctx){
+    string result;
+    for (auto e : ctx->named_expression())
+        result += any_cast<string>(visitNamed_expression(e)) + ", ";
+    return result.substr(0, result.length() - 2);
+}
+
+std::any PythonCustomParserVisitor::visitMatch_case(PythonParser::Match_caseContext *ctx){
+    string result = "case " + any_cast<string>(visitPattern(ctx->pattern())) + ":";
+    string blockStr = any_cast<string>(visitBlock(ctx->block()));
+    result += blockStr.substr(1, blockStr.length() - 2) + "break\n";
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitMatch_case_default(PythonParser::Match_case_defaultContext *ctx){
+    string result = "default:";
+    string blockStr = any_cast<string>(visitBlock(ctx->block()));
+    result += blockStr.substr(1, blockStr.length() - 2) + "break\n";
+    return result;
+}
+
+std::any PythonCustomParserVisitor::visitPattern(PythonParser::PatternContext* ctx){
+    return any_cast<string>(visit(ctx->primary()));
+}

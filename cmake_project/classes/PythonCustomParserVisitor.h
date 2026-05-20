@@ -26,6 +26,7 @@ public:
 
     std::any visitExpressions(PythonParser::ExpressionsContext *ctx) override;
     std::any visitExpression(PythonParser::ExpressionContext *ctx) override;
+    std::any visitFunction_def(PythonParser::Function_defContext *ctx) override;
     std::any visitLambdef(PythonParser::LambdefContext *ctx) override;
 
     std::any visitDisjunction(PythonParser::DisjunctionContext *ctx) override;
@@ -93,6 +94,30 @@ public:
     std::any visitAug_assignment(PythonParser::Aug_assignmentContext *ctx) override;
     std::any visitSimple_stmt(PythonParser::Simple_stmtContext *ctx) override;
     std::any visitStatement(PythonParser::StatementContext *ctx) override;
+
+    std::any visitReturn_stmt(PythonParser::Return_stmtContext *ctx) override;
+    std::any visitPass_stmt(PythonParser::Pass_stmtContext *ctx) override;
+    std::any visitDel_stmt(PythonParser::Del_stmtContext *ctx) override;
+    std::any visitBreak_stmt(PythonParser::Break_stmtContext *ctx) override;
+    std::any visitContinue_stmt(PythonParser::Continue_stmtContext *ctx) override;
+    std::any visitGlobal_stmt(PythonParser::Global_stmtContext *ctx) override;
+    std::any visitNonlocal_stmt(PythonParser::Nonlocal_stmtContext *ctx) override;
+
+    std::any visitIf_stmt(PythonParser::If_stmtContext *ctx) override;
+    std::any visitElif_stmt(PythonParser::Elif_stmtContext *ctx) override;
+    std::any visitElse_block(PythonParser::Else_blockContext *ctx) override;
+
+    std::any visitFor_stmt(PythonParser::For_stmtContext *ctx) override;
+
+    std::any visitWhile_stmt(PythonParser::While_stmtContext *ctx) override;
+
+    std::any visitClass_def(PythonParser::Class_defContext *ctx) override;
+
+    std::any visitMatch_stmt(PythonParser::Match_stmtContext *ctx) override;
+    std::any visitSubject_expr(PythonParser::Subject_exprContext *ctx) override;
+    std::any visitMatch_case(PythonParser::Match_caseContext *ctx) override;
+    std::any visitMatch_case_default(PythonParser::Match_case_defaultContext *ctx) override;
+    std::any visitPattern(PythonParser::PatternContext *ctx) override;
 
     std::any visitFor_if_clauses(PythonParser::For_if_clausesContext *ctx) override;
     std::any visitFor_if_clause(PythonParser::For_if_clauseContext *ctx) override;
