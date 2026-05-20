@@ -6,6 +6,13 @@
 
 using namespace std;
 
+std::string PythonCustomParserVisitor::getIndent(){
+    string indent;
+    for (int i=0; i<indentCount * indentDepth; i++)
+        indent += " ";
+    return indent;
+}
+
 std::any PythonCustomParserVisitor::visitFile(PythonParser::FileContext *ctx) {
     if (!ctx->statements())
         return string("");
@@ -33,12 +40,9 @@ std::any PythonCustomParserVisitor::visitStatements(PythonParser::StatementsCont
 
 std::any PythonCustomParserVisitor::visitStatement(PythonParser::StatementContext *ctx) {
     auto res = any_cast<string>(visit(ctx->children[0]));
-    string tabs;
+    string tabs = getIndent();
 
-    for (int i=0; i<indentCount * indentDepth; i++)
-        tabs += " ";
-
-    return tabs + res + "\n";
+    return string(res.empty() ? "" : tabs + res + "\n");
 }
 
 std::any PythonCustomParserVisitor::visitBlock(PythonParser::BlockContext *ctx) {
@@ -46,7 +50,7 @@ std::any PythonCustomParserVisitor::visitBlock(PythonParser::BlockContext *ctx) 
     string statementsResult = any_cast<string>(visit(ctx->statements()));
     indentDepth -= 1;
 
-    return "{\n" + statementsResult + "}";
+    return "{\n" + statementsResult + getIndent() + "}";
 }
 
 
@@ -68,9 +72,15 @@ std::any PythonCustomParserVisitor::visitSimple_assignment(PythonParser::Simple_
     for (auto d : ctx->as_targets()) {
         for (auto &t : d->as_target()) {
             bool alreadyPresentInScope = false;
-            for (auto &s: scopes) {
-                if (s.names.contains(t->getText()) || s.nonLocals.contains(t->getText()) || s.globals.contains(t->getText())) {
+            if (scopes.back().name == FUNCSCOPE){
+                if (scopes.back().names.contains(t->getText()) || scopes.back().globals.contains(t->getText()) || scopes.back().nonLocals.contains(t->getText())){
                     alreadyPresentInScope = true;
+                }
+            }else{
+                for (auto &s: scopes) {
+                    if (s.names.contains(t->getText()) || s.nonLocals.contains(t->getText()) || s.globals.contains(t->getText())) {
+                        alreadyPresentInScope = true;
+                    }
                 }
             }
 
@@ -98,7 +108,7 @@ std::any PythonCustomParserVisitor::visitSimple_assignment(PythonParser::Simple_
 
     if (notDeclared != "let ") {
         if (!alreadyDeclared.empty())
-            result += "\n";
+            result += getIndent() + "\n";
         notDeclared.append(" = ").append(exprResult);
         result += notDeclared;
     }
@@ -835,7 +845,9 @@ std::any PythonCustomParserVisitor::visitExcept_block_normal(PythonParser::Excep
         return string("");
     }
 
+    scopes.emplace_back(EXCEPTSCOPE);
     string blockResult = any_cast<string>(visitBlock(ctx->block()));
+    scopes.pop_back();
 
     // if (!ctx->expression() && !ctx->expressions())
     //     return "catch";
@@ -844,17 +856,23 @@ std::any PythonCustomParserVisitor::visitExcept_block_normal(PythonParser::Excep
 }
 
 std::any PythonCustomParserVisitor::visitExcept_as_block(PythonParser::Except_as_blockContext *ctx) {
+    scopes.emplace_back(EXCEPTSCOPE);
     string blockResult = any_cast<string>(visitBlock(ctx->block()));
+    scopes.pop_back();
     return "catch(" + ctx->NAME()->getText() + ")" + blockResult;
 }
 
 std::any PythonCustomParserVisitor::visitFinally_block(PythonParser::Finally_blockContext *ctx) {
+    scopes.emplace_back(FINALLYSCOPE);
     string blockResult = any_cast<string>(visitBlock(ctx->block()));
+    scopes.pop_back();
     return "finally" + blockResult;
 }
 
 std::any PythonCustomParserVisitor::visitTry_finally_block(PythonParser::Try_finally_blockContext *ctx) {
+    scopes.emplace_back(TRYSCOPE);
     string blockResult = any_cast<string>(visitBlock(ctx->block()));
+    scopes.pop_back();
     string finallyBlockResult = any_cast<string>(visitFinally_block(ctx->finally_block()));
 
     return "try" + blockResult + finallyBlockResult;
@@ -871,7 +889,9 @@ std::any PythonCustomParserVisitor::visitTry_except_else_finally_block(PythonPar
         return string("");
     }
 
+    scopes.emplace_back(TRYSCOPE);
     string blockResult = any_cast<string>(visitBlock(ctx->block()));
+    scopes.pop_back();
     string exceptBlockResult = any_cast<string>(visit(ctx->except_block()[0]));
 
     string result = "try" + blockResult + exceptBlockResult;
@@ -888,7 +908,9 @@ std::any PythonCustomParserVisitor::visitFunction_def(PythonParser::Function_def
     string result = "function " + ctx->NAME()->getText() + "(";
     if (ctx->function_params())
         result += any_cast<string>(visitFunction_params(ctx->function_params()));
+    scopes.emplace_back(FUNCSCOPE);
     result += ")" + any_cast<string>(visitBlock(ctx->block()));
+    scopes.pop_back();
 
     return result;
 }
@@ -930,7 +952,10 @@ std::any PythonCustomParserVisitor::visitNonlocal_stmt(PythonParser::Nonlocal_st
 }
 
 std::any PythonCustomParserVisitor::visitIf_stmt(PythonParser::If_stmtContext* ctx){
-    string result = "if(" + any_cast<string>(visitNamed_expression(ctx->named_expression())) + ")" + any_cast<string>(visitBlock(ctx->block()));
+    string result = "if(" + any_cast<string>(visitNamed_expression(ctx->named_expression())) + ")";
+    scopes.emplace_back(IFSCOPE);
+    result += any_cast<string>(visitBlock(ctx->block()));
+    scopes.pop_back();
     if (ctx->elif_stmt())
         result += any_cast<string>(visitElif_stmt(ctx->elif_stmt()));
     if (ctx->else_block())
@@ -939,7 +964,10 @@ std::any PythonCustomParserVisitor::visitIf_stmt(PythonParser::If_stmtContext* c
 }
 
 std::any PythonCustomParserVisitor::visitElif_stmt(PythonParser::Elif_stmtContext* ctx){
-    string result = "else if(" + any_cast<string>(visitNamed_expression(ctx->named_expression())) + ")" + any_cast<string>(visitBlock(ctx->block()));
+    string result = "else if(" + any_cast<string>(visitNamed_expression(ctx->named_expression())) + ")";
+    scopes.emplace_back(ELIFSCOPE);
+    result += any_cast<string>(visitBlock(ctx->block()));
+    scopes.pop_back();
     if (ctx->elif_stmt())
         result += any_cast<string>(visitElif_stmt(ctx->elif_stmt()));
     if (ctx->else_block())
@@ -948,13 +976,18 @@ std::any PythonCustomParserVisitor::visitElif_stmt(PythonParser::Elif_stmtContex
 }
 
 std::any PythonCustomParserVisitor::visitElse_block(PythonParser::Else_blockContext* ctx){
-    return "else" + any_cast<string>(visitBlock(ctx->block()));
+    scopes.emplace_back(ELSESCOPE);
+    string blockResult = any_cast<string>(visitBlock(ctx->block()));
+    scopes.pop_back();
+    return "else" + blockResult;
 }
 
 std::any PythonCustomParserVisitor::visitFor_stmt(PythonParser::For_stmtContext* ctx){
     string result = "for(" + any_cast<string>(visitTargets(ctx->targets()));
     result += " of " + any_cast<string>(visitExpressions(ctx->expressions()));
+    scopes.emplace_back(FORLOOPSCOPE);
     result += ")" + any_cast<string>(visitBlock(ctx->block()));
+    scopes.pop_back();
 
     if (ctx->else_block()){
         cout << "For...else statements are not supported by JavaScript";
@@ -965,7 +998,10 @@ std::any PythonCustomParserVisitor::visitFor_stmt(PythonParser::For_stmtContext*
 }
 
 std::any PythonCustomParserVisitor::visitWhile_stmt(PythonParser::While_stmtContext* ctx){
-    return "while(" + any_cast<string>(visitNamed_expression(ctx->named_expression())) + ")" + any_cast<string>(visitBlock(ctx->block()));
+    scopes.emplace_back(WHILELOOPSCOPE);
+    string blockResult = any_cast<string>(visitBlock(ctx->block()));
+    scopes.pop_back();
+    return "while(" + any_cast<string>(visitNamed_expression(ctx->named_expression())) + ")" + blockResult;
 }
 
 std::any PythonCustomParserVisitor::visitClass_def(PythonParser::Class_defContext* ctx){
@@ -977,7 +1013,9 @@ std::any PythonCustomParserVisitor::visitClass_def(PythonParser::Class_defContex
         }
         result += " extends " + any_cast<string>(visitArguments(ctx->arguments()));
     }
+    scopes.emplace_back(CLASSSCOPE);
     result += any_cast<string>(visitBlock(ctx->block()));
+    scopes.pop_back();
 
     return result;
 }
@@ -986,10 +1024,10 @@ std::any PythonCustomParserVisitor::visitMatch_stmt(PythonParser::Match_stmtCont
     string result = "switch " + any_cast<string>(visitSubject_expr(ctx->subject_expr())) + "{\n";
     indentDepth++;
     for (auto c : ctx->case_block()){
-        result += any_cast<string>(visit(c));
+        result += getIndent() + any_cast<string>(visit(c));
     }
     indentDepth--;
-    result += "}";
+    result += getIndent() + "}";
 
     return result;
 }
@@ -1003,15 +1041,25 @@ std::any PythonCustomParserVisitor::visitSubject_expr(PythonParser::Subject_expr
 
 std::any PythonCustomParserVisitor::visitMatch_case(PythonParser::Match_caseContext *ctx){
     string result = "case " + any_cast<string>(visitPattern(ctx->pattern())) + ":";
+    scopes.emplace_back(MATCHSCOPE);
     string blockStr = any_cast<string>(visitBlock(ctx->block()));
-    result += blockStr.substr(1, blockStr.length() - 2) + "break\n";
+    scopes.pop_back();
+    result += blockStr.substr(1, blockStr.length() - 2);
+    for (int i=0;i<indentCount;i++)
+        result += " ";
+    result += "break\n";
     return result;
 }
 
 std::any PythonCustomParserVisitor::visitMatch_case_default(PythonParser::Match_case_defaultContext *ctx){
     string result = "default:";
+    scopes.emplace_back(MATCHSCOPE);
     string blockStr = any_cast<string>(visitBlock(ctx->block()));
-    result += blockStr.substr(1, blockStr.length() - 2) + "break\n";
+    scopes.pop_back();
+    result += blockStr.substr(1, blockStr.length() - 2);
+    for (int i=0;i<indentCount;i++)
+        result += " ";
+    result += "break\n";
     return result;
 }
 

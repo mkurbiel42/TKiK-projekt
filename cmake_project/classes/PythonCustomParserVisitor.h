@@ -21,6 +21,8 @@ public:
     int indentCount = 4;
     int indentDepth = 0;
 
+    std::string getIndent();
+
     std::any visitFile(PythonParser::FileContext *ctx) override;
     std::any visitStatements(PythonParser::StatementsContext *context) override;
 
