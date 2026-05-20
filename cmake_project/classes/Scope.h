@@ -20,7 +20,8 @@ enum ScopeName {
     EXCEPTSCOPE,
     FINALLYSCOPE,
     CLASSSCOPE,
-    BLOCKSCOPE
+    BLOCKSCOPE,
+    FORLOOPSTATEMENTSCOPE
 };
 
 class Scope {

@@ -355,11 +355,39 @@ std::any PythonCustomParserVisitor::visitPower(PythonParser::PowerContext *ctx) 
 }
 
 std::any PythonCustomParserVisitor::visitField_prim(PythonParser::Field_primContext *ctx) {
-    return ctx->getText();
+    string primaryResult = any_cast<string>(visit(ctx->primary()));
+    return primaryResult + "." + ctx->NAME()->getText();
 }
 
 std::any PythonCustomParserVisitor::visitFunction_call_prim(PythonParser::Function_call_primContext *ctx) {
-    return ctx->getText();
+    auto args = ctx->arguments();
+
+    if (scopes.back().name == FORLOOPSTATEMENTSCOPE && ctx->arguments() && ctx->arguments()->arg_expression().size() >= 1 && ctx->arguments()->arg_expression().size() <= 3) {
+        if (ctx->primary()->getText() == "range") {
+            string stop = "", start = "0", step = "+";
+
+            stop = any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+
+            if (args->arg_expression().size() >= 2) {
+                start = stop;
+                stop = any_cast<string>(visitArg_expression(args->arg_expression()[1]));
+            }
+
+            if (args->arg_expression().size() == 3)
+                step = "=" + any_cast<string>(visitArg_expression(args->arg_expression()[2]));
+
+            string result = "let =" + start + "; " + "<" + stop + "; " + "+" + step;
+
+            return result;
+        }
+    }
+
+    string primaryResult = any_cast<string>(visit(ctx->primary()));
+    if(!ctx->arguments())
+        return primaryResult + "()";
+
+    string argumentsResult = any_cast<string>(visit(args));
+    return primaryResult + "(" + argumentsResult + ")";
 }
 
 std::any PythonCustomParserVisitor::visitSlice_prim(PythonParser::Slice_primContext *ctx) {
@@ -377,7 +405,7 @@ std::any PythonCustomParserVisitor::visitAtom(PythonParser::AtomContext *ctx) {
         return noneReplacement;
 
     if (ctx->NAME() && (ctx->NAME()->getText().contains("Error") || ctx->NAME()->getText().contains("Exception")))
-        return "new Error";
+        return string("new Error");
 
     if (ctx->NAME() || ctx->NUMBER())
         return ctx->getText();
@@ -830,9 +858,10 @@ std::any PythonCustomParserVisitor::visitRaise_stmt(PythonParser::Raise_stmtCont
     if (!ctx->expression())
         return "throw " + noneReplacement;
 
-    string expressionResult = any_cast<string>(visit(ctx->expression()));
-    if (!expressionResult.starts_with("Error")) {
-        cout << "Cannot raise " << ctx->expression()-> getText() << "as an exception" << endl;
+    string expressionResult = any_cast<string>(visitExpression(ctx->expression()));
+
+    if (!expressionResult.starts_with("new Error")) {
+        cout << "Cannot raise " << ctx->expression()-> getText() << " as an exception" << endl;
         return string("");
     }
 
@@ -983,10 +1012,35 @@ std::any PythonCustomParserVisitor::visitElse_block(PythonParser::Else_blockCont
 }
 
 std::any PythonCustomParserVisitor::visitFor_stmt(PythonParser::For_stmtContext* ctx){
-    string result = "for(" + any_cast<string>(visitTargets(ctx->targets()));
-    result += " of " + any_cast<string>(visitExpressions(ctx->expressions()));
+    string targetResult = any_cast<string>(visitTargets(ctx->targets()));
+
+
+    string result = "for(";
+
+    scopes.emplace_back(FORLOOPSTATEMENTSCOPE);
+    string expressionResult = any_cast<string>(visitExpressions(ctx->expressions()));
+    scopes.pop_back();
+
+    auto firstSemicolon = expressionResult.find_first_of(';');
+    auto secondSemicolon = expressionResult.find_last_of(';');
+
+    if (ctx->expressions()->expression().size() > 1)
+        expressionResult = "[" + expressionResult + "]";
+    else if (expressionResult.starts_with("let") && firstSemicolon != secondSemicolon) {
+        expressionResult.replace(secondSemicolon + 2, 0, targetResult);
+        expressionResult.replace(firstSemicolon + 2, 0, targetResult);
+        expressionResult.replace(4, 0, targetResult);
+        result += expressionResult;
+    }
+
+    if (result == "for(") {
+        result += targetResult;
+        result += " of " + expressionResult;
+    }
+
     scopes.emplace_back(FORLOOPSCOPE);
-    result += ")" + any_cast<string>(visitBlock(ctx->block()));
+    string blockResult = any_cast<string>(visitBlock(ctx->block()));
+    result += ")" + blockResult;
     scopes.pop_back();
 
     if (ctx->else_block()){
