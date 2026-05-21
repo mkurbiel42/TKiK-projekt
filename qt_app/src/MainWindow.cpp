@@ -5,6 +5,7 @@
 #include <iostream>
 #include "MainWindow.h"
 #include <QtWidgets/QFileDialog>
+#include "Translator.h"
 
 using namespace std;
 using namespace Ui;
@@ -13,7 +14,7 @@ MainWindow::MainWindow() : Ui_MainWindow() {
     std::cout << "should initialize" << std::endl;
     this->setupUi(this);
     this->setupActions();
-    this->show();
+    this->showMaximized();
 }
 
 void MainWindow::setupActions() {
@@ -61,5 +62,6 @@ void MainWindow::handleFileSave() {
 }
 
 void MainWindow::handleTranslate() {
-    cout << "Translation!!!!!!" << endl;
+    string translation = Translator::translate(this->textEdit->toPlainText().toStdString());
+    textEdit_2->setPlainText(QString::fromStdString(translation));
 }

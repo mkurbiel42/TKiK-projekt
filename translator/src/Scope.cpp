@@ -2,7 +2,7 @@
 // Created by komp on 13.05.2026.
 //
 
-#include "../classes/Scope.h"
+#include "Scope.h"
 
 Scope::Scope() {
     names = {};

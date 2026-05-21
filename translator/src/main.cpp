@@ -1,3 +1,7 @@
-//
-// Created by komp on 21.05.2026.
-//
+#include "Translator.h"
+
+int main() {
+    Translator::translate("i = 1");
+
+    return 0;
+}

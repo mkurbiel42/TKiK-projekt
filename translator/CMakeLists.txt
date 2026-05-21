@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(Proj LANGUAGES CXX)
+project(translator LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,44 +20,43 @@ set(WITH_STATIC_CRT ON CACHE BOOL "" FORCE)
 
 find_package(antlr4-runtime REQUIRED)
 
-add_library(parser STATIC
-        classes/PythonLexer.cpp
-        classes/PythonParser.cpp
-        classes/PythonLexerBase.cpp
-        classes/Scope.cpp
-        classes/Scope.h
-        classes/PythonCustomParserVisitor.cpp
-        classes/PythonCustomParserVisitor.h
-)
-
-target_include_directories(parser
-        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/classes
-)
-
-target_link_libraries(parser
-        PUBLIC antlr4_static
-)
-
-target_compile_definitions(parser
-        PUBLIC ANTLR4CPP_STATIC
-)
-
-add_executable(gram
+add_library(translator STATIC
+        src/PythonLexer.cpp
+        src/PythonParser.cpp
+        src/PythonLexerBase.cpp
+        src/Scope.cpp
+        src/Scope.h
+        src/PythonCustomParserVisitor.cpp
+        src/PythonCustomParserVisitor.h
+        src/Translator.cpp
         src/main.cpp
 )
 
-target_include_directories(gram PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+target_include_directories(translator PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+target_link_libraries(translator
+        PUBLIC antlr4_static
+)
+
+target_compile_definitions(translator
+        PUBLIC ANTLR4CPP_STATIC
+)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/examples/testfile.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/examples)
 
-target_compile_features(
-        gram PRIVATE cxx_std_17
-)
-
-target_link_libraries(gram
-        PRIVATE parser
-)
-
-target_compile_definitions(gram
+target_compile_definitions(translator
         PRIVATE ANTLR4CPP_STATIC
+)
+
+target_compile_features(
+        translator PRIVATE cxx_std_17
+)
+
+add_executable(
+        gram src/main.cpp
+)
+
+target_link_libraries(
+        gram PRIVATE translator
 )

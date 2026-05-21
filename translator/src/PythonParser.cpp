@@ -2,9 +2,9 @@
 // Generated from ./PythonParser.g4 by ANTLR 4.13.2
 
 
-#include "../classes/PythonParserVisitor.h"
+#include "PythonParserVisitor.h"
 
-#include "../classes/PythonParser.h"
+#include "PythonParser.h"
 
 
 using namespace antlrcpp;

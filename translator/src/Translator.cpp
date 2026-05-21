@@ -1,10 +1,9 @@
 ﻿#include <iostream>
+#include <Translator.h>
 
 #include "antlr4-runtime.h"
 #include "PythonLexer.h"
 #include "PythonParser.h"
-
-#include <filesystem>
 
 #include "PythonCustomParserVisitor.h"
 
@@ -13,7 +12,7 @@
 using namespace antlr4;
 using namespace std;
 
-string translate(string inputString) {
+std::string Translator::translate(std::string inputString) {
 	if (inputString.back() != '\n')
 		inputString += '\n';
 

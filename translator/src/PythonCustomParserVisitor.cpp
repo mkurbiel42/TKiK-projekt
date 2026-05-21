@@ -2,7 +2,7 @@
 // Created by komp on 14.05.2026.
 //
 
-#include "../classes/PythonCustomParserVisitor.h"
+#include "PythonCustomParserVisitor.h"
 
 using namespace std;
 

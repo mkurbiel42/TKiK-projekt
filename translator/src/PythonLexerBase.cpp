@@ -1,6 +1,6 @@
 #include "PythonLexer.h"
-#include "../classes/PythonParser.h"
-#include "../classes/PythonLexerBase.h"
+#include "PythonParser.h"
+#include "PythonLexerBase.h"
 #include <regex>
 using namespace antlr4;
 

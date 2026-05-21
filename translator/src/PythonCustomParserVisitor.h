@@ -7,7 +7,7 @@
 
 #include <list>
 
-#include "../classes/PythonParserBaseVisitor.h"
+#include "PythonParserBaseVisitor.h"
 #include "Scope.h"
 
 
