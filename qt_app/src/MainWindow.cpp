@@ -45,7 +45,7 @@ void MainWindow::handleFileOpen() {
 
 void MainWindow::handleFileSave() {
     auto dialog = QFileDialog(this);
-    auto filters = QStringList{"Python code file (*.py)", "Text file (*.txt)"};
+    auto filters = QStringList{"JavaScript code file (*.js)", "Text file (*.txt)"};
 
     dialog.setNameFilters(filters);
     dialog.setAcceptMode(QFileDialog::AcceptSave);

@@ -72,12 +72,16 @@ public:
         textEdit->setObjectName("textEdit");
         textEdit->document()->setDefaultFont(QFont("Consolas", 10.5));
 
+        QFontMetricsF metrics(textEdit->font());
+        textEdit->setTabStopDistance(metrics.horizontalAdvance(' ') * 4);
+
         horizontalLayout->addWidget(textEdit);
 
         textEdit_2 = new QTextEdit(centralwidget);
         textEdit_2->setObjectName("textEdit_2");
         textEdit_2->setFontFamily("Consolas");
         textEdit_2->document()->setDefaultFont(QFont("Consolas", 10.5));
+        textEdit_2->setTabStopDistance(metrics.horizontalAdvance(' ') * 4);
 
         horizontalLayout->addWidget(textEdit_2);
 
