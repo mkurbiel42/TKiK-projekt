@@ -28,6 +28,8 @@ add_library(translator STATIC
         src/Scope.h
         src/PythonCustomParserVisitor.cpp
         src/PythonCustomParserVisitor.h
+        src/CustomErrorListener.h
+        src/CustomErrorListener.cpp
         src/Translator.cpp
         src/main.cpp
 )
