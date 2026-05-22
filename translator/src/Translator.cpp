@@ -5,6 +5,7 @@
 #include "PythonLexer.h"
 #include "PythonParser.h"
 
+#include "CustomErrorListener.h"
 #include "PythonCustomParserVisitor.h"
 
 #pragma execution_character_set("utf-8")
@@ -21,7 +22,16 @@ std::string Translator::translate(std::string inputString) {
 	CommonTokenStream tokens(&lexer);
 
 	PythonParser parser(&tokens);
+
+	parser.removeErrorListeners();
+	auto errorListener = new CustomErrorListener();
+	parser.addErrorListener(errorListener);
+
 	tree::ParseTree *tree = parser.file();
+
+	if (errorListener->error)
+		return "";
+
 
 	for (auto c : tree->children) {
 		cout << c->getText() << endl;
