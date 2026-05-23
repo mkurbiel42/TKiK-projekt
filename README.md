@@ -6,7 +6,7 @@
 
 - Założenia:
     - Program napisany w jezyku C++
-    - Interpreter - translator
+    - Kompilator - translator
     - Cel to translacja programu napisanego w języku Python do skryptu w języku JavaScript
         - Gramatyka zawiera większość konstrukcji dostępnych w pełnej wersji języka Python, jednak nie wszystkie one są dostępne w języku JavaScript
         - Wykrycie jakiegokolwiek błędu przez parser (nieoczekiwany token, niewspierana w JS konstrukcja itd.) kończy działanie programu i nie zwraca żadnej translacji
