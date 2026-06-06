@@ -965,6 +965,19 @@ std::any PythonCustomParserVisitor::visitFunction_def(PythonParser::Function_def
 }
 
 std::any PythonCustomParserVisitor::visitReturn_stmt(PythonParser::Return_stmtContext* ctx){
+    bool isAllowedInScope = false;
+    for (auto s: scopes) {
+        if (s.name==FUNCSCOPE)
+            isAllowedInScope = true;
+        else if (s.name==CLASSSCOPE)
+            isAllowedInScope = false;
+    }
+    if (!isAllowedInScope) {
+        std::string error = "Return statement is not allowed in current scope";
+        cout << error << endl;
+        addError(error);
+        return string("//" + error);
+    }
     string result = "return";
     if (ctx->expression())
         result += " " + any_cast<string>(visitExpression(ctx->expression()));
@@ -981,10 +994,40 @@ std::any PythonCustomParserVisitor::visitDel_stmt(PythonParser::Del_stmtContext*
 }
 
 std::any PythonCustomParserVisitor::visitBreak_stmt(PythonParser::Break_stmtContext* ctx){
+    bool isAllowedInScope = false;
+    for (auto s: scopes) {
+        if (s.name==FORLOOPSCOPE ||
+            s.name==WHILELOOPSCOPE)
+            isAllowedInScope = true;
+        else if (s.name==FUNCSCOPE ||
+            s.name==CLASSSCOPE)
+            isAllowedInScope = false;
+    }
+    if (!isAllowedInScope) {
+        std::string error = "Break statement is not allowed in current scope";
+        cout << error << endl;
+        addError(error);
+        return string("//" + error);
+    }
     return string("break");
 }
 
 std::any PythonCustomParserVisitor::visitContinue_stmt(PythonParser::Continue_stmtContext* ctx){
+    bool isAllowedInScope = false;
+    for (auto s: scopes) {
+        if (s.name==FORLOOPSCOPE ||
+            s.name==WHILELOOPSCOPE)
+            isAllowedInScope = true;
+        else if (s.name==FUNCSCOPE ||
+            s.name==CLASSSCOPE)
+            isAllowedInScope = false;
+    }
+    if (!isAllowedInScope) {
+        std::string error = "Continue statement is not allowed in current scope";
+        cout << error << endl;
+        addError(error);
+        return string("//" + error);
+    }
     return string("continue");
 }
 
@@ -995,6 +1038,18 @@ std::any PythonCustomParserVisitor::visitGlobal_stmt(PythonParser::Global_stmtCo
 }
 
 std::any PythonCustomParserVisitor::visitNonlocal_stmt(PythonParser::Nonlocal_stmtContext *ctx){
+    bool isAllowedInScope = false;
+    for (auto s: scopes) {
+        if (s.name==FUNCSCOPE ||
+            s.name==CLASSSCOPE)
+            isAllowedInScope = true;
+    }
+    if (!isAllowedInScope) {
+        std::string error = "Nonlocal statement is not allowed in current scope";
+        cout << error << endl;
+        addError(error);
+        return string("//" + error);
+    }
     for (auto var: ctx->NAME())
         scopes.back().nonLocals.insert(var->getText());
     return string("");
