@@ -385,6 +385,161 @@ std::any PythonCustomParserVisitor::visitFunction_call_prim(PythonParser::Functi
             return result;
         }
     }
+    if (ctx->primary()->getText() == "enumerate") {
+        string res;
+        if (ctx->arguments()) {
+            res += std::any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+            res += ".entries()";
+            if (ctx->arguments()->arg_expression().size() == 2) {
+                res += ".map(e=>{e[0]+=";
+                res += std::any_cast<string>(visitArg_expression(args->arg_expression()[1]));
+                res += ";return e;})";
+            }
+        }
+        return res;
+    }
+    if (ctx->primary()->getText() == "list") {
+        string res;
+        if (ctx->arguments()) {
+            res += "[...";
+            res += std::any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+            res += "]";
+        }
+        return res;
+    }
+    if (ctx->primary()->getText() == "filter") {
+        string res;
+        if (ctx->arguments() && ctx->arguments()->arg_expression().size() == 2) {
+            res += std::any_cast<string>(visitArg_expression(args->arg_expression()[1]));
+            res += ".filter(";
+            res += std::any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+            res += ")";
+        }
+        return res;
+    }
+    if (ctx->primary()->getText() == "len") {
+        string res;
+        if (ctx->arguments()) {
+            res += std::any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+            res += ".length";
+        }
+        return res;
+    }
+    if (ctx->primary()->getText() == "range") {
+        string res;
+        //range = (from, to, step)
+        //[...Array(Math.ceil((Math.abs(to-from)-1)/Math.abs(step))).keys()].map(a => a*step+from)
+        if (ctx->arguments()) {
+            string from = "0";
+            string to;
+            string step = "1";
+            if (ctx->arguments()->arg_expression().size() == 1) {
+                to = any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+            }
+            else if (ctx->arguments()->arg_expression().size() == 2) {
+                from = any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+                to = any_cast<string>(visitArg_expression(args->arg_expression()[1]));
+            }
+            else if (ctx->arguments()->arg_expression().size() == 3) {
+                from = any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+                to = any_cast<string>(visitArg_expression(args->arg_expression()[1]));
+                step = any_cast<string>(visitArg_expression(args->arg_expression()[2]));
+            }
+            res = "[...Array(Math.ceil((Math.abs("+to+"-"+from+"))/Math.abs("+step+"))).keys()].map(a => a*"+step+"+"+from+")";
+        }
+        return res;
+    }
+    if (ctx->primary()->getText() == "map") {
+        string res;
+        if (ctx->arguments() && ctx->arguments()->arg_expression().size() == 2) {
+            res += std::any_cast<string>(visitArg_expression(args->arg_expression()[1]));
+            res += ".map(";
+            res += std::any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+            res += ")";
+        }
+        return res;
+    }
+    if (ctx->primary()->getText() == "max") {
+        string res;
+        if (ctx->arguments()) {
+            if (ctx->arguments()->arg_expression().size() == 1) {
+                res += "Math.max(...";
+                res += std::any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+                res += ")";
+            }
+            else {
+                res += "Math.max(";
+                res += std::any_cast<string>(visitArguments(ctx->arguments()));
+                res += ")";
+            }
+        }
+        return res;
+    }
+    if (ctx->primary()->getText() == "min") {
+        string res;
+        if (ctx->arguments()) {
+            if (ctx->arguments()->arg_expression().size() == 1) {
+                res += "Math.min(...";
+                res += std::any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+                res += ")";
+            }
+            else {
+                res += "Math.min(";
+                res += std::any_cast<string>(visitArguments(ctx->arguments()));
+                res += ")";
+            }
+        }
+        return res;
+    }
+    if (ctx->primary()->getText() == "reversed") {
+        string res;
+        if (ctx->arguments()) {
+            res += "[...";
+            res += std::any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+            res += "].reverse()";
+        }
+        return res;
+    }
+    if (ctx->primary()->getText() == "round") {
+        string res;
+        if (ctx->arguments()) {
+            if (ctx->arguments()->arg_expression().size() == 1) {
+                res += "Math.round(";
+                res += std::any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+                res += ")";
+            }
+            else if (ctx->arguments()->arg_expression().size() == 2) {
+                res += "+parseFloat(";
+                res += std::any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+                res += ").toFixed(";
+                res += std::any_cast<string>(visitArg_expression(args->arg_expression()[1]));
+                res += ")";
+            }
+        }
+        return res;
+    }
+    if (ctx->primary()->getText() == "str") {
+        string res;
+        if (ctx->arguments()) {
+            res += "(";
+            res += std::any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+            res += ").toString()";
+        }
+        return res;
+    }
+    if (ctx->primary()->getText() == "sum") {
+        string res;
+        if (ctx->arguments()) {
+            res += std::any_cast<string>(visitArg_expression(args->arg_expression()[0]));
+            res += ".reduce((acc, currVal) => acc+currVal";
+            if (ctx->arguments()->arg_expression().size() == 2) {
+                res += ", ";
+                res += std::any_cast<string>(visitArg_expression(args->arg_expression()[1]));
+            }
+            res += ")";
+        }
+        return res;
+    }
 
     string primaryResult = any_cast<string>(visit(ctx->primary()));
     if(!ctx->arguments())
@@ -411,7 +566,29 @@ std::any PythonCustomParserVisitor::visitAtom(PythonParser::AtomContext *ctx) {
     if (ctx->NAME() && (ctx->NAME()->getText().contains("Error") || ctx->NAME()->getText().contains("Exception")))
         return string("new Error");
 
-    if (ctx->NAME() || ctx->NUMBER())
+    if (ctx->NAME()) {
+        if (ctx->NAME()->getText()=="print") {
+            return string("console.log");
+        }
+        if (ctx->NAME()->getText()=="abs") {
+            return string("Math.abs");
+        }
+        if (ctx->NAME()->getText()=="bool") {
+            return string("Boolean");
+        }
+        if (ctx->NAME()->getText()=="float") {
+            return string("parseFloat");
+        }
+        if (ctx->NAME()->getText()=="int") {
+            return string("parseInt");
+        }
+        if (ctx->NAME()->getText()=="set") {
+            return string("new Set");
+        }
+        return ctx->getText();
+    }
+
+    if (ctx->NUMBER())
         return ctx->getText();
 
     if (ctx->TRUE() || ctx->FALSE()) {
@@ -954,7 +1131,7 @@ std::any PythonCustomParserVisitor::visitTry_except_else_finally_block(PythonPar
 }
 
 std::any PythonCustomParserVisitor::visitFunction_def(PythonParser::Function_defContext* ctx){
-    string result = "function " + ctx->NAME()->getText() + "(";
+    string result = (scopes.back().name==CLASSSCOPE ? "" : "function ") + ctx->NAME()->getText() + "(";
     if (ctx->function_params())
         result += any_cast<string>(visitFunction_params(ctx->function_params()));
     scopes.emplace_back(FUNCSCOPE);
@@ -1154,7 +1331,7 @@ std::any PythonCustomParserVisitor::visitClass_def(PythonParser::Class_defContex
 }
 
 std::any PythonCustomParserVisitor::visitMatch_stmt(PythonParser::Match_stmtContext* ctx){
-    string result = "switch " + any_cast<string>(visitSubject_expr(ctx->subject_expr())) + "{\n";
+    string result = "switch(" + any_cast<string>(visitSubject_expr(ctx->subject_expr())) + "){\n";
     indentDepth++;
     for (auto c : ctx->case_block()){
         result += getIndent() + any_cast<string>(visit(c));

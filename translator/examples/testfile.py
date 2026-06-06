@@ -39,7 +39,28 @@ i = 1
 
 # asdasdad
 
-while i < 10:
-    i += 1
+print(abs(-1))
+print(bool(10))
+print(list(enumerate(['a', 'b', 'c'])))
+print(list(enumerate(['a', 'b', 'c'], 4)))
+print(list(filter(lambda x: x>10, [1, 5, 15, 2, 35, 10])))
+print(int(10.3))
+print(len([1, 3, 2, 4, 1]))
+print(list(range(10)))
+print(list(range(3, 15)))
+print(list(range(3, 15, 3)))
+print(list(range(15, 3, -3)))
+print(list(map(lambda x: x*10, [1, 3, 2, 9, 4])))
+print(max(1, 3, 2))
+print(max([2, 4, 0]))
+print(min(1, 3, 2))
+print(min([2, 4, 0]))
+print(list(reversed([1, 2, 3])))
+print(round(4.5678))
+print(round(4.5678, 2))
+print(set([1, 2, 3, 2, 5, 3]))
+print(str(10))
+print(sum([1, 2, 3]))
+print(sum([1, 2, 3], 2))
 
 raise Exception(1)
