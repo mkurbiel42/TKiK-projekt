@@ -5,6 +5,7 @@
 #include <iostream>
 #include "MainWindow.h"
 #include <QtWidgets/QFileDialog>
+#include <QMessageBox>
 #include "Translator.h"
 
 using namespace std;
@@ -63,5 +64,20 @@ void MainWindow::handleFileSave() {
 
 void MainWindow::handleTranslate() {
     string translation = Translator::translate(this->textEdit->toPlainText().toStdString());
+    if (Translator::errors.size()>0) {
+        QMessageBox msgBox = QMessageBox(this);
+        string text;
+        if (Translator::areErrorsFatal) {
+            text = "The code could not be translated, translator found errors:\n\n";
+            msgBox.setWindowTitle("Fatal translation error");
+        }
+        else {
+            text = "Translator found errors. The code was partially translated, however the output will most likely differ from the desired translation. Errors in the output have been replaced with comments.\n\n";
+            msgBox.setWindowTitle("Translation error");
+        }
+        for (auto m: Translator::errors) text += m + "\n";
+        msgBox.setText(QString::fromStdString(text));
+        msgBox.exec();
+    }
     textEdit_2->setPlainText(QString::fromStdString(translation));
 }

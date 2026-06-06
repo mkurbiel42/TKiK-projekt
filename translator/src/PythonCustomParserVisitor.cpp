@@ -65,8 +65,10 @@ std::any PythonCustomParserVisitor::visitSimple_assignment(PythonParser::Simple_
     string notDeclared = "let ";
 
     if (ctx->expressions()->expression().size() != 1) {
-        cout << "Multiple values assignment is not supported by JavaScript" << endl;
-        return string("");
+        std::string error = "Multiple values assignment is not supported by JavaScript";
+        cout << error << endl;
+        addError(error);
+        return string("//" + error);
     }
 
     for (auto d : ctx->as_targets()) {
@@ -133,8 +135,10 @@ std::any PythonCustomParserVisitor::visitAug_assignment(PythonParser::Aug_assign
         }
     }
     if (!alreadyPresentInScope) {
-        cout << "Can't augassign to an uninitialized variable" << endl;
-        return string("");
+        std::string error = "Cannot augassign to an uninitialized variable";
+        cout << error << endl;
+        addError(error);
+        return string("//" + error);
     }
 
     if (ctx->augassign()->DOUBLESLASHEQUAL()) {
@@ -451,8 +455,10 @@ std::any PythonCustomParserVisitor::visitSet(PythonParser::SetContext *ctx) {
 
 std::any PythonCustomParserVisitor::visitFor_if_clause(PythonParser::For_if_clauseContext *ctx) {
     if (ctx->targets()->target().size() != 1) {
-        cout << "Multiple targets for if clauses are not supported";
-        return string("");
+        std::string error = "Multiple targets for if clauses are not supported";
+        cout << error << endl;
+        addError(error);
+        return string("//" + error);
     }
 
     auto target = ctx->targets()[0].target()[0];
@@ -571,8 +577,10 @@ std::any PythonCustomParserVisitor::visitNamed_expression(PythonParser::Named_ex
 }
 
 std::any PythonCustomParserVisitor::visitAssignment_expression(PythonParser::Assignment_expressionContext *ctx) {
-    cout << "Assignment expressions are not supported by JavaScript (especially in strict mode)";
-    return string("");
+    std::string error = "Assignment expressions are not supported by JavaScript (especially in strict mode)";
+    cout << error << endl;
+    addError(error);
+    return string("//" + error);
 }
 
 std::any PythonCustomParserVisitor::visitSlices(PythonParser::SlicesContext *ctx) {
@@ -625,8 +633,10 @@ std::any PythonCustomParserVisitor::visitSlice(PythonParser::SliceContext *ctx) 
 
 std::any PythonCustomParserVisitor::visitAtom_tprim(PythonParser::Atom_tprimContext *ctx) {
     if (ctx->atom()->TRUE() || ctx->atom()->FALSE() || ctx->atom()->NONE() || ctx->atom()->strings() || ctx->atom()->NUMBER()) {
-        cout << "Can't augassign to '" << ctx->atom()->getText() << "'" << endl;
-        return string("");
+        std::string error = "Cannot augassign to '" + ctx->atom()->getText() + "'";
+        cout << error << endl;
+        addError(error);
+        return string("//" + error);
     }
 
     if (!ctx->atom()->NAME())
@@ -639,8 +649,10 @@ std::any PythonCustomParserVisitor::visitAtom_tprim(PythonParser::Atom_tprimCont
             return visitAtom(ctx->atom());
     }
 
-    cout << "Can't augassign to an undeclared variable" << endl;
-    return string("");
+    std::string error = "Cannot augassign to an undeclared variable";
+    cout << error << endl;
+    addError(error);
+    return string("//" + error);
 }
 
 std::any PythonCustomParserVisitor::visitField_tprim(PythonParser::Field_tprimContext *ctx) {
@@ -861,8 +873,10 @@ std::any PythonCustomParserVisitor::visitRaise_stmt(PythonParser::Raise_stmtCont
     string expressionResult = any_cast<string>(visitExpression(ctx->expression()));
 
     if (!expressionResult.starts_with("new Error")) {
-        cout << "Cannot raise " << ctx->expression()-> getText() << " as an exception" << endl;
-        return string("");
+        std::string error = "Cannot raise " + ctx->expression()-> getText() + " as an exception";
+        cout << error << endl;
+        addError(error);
+        return string("//" + error);
     }
 
     return "throw " + expressionResult;
@@ -870,8 +884,10 @@ std::any PythonCustomParserVisitor::visitRaise_stmt(PythonParser::Raise_stmtCont
 
 std::any PythonCustomParserVisitor::visitExcept_block_normal(PythonParser::Except_block_normalContext *ctx) {
     if (ctx->expressions() && ctx->expressions()->expression().empty()) {
-        cout << "Multiple exceptions in one except block are not supported" << endl;
-        return string("");
+        std::string error = "Multiple exceptions in one except block are not supported";
+        cout << error << endl;
+        addError(error);
+        return string("//" + error);
     }
 
     scopes.emplace_back(EXCEPTSCOPE);
@@ -909,13 +925,17 @@ std::any PythonCustomParserVisitor::visitTry_finally_block(PythonParser::Try_fin
 
 std::any PythonCustomParserVisitor::visitTry_except_else_finally_block(PythonParser::Try_except_else_finally_blockContext *ctx) {
     if (ctx->except_block().size() > 1) {
-        cout << "Multiple except blocks are not supported by JavaScript";
-        return string("");
+        std::string error = "Multiple except blocks are not supported by JavaScript";
+        cout << error << endl;
+        addError(error);
+        return string("//" + error);
     }
 
     if (ctx->else_block()) {
-        cout << "Else block in try...catch statement is not supported by JavaScript";
-        return string("");
+        std::string error = "Else block in try...catch statement is not supported by JavaScript";
+        cout << error << endl;
+        addError(error);
+        return string("//" + error);
     }
 
     scopes.emplace_back(TRYSCOPE);
@@ -1044,8 +1064,10 @@ std::any PythonCustomParserVisitor::visitFor_stmt(PythonParser::For_stmtContext*
     scopes.pop_back();
 
     if (ctx->else_block()){
-        cout << "For...else statements are not supported by JavaScript";
-        return string("");
+        std::string error = "For...else statements are not supported by JavaScript";
+        cout << error << endl;
+        addError(error);
+        return string("//" + error);
     }
 
     return result;
@@ -1062,8 +1084,10 @@ std::any PythonCustomParserVisitor::visitClass_def(PythonParser::Class_defContex
     string result = "class " + ctx->NAME()->getText();
     if (ctx->arguments()){
         if (ctx->arguments()->arg_expression().size() > 1){
-            cout << "Extending multiple classes is not supported by JavaScript";
-            return string("");
+            std::string error = "Extending multiple classes is not supported by JavaScript";
+            cout << error << endl;
+            addError(error);
+            return string("//" + error);
         }
         result += " extends " + any_cast<string>(visitArguments(ctx->arguments()));
     }
@@ -1119,4 +1143,12 @@ std::any PythonCustomParserVisitor::visitMatch_case_default(PythonParser::Match_
 
 std::any PythonCustomParserVisitor::visitPattern(PythonParser::PatternContext* ctx){
     return any_cast<string>(visit(ctx->primary()));
+}
+
+std::string PythonCustomParserVisitor::addError(std::string errorMessage) {
+    int lines = 1;
+    for (char x:translated) if (x == '\n') lines++;
+    std::string message = "Error at line " + std::to_string(lines) + ": " + errorMessage;
+    errors.push_back(message);
+    return message;
 }

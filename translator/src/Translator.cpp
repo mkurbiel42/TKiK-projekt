@@ -13,7 +13,12 @@
 using namespace antlr4;
 using namespace std;
 
+std::list<std::string> Translator::errors = {};
+bool Translator::areErrorsFatal = false;
+
 std::string Translator::translate(std::string inputString) {
+	errors = {};
+	areErrorsFatal = false;
 	if (inputString.back() != '\n')
 		inputString += '\n';
 
@@ -26,11 +31,17 @@ std::string Translator::translate(std::string inputString) {
 	parser.removeErrorListeners();
 	auto errorListener = new CustomErrorListener();
 	parser.addErrorListener(errorListener);
+	lexer.addErrorListener(errorListener);
 
 	tree::ParseTree *tree = parser.file();
 
-	if (errorListener->error)
+	if (errorListener->error) {
+		for (auto error : errorListener->errors) cout << error << endl;
+		areErrorsFatal = true;
+		errors = errorListener->errors;
 		return "";
+	}
+
 
 
 	for (auto c : tree->children) {
@@ -42,6 +53,9 @@ std::string Translator::translate(std::string inputString) {
 
 	auto *visitor = new PythonCustomParserVisitor();
 	visitor->visit(tree);
+	if (visitor->errors.size()>0) {
+		for (auto e: visitor->errors) errors.push_back(e);
+	}
 
 	cout << "================" << endl;
 	cout << "Przetlumaczone:" << endl << visitor->translated << endl;

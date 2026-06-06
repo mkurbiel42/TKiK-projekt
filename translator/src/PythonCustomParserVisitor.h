@@ -135,6 +135,8 @@ public:
     std::any visitFinally_block(PythonParser::Finally_blockContext *ctx) override;
 
     std::any visitBlock(PythonParser::BlockContext *ctx) override;
+
+    std::string addError(std::string errorMessage);
 };
 
 
