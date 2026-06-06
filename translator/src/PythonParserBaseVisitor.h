@@ -35,6 +35,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitComment_stmt(PythonParser::Comment_stmtContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitSimple_assignment(PythonParser::Simple_assignmentContext *ctx) override {
     return visitChildren(ctx);
   }

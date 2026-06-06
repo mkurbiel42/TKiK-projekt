@@ -86,6 +86,8 @@ NUMBER: INTEGER | FLOAT;
 STRING: '"' ~[\\\r\n"]*? '"' | '\'' ~[\\\r\n']*? '\'';
 WHITESPACESKIP: [\t ] -> skip;
 
+COMMENT: '#' ~('\n'|'\r'|'\f')*;
+
 fragment INTEGER:   [1-9][0-9]* | '0';
 fragment FLOAT:     INTEGER '.' [0-9]+;
 fragment SPACES: [ \t]+;

@@ -29,6 +29,8 @@ public:
 
     virtual std::any visitCompound_stmt(PythonParser::Compound_stmtContext *context) = 0;
 
+    virtual std::any visitComment_stmt(PythonParser::Comment_stmtContext *context) = 0;
+
     virtual std::any visitSimple_assignment(PythonParser::Simple_assignmentContext *context) = 0;
 
     virtual std::any visitAug_assignment(PythonParser::Aug_assignmentContext *context) = 0;

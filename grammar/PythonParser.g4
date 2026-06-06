@@ -7,10 +7,11 @@ file: NEWLINE* statements? ENDMARKER;
 
 // general statements
 statements: statement+;
-statement: compound_stmt | simple_stmt;
+statement: comment_stmt | compound_stmt | simple_stmt;
 simple_stmt: (assignment | expressions | return_stmt | raise_stmt | pass_stmt | del_stmt | break_stmt | continue_stmt | global_stmt | nonlocal_stmt) NEWLINE;
 compound_stmt: function_def | if_stmt | class_def | for_stmt | try_stmt | while_stmt | match_stmt;
 
+comment_stmt: COMMENT NEWLINE;
 // simple statements
 assignment: (as_targets EQUALS)+ expressions    # simple_assignment
     | single_target augassign expressions       # aug_assignment

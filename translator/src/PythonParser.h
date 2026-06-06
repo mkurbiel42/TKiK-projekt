@@ -24,34 +24,34 @@ public:
     DOUBLESLASH = 53, PERCENT = 54, DOUBLESTAR = 55, TRUE = 56, FALSE = 57, 
     NONE = 58, PLUSEQUAL = 59, MINUSEQUAL = 60, STAREQUAL = 61, SLASHEQUAL = 62, 
     PERCENTEQUAL = 63, DOUBLESTAREQUAL = 64, DOUBLESLASHEQUAL = 65, NAME = 66, 
-    NUMBER = 67, STRING = 68, WHITESPACESKIP = 69
+    NUMBER = 67, STRING = 68, WHITESPACESKIP = 69, COMMENT = 70
   };
 
   enum {
     RuleFile = 0, RuleStatements = 1, RuleStatement = 2, RuleSimple_stmt = 3, 
-    RuleCompound_stmt = 4, RuleAssignment = 5, RuleAugassign = 6, RuleReturn_stmt = 7, 
-    RuleRaise_stmt = 8, RulePass_stmt = 9, RuleDel_stmt = 10, RuleBreak_stmt = 11, 
-    RuleContinue_stmt = 12, RuleGlobal_stmt = 13, RuleNonlocal_stmt = 14, 
-    RuleFunction_def = 15, RuleLambdef = 16, RuleIf_stmt = 17, RuleElif_stmt = 18, 
-    RuleElse_block = 19, RuleFor_stmt = 20, RuleWhile_stmt = 21, RuleClass_def = 22, 
-    RuleTry_stmt = 23, RuleExcept_block = 24, RuleFinally_block = 25, RuleMatch_stmt = 26, 
-    RuleSubject_expr = 27, RuleCase_block = 28, RulePattern = 29, RuleBlock = 30, 
-    RuleFunction_params = 31, RuleExpressions = 32, RuleExpression = 33, 
-    RuleAssignment_expression = 34, RuleNamed_expression = 35, RuleDisjunction = 36, 
-    RuleConjunction = 37, RuleInversion = 38, RuleComparison = 39, RuleComp_op = 40, 
-    RuleComp_eq = 41, RuleComp_noteq = 42, RuleComp_lte = 43, RuleComp_lt = 44, 
-    RuleComp_gte = 45, RuleComp_gt = 46, RuleComp_notin = 47, RuleComp_in = 48, 
-    RuleSum = 49, RuleTerm = 50, RuleFactor = 51, RulePower = 52, RulePrimary = 53, 
-    RuleSlices = 54, RuleSlice = 55, RuleAtom = 56, RuleGroup = 57, RuleArguments = 58, 
-    RuleArg_expression = 59, RuleKwargs = 60, RuleStarred_expression = 61, 
-    RuleKwarg_or_starred = 62, RuleKwarg_or_double_starred = 63, RuleAs_targets = 64, 
-    RuleAs_target_list = 65, RuleAs_target_tuple = 66, RuleAs_target = 67, 
-    RuleAs_atom = 68, RuleSingle_target = 69, RuleSingle_subscript_attribute_target = 70, 
-    RuleT_primary = 71, RuleTargets = 72, RuleTarget = 73, RuleDel_targets = 74, 
-    RuleDel_target = 75, RuleStrings = 76, RuleList = 77, RuleTuple = 78, 
-    RuleSet = 79, RuleDict = 80, RuleDouble_starred_kvpairs = 81, RuleDouble_starred_kvpair = 82, 
-    RuleKvpair = 83, RuleFor_if_clauses = 84, RuleFor_if_clause = 85, RuleListcomp = 86, 
-    RuleSetcomp = 87, RuleDictcomp = 88
+    RuleCompound_stmt = 4, RuleComment_stmt = 5, RuleAssignment = 6, RuleAugassign = 7, 
+    RuleReturn_stmt = 8, RuleRaise_stmt = 9, RulePass_stmt = 10, RuleDel_stmt = 11, 
+    RuleBreak_stmt = 12, RuleContinue_stmt = 13, RuleGlobal_stmt = 14, RuleNonlocal_stmt = 15, 
+    RuleFunction_def = 16, RuleLambdef = 17, RuleIf_stmt = 18, RuleElif_stmt = 19, 
+    RuleElse_block = 20, RuleFor_stmt = 21, RuleWhile_stmt = 22, RuleClass_def = 23, 
+    RuleTry_stmt = 24, RuleExcept_block = 25, RuleFinally_block = 26, RuleMatch_stmt = 27, 
+    RuleSubject_expr = 28, RuleCase_block = 29, RulePattern = 30, RuleBlock = 31, 
+    RuleFunction_params = 32, RuleExpressions = 33, RuleExpression = 34, 
+    RuleAssignment_expression = 35, RuleNamed_expression = 36, RuleDisjunction = 37, 
+    RuleConjunction = 38, RuleInversion = 39, RuleComparison = 40, RuleComp_op = 41, 
+    RuleComp_eq = 42, RuleComp_noteq = 43, RuleComp_lte = 44, RuleComp_lt = 45, 
+    RuleComp_gte = 46, RuleComp_gt = 47, RuleComp_notin = 48, RuleComp_in = 49, 
+    RuleSum = 50, RuleTerm = 51, RuleFactor = 52, RulePower = 53, RulePrimary = 54, 
+    RuleSlices = 55, RuleSlice = 56, RuleAtom = 57, RuleGroup = 58, RuleArguments = 59, 
+    RuleArg_expression = 60, RuleKwargs = 61, RuleStarred_expression = 62, 
+    RuleKwarg_or_starred = 63, RuleKwarg_or_double_starred = 64, RuleAs_targets = 65, 
+    RuleAs_target_list = 66, RuleAs_target_tuple = 67, RuleAs_target = 68, 
+    RuleAs_atom = 69, RuleSingle_target = 70, RuleSingle_subscript_attribute_target = 71, 
+    RuleT_primary = 72, RuleTargets = 73, RuleTarget = 74, RuleDel_targets = 75, 
+    RuleDel_target = 76, RuleStrings = 77, RuleList = 78, RuleTuple = 79, 
+    RuleSet = 80, RuleDict = 81, RuleDouble_starred_kvpairs = 82, RuleDouble_starred_kvpair = 83, 
+    RuleKvpair = 84, RuleFor_if_clauses = 85, RuleFor_if_clause = 86, RuleListcomp = 87, 
+    RuleSetcomp = 88, RuleDictcomp = 89
   };
 
   explicit PythonParser(antlr4::TokenStream *input);
@@ -76,6 +76,7 @@ public:
   class StatementContext;
   class Simple_stmtContext;
   class Compound_stmtContext;
+  class Comment_stmtContext;
   class AssignmentContext;
   class AugassignContext;
   class Return_stmtContext;
@@ -195,6 +196,7 @@ public:
   public:
     StatementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    Comment_stmtContext *comment_stmt();
     Compound_stmtContext *compound_stmt();
     Simple_stmtContext *simple_stmt();
 
@@ -246,6 +248,20 @@ public:
   };
 
   Compound_stmtContext* compound_stmt();
+
+  class  Comment_stmtContext : public antlr4::ParserRuleContext {
+  public:
+    Comment_stmtContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *COMMENT();
+    antlr4::tree::TerminalNode *NEWLINE();
+
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  Comment_stmtContext* comment_stmt();
 
   class  AssignmentContext : public antlr4::ParserRuleContext {
   public:

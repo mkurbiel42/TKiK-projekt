@@ -1145,6 +1145,10 @@ std::any PythonCustomParserVisitor::visitPattern(PythonParser::PatternContext* c
     return any_cast<string>(visit(ctx->primary()));
 }
 
+std::any PythonCustomParserVisitor::visitComment_stmt(PythonParser::Comment_stmtContext *context) {
+    return "//" + context->COMMENT()->getText().substr(1);
+}
+
 std::string PythonCustomParserVisitor::addError(std::string errorMessage) {
     int lines = 1;
     for (char x:translated) if (x == '\n') lines++;

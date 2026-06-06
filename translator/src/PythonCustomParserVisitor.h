@@ -136,6 +136,8 @@ public:
 
     std::any visitBlock(PythonParser::BlockContext *ctx) override;
 
+    std::any visitComment_stmt(PythonParser::Comment_stmtContext *context) override;
+
     std::string addError(std::string errorMessage);
 };
 

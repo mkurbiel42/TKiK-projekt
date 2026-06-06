@@ -90,7 +90,8 @@ void PythonLexerBase::onNewLine(){
     int next = _input->LA(1);
     int nextnext = _input->LA(2);
     // if (opened > 0 || (nextnext != -1 && (next == '\r' || next == '\n' || next == '\f' || next == '#'))) {
-    if (opened > 0 || next == '\r' || next == '\n' || next == '\f' || next == '#'){
+    // if (opened > 0 || next == '\r' || next == '\n' || next == '\f' || next == '#'){
+    if (opened > 0 || next == '\r' || next == '\n' || next == '\f'){
         skip();
     }
     else {
