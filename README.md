@@ -193,7 +193,7 @@
     ```
 
 - Spis tokenów w formacie wejściowym ANTLR4 (fragment pliku [./grammar/PythonLexer.g4](./grammar/PythonLexer.g4)):
-    ```antlrv4
+    ```antlr4
     NEWLINE: (SPACES | ( '\r'? '\n' | '\r' | '\f') SPACES?);
     EQUALS: '=';
     RETURN: 'return';
@@ -269,7 +269,7 @@
     fragment SPACES: [ \t]+;
     ```
 - Gramatyka języka w formacie wejściowym ANTLR4 (fragment pliku [./grammar/PythonParser.g4](./grammar/PythonParser.g4)):
-    ```antlrv4
+    ```antlr4
     // starting rule
     file: NEWLINE* statements? ENDMARKER;
 
