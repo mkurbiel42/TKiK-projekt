@@ -90,6 +90,7 @@ void MainWindow::handleRun() {
     msgBox.setWindowTitle("Error");
     msgBox.setText("Running translated code is only supported on Windows");
     msgBox.exec();
+    return;
 #endif
     try {
         auto fp = filesystem::current_path();
