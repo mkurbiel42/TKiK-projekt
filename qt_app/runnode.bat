@@ -1,0 +1,1 @@
+node tmpfile.js & pause & del tmpfile.js & exit

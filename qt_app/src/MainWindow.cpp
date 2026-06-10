@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <fstream>
 #include "MainWindow.h"
 #include <QtWidgets/QFileDialog>
 #include <QMessageBox>
@@ -22,6 +23,7 @@ void MainWindow::setupActions() {
     this->actionFileOpen->connect(actionFileOpen, QAction::triggered, this, [this] {handleFileOpen();});
     this->actionFileSave->connect(actionFileSave, QAction::triggered, this, [this] {handleFileSave();});
     this->actionTranslate->connect(actionTranslate, QAction::triggered, this, [this] {handleTranslate();});
+    this->actionRun->connect(actionRun, QAction::triggered, this, [this] {handleRun();});
 }
 
 void MainWindow::handleFileOpen() {
@@ -80,4 +82,33 @@ void MainWindow::handleTranslate() {
         msgBox.exec();
     }
     textEdit_2->setPlainText(QString::fromStdString(translation));
+}
+
+void MainWindow::handleRun() {
+#ifndef _WIN32
+    QMessageBox msgBox = QMessageBox(this);
+    msgBox.setWindowTitle("Error");
+    msgBox.setText("Running translated code is only supported on Windows");
+    msgBox.exec();
+#endif
+    try {
+        auto fp = filesystem::current_path();
+        while (!fp.generic_string().ends_with("TKiK-projekt") && fp.has_parent_path())
+            fp = fp.parent_path();
+        if (!fp.has_parent_path()) throw runtime_error("Could not find directory");
+        fp += "/qt_app";
+        string filename = "tmpfile.js";
+        string filepath = fp.generic_string() + "/" + filename;
+        ofstream tmpfile(filepath);
+        tmpfile << textEdit_2->toPlainText().toStdString();
+        tmpfile.close();
+        string cmd = "start /d \"" + fp.generic_string()+ "\" " + fp.generic_string() + "/runnode.bat";
+        system(cmd.c_str());
+        // filesystem::remove(filepath);
+    }catch (exception& e) {
+        QMessageBox msgBox = QMessageBox(this);
+        msgBox.setWindowTitle("Error");
+        msgBox.setText("There was an error running the code:\n"+QString::fromStdString(e.what()));
+        msgBox.exec();
+    }
 }

@@ -30,6 +30,7 @@ public:
     QAction *actionFileOpen;
     QAction *actionFileSave;
     QAction *actionTranslate;
+    QAction *actionRun;
     QWidget *centralwidget;
     QHBoxLayout *horizontalLayout;
     QTextEdit *textEdit;
@@ -59,6 +60,10 @@ public:
         QIcon icon(QIcon::fromTheme(QIcon::ThemeIcon::GoNext));
         actionTranslate->setIcon(icon);
         actionTranslate->setMenuRole(QAction::MenuRole::NoRole);
+        actionRun = new QAction(MainWindow);
+        actionRun->setObjectName("actionRun");
+        actionRun->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart));
+        actionRun->setMenuRole(QAction::MenuRole::NoRole);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         QSizePolicy sizePolicy1(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Minimum);
@@ -104,6 +109,7 @@ public:
         menu->addAction(actionFileOpen);
         menu->addAction(actionFileSave);
         toolBar->addAction(actionTranslate);
+        toolBar->addAction(actionRun);
 
         retranslateUi(MainWindow);
 
@@ -136,6 +142,7 @@ namespace Ui {
         void handleFileOpen();
         void handleFileSave();
         void handleTranslate();
+        void handleRun();
     };
 } // namespace Ui
 
