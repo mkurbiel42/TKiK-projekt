@@ -16,9 +16,11 @@ find_package(Qt6 COMPONENTS
 
 qt_standard_project_setup()
 
-add_executable(qt_app src/main.cpp
+add_executable(qt_app
+        src/main.cpp
         src/MainWindow.cpp
-        src/MainWindow.h)
+        src/MainWindow.h
+)
 
 target_link_libraries(qt_app
         Qt::Core

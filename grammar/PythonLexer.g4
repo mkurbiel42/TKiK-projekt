@@ -6,16 +6,9 @@ options{
 
 @header{#include "PythonLexerBase.h"}
 
-// tokens and temporary helpers
-
 tokens {
     DEDENT, INDENT, ENDMARKER
 }
-
-// temporary for testing
-// INDENT: BRACE_LEFT;
-// DEDENT: BRACE_RIGHT;
-// NEWLINE: '\r\n' | '\n';
 
 NEWLINE: ({this->atStartOfInput()}? SPACES | ( '\r'? '\n' | '\r' | '\f') SPACES?) {this->onNewLine();};
 
